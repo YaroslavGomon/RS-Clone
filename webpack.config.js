@@ -9,6 +9,9 @@ module.exports = {
   mode: "development",
   entry: path.resolve(__dirname, './src/index.ts'),
   devServer: {
+    watchFiles: ["./src"],
+    liveReload: true,
+    hot: true,
     static: {
       directory: path.join(__dirname, 'build'),
     },
@@ -57,7 +60,6 @@ module.exports = {
     extensions: [".ts", ".js"]
   },
   output: {
-    publicPath: "./",
     filename: "bundle.js",
     path: path.resolve(__dirname, "build"),
   },
