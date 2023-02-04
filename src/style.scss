@@ -1,3 +1,3 @@
-@import './styles/general.scss';
-@import './styles/components/header.scss';
-@import './styles/components/footer.scss';
+@import './styles/base.scss';
+@import './styles/abstracts/constants';
+@import './styles/abstracts/mixins';
