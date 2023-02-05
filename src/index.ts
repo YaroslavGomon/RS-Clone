@@ -1,4 +1,6 @@
 import './style.scss';
-import testFunction from './components/test';
+import './assets/img/fav-icon.png';
+import Controller from './components/controller';
 
-testFunction();
+const controller = new Controller();
+controller.test();
