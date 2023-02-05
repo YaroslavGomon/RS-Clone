@@ -69,8 +69,8 @@ module.exports = {
         filename: 'index.html',
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/podcast.html'),
-      filename: 'podcast.html',
+      template: path.resolve(__dirname, './src/spotify.html'),
+      filename: 'spotify.html',
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './src/apple.html'),
