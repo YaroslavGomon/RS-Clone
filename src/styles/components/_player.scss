@@ -12,7 +12,7 @@
     border-radius: $radius;
 }
 
-.duration {
+.duration, .episode__time_spoti {
     @include font($size: 1.5rem);
 }
 
