@@ -1,0 +1,133 @@
+.episodes__header {
+    padding-left: 1rem;
+}
+
+.episode {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1rem;
+    border-bottom: 1px solid $color-additional-light;
+    border-radius: $radius;
+    position: relative;
+
+    &:hover {
+        background-color: $color-additional-light;
+    }
+}
+
+.episode_latest {
+    position: relative;
+}
+
+.actions_spoti { //onmouseover
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    right: 0;
+    bottom: 0.7rem;
+}
+
+.episode__image_spoti {
+    width: 14%;
+    border-radius: $radius;
+    border: 1px solid $color-bright; //delete at the end
+}
+
+.episode__info {
+    width: 85%;
+}
+
+.episode__time {
+    color: $color-additional;
+    text-transform: capitalize;
+    padding-bottom: 1rem;
+}
+
+.episode__description {
+    padding: 1rem 0 0.5rem;
+}
+
+.actions {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-self: end;
+}
+
+.save {
+    background: url('./assets/icons/save.svg') no-repeat;
+    background-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.download {
+    background: url('./assets/icons/download.svg') no-repeat;
+    background-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.add {
+    -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
+    mask: url('./assets/icons/more.svg') no-repeat center;
+    background-color: $color-additional;
+    background-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+
+    &:hover {
+        background: $color-bright;
+    }
+}
+
+.unvisible {
+    visibility: hidden;
+}
+
+.title_up-next {
+    color: $color-additional;
+    padding-bottom: 1rem;
+}
+
+.episode__title_spoti {
+    padding-left: 2rem;
+    position: relative;
+
+    &::before {
+        content: '';
+        width: 1rem;
+        height: 1rem;
+        -webkit-mask: url('./assets/icons/point.svg') no-repeat center;
+        mask: url('./assets/icons/point.svg') no-repeat center;
+        background-color: $color-bright;
+        position: absolute;
+        top: 0.5rem;
+        left: 0;
+    }
+}
+
+.share_spoti {
+    width: 2.5rem;
+    height: 2.8rem;
+    -webkit-mask: url('./assets/icons/share.svg') no-repeat center;
+    mask: url('./assets/icons/share.svg') no-repeat center;
+    background-color: $color-additional;
+}
+
+.add_spoti {
+    width: 2.5rem;
+    height: 2.8rem;
+    -webkit-mask: url('./assets/icons/add.svg') no-repeat center;
+    mask: url('./assets/icons/add.svg') no-repeat center;
+    background-color: $color-additional;
+}
+
+.more_spoti {
+    width: 2.5rem;
+    height: 2.8rem;
+    -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
+    mask: url('./assets/icons/more.svg') no-repeat center;
+    background-color: $color-additional;
+}

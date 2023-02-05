@@ -68,6 +68,14 @@ module.exports = {
         template: path.resolve(__dirname, './src/index.html'),
         filename: 'index.html',
     }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/spotify.html'),
+      filename: 'spotify.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, './src/apple.html'),
+      filename: 'apple.html',
+    }),
     new EslintPlugin({ extensions: 'ts' }),
 ],
 };

@@ -1,0 +1,39 @@
+.player_small {
+    display: flex;
+    align-items: center;
+    gap: 1%;
+    padding-top: 1rem;
+}
+
+.progress_small {
+    height: 0.5rem;
+    width: 10%;
+    background-color: $color-additional-light;
+    border-radius: $radius;
+}
+
+.duration, .episode__time_spoti {
+    @include font($size: 1.5rem);
+}
+
+.unvisivle {
+    display: none;
+}
+
+.button-play,
+.button-pause {
+    width: 2rem;
+    height: 2rem;
+    background-color: $color-bright;
+    background-size: contain;
+}
+
+.button-play {
+    -webkit-mask: url('./assets/icons/play.svg') no-repeat center;
+    mask: url('./assets/icons/play.svg') no-repeat center;
+}
+
+.button-pause {
+    -webkit-mask: url('./assets/icons/pause.svg') no-repeat center;
+    mask: url('./assets/icons/pause.svg') no-repeat center;
+}

@@ -1,3 +1,18 @@
-@import './styles/base.scss';
+//Abstarcts
 @import './styles/abstracts/constants';
 @import './styles/abstracts/mixins';
+
+//Base
+@import './styles/base.scss';
+
+//Components
+@import './styles/components/podcast';
+@import './styles/components/buttons';
+@import './styles/components/episode';
+@import './styles/components/player';
+@import './styles/components/links';
+@import './styles/components/menu';
+@import './styles/components/footer';
+
+//Layouts
+@import './styles/layouts/layouts';
