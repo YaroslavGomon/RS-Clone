@@ -14,6 +14,10 @@
     &:hover {
         background-color: $color-additional-light;
     }
+
+    &:hover .actions, &:hover .actions_spoti {
+        opacity: 1;
+    }
 }
 
 .episode_latest {
@@ -26,6 +30,7 @@
     position: absolute;
     right: 0;
     bottom: 0.7rem;
+    opacity: 0;
 }
 
 .episode__image_spoti {
@@ -53,37 +58,24 @@
     gap: 2rem;
     align-items: center;
     justify-self: end;
+    opacity: 0;
+}
+
+.button_action {
+    width: 3rem;
+    height: 3rem;
+    background-color: $color-bright;
+    cursor: pointer;
 }
 
 .save {
-    background: url('./assets/icons/save.svg') no-repeat;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
+    -webkit-mask: url('./assets/icons/save.svg') no-repeat center;
+    mask: url('./assets/icons/save.svg') no-repeat center;
 }
 
-.download {
-    background: url('./assets/icons/download.svg') no-repeat;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
-}
-
-.add {
-    -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
-    mask: url('./assets/icons/more.svg') no-repeat center;
-    background-color: $color-additional;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
-
-    &:hover {
-        background: $color-bright;
-    }
-}
-
-.unvisible {
-    visibility: hidden;
+.share, .download {
+    -webkit-mask: url('./assets/icons/download.svg') no-repeat center;
+    mask: url('./assets/icons/download.svg') no-repeat center;
 }
 
 .title_up-next {
@@ -108,26 +100,7 @@
     }
 }
 
-.share_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
-    -webkit-mask: url('./assets/icons/share.svg') no-repeat center;
-    mask: url('./assets/icons/share.svg') no-repeat center;
-    background-color: $color-additional;
-}
-
-.add_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
-    -webkit-mask: url('./assets/icons/add.svg') no-repeat center;
-    mask: url('./assets/icons/add.svg') no-repeat center;
-    background-color: $color-additional;
-}
-
-.more_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
+.more_spoti, .add {
     -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
     mask: url('./assets/icons/more.svg') no-repeat center;
-    background-color: $color-additional;
 }
