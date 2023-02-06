@@ -1,10 +1,50 @@
 .menu {
-    height: 100%;
-    width: 15%;
-    background-color: $color-menu;
-    border-radius: $radius;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
+  height: 100%;
+  width: 15%;
+  // min-width: 30rem;
+  background-color: $color-menu;
+  border-radius: $radius;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+
+  &__inner {
+    padding: 2rem;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin-bottom: 4rem;
+  }
+
+  &__link:hover .menu__title {
+    color: $color-bright;
+  }
+
+  &__link:hover .menu__logo {
+    background-color: $color-bright;
+  }
+
+  &__logo {
+    -webkit-mask: url('./assets/img/fav-icon.png') no-repeat center;
+    mask: url('./assets/img/fav-icon.png') no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background-color: $color-dark;
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    margin-right: 1rem;
+    transition: background-color .3s;
+  }
+
+  &__title {
+    @include font($size: 3rem, $weight: 800);
+    color: $color-dark;
+    display: inline-block;
+    transition: color .3s;
+  }
 }

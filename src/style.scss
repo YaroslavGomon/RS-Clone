@@ -1,4 +1,5 @@
 //Abstarcts
+@import './styles/abstracts/reset';
 @import './styles/abstracts/constants';
 @import './styles/abstracts/mixins';
 
@@ -13,6 +14,7 @@
 @import './styles/components/links';
 @import './styles/components/menu';
 @import './styles/components/footer';
+@import './styles/components/search';
 
 //Layouts
 @import './styles/layouts/layouts';

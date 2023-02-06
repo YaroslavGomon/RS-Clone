@@ -1,0 +1,29 @@
+.search {
+  padding: .5rem;
+  background-color: $color-not-active;
+  border: none;
+  border-radius: $radius;
+  outline: none;
+
+  &:focus {
+    background-color: $color-bright-light;
+  }
+
+  &::placeholder {
+    padding-left: 3rem;
+    background-image: url('./assets/icons/search.svg');
+    background-position: -.9rem;
+    background-size: 4.5rem;
+    background-repeat: no-repeat;
+  }
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    margin-left: .6rem;
+    background-image: url('./assets/icons/cross.svg');
+    cursor: pointer;
+  }
+}
