@@ -1,0 +1,39 @@
+.menu__item {
+
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: fit-content;
+  margin-bottom: 2rem;
+
+  &:hover .menu__item-text {
+    color: $color-bright;
+  }
+
+  &-logo {
+    margin-right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-size: 2.5rem;
+    display: inline-block;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background-color: $color-bright;
+  }
+  
+  &-logo.home {
+    -webkit-mask: url('./assets/icons/home.svg') no-repeat center;
+    mask: url('./assets/icons/home.svg') no-repeat center;
+  }
+
+  &-logo.library {
+    -webkit-mask: url('./assets/icons/save.svg') no-repeat center;
+    mask: url('./assets/icons/save.svg') no-repeat center;
+  }
+
+  &-text {
+    @include font($size: 2rem, $weight: 600);
+    display: inline-block;
+    transition: color .3s;
+  }
+}
