@@ -11,8 +11,7 @@ html {
 body {
     min-height: 100vh;
     display: grid;
-    // grid-template-rows: auto 1fr auto; //pin footer at the end of page
-    grid-template-rows: 1fr auto; //pin footer at the end of page
+    grid-template-rows: auto 1fr auto;
     color: $color-dark;
     @include font($size: 2rem);
     font-family: 'Roboto', Arial, sans-serif;
