@@ -48,7 +48,9 @@ export class Player {
     }
 
     private addListenersForRange(): void {
-        const progressTrack: Element | null = document.querySelector('.progress-track');
+        console.log('hjhjh');
+
+        const progressTrack: Element | null = document.querySelector('.progress_track');
         if (progressTrack !== null) {
             progressTrack.addEventListener('input', (event: Event) => this.onRangeInput(event));
         }
