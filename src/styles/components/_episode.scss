@@ -5,11 +5,19 @@
 .episode {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 2rem;
     padding: 1rem;
     border-bottom: 1px solid $color-additional-light;
     border-radius: $radius;
     position: relative;
+
+    &_latest {
+        position: relative;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+    }
 
     &:hover {
         background-color: $color-additional-light;
@@ -18,10 +26,6 @@
     &:hover .actions, &:hover .actions_spoti {
         opacity: 1;
     }
-}
-
-.episode_latest {
-    position: relative;
 }
 
 .actions_spoti { //onmouseover
@@ -34,13 +38,14 @@
 }
 
 .episode__image_spoti {
-    width: 14%;
+    width: 15rem;
+    height: 15rem;
     border-radius: $radius;
     border: 1px solid $color-bright; //delete at the end
-}
 
-.episode__info {
-    width: 85%;
+    @include media-mobile {
+        display: none;
+    }
 }
 
 .episode__time {
@@ -80,7 +85,7 @@
 
 .title_up-next {
     color: $color-additional;
-    padding-bottom: 1rem;
+    padding-left: 1rem;
 }
 
 .episode__title_spoti {

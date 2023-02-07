@@ -6,4 +6,10 @@
     top: 0;
     background: $color-light;
     z-index: 50;
+
+    @include media-mobile {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+    }
 }
