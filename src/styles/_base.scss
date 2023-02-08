@@ -10,8 +10,10 @@ html {
 
 body {
     min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+    // display: grid;
+    // grid-template-rows: auto 1fr auto;
+    display: flex;
+    flex-direction: column;
     color: $color-dark;
     @include font($size: 2rem);
     font-family: 'Roboto', Arial, sans-serif;
