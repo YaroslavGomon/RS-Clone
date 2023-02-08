@@ -5,19 +5,27 @@
 .episode {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 2rem;
     padding: 1rem;
     border-bottom: 1px solid $color-additional-light;
     border-radius: $radius;
     position: relative;
 
+    &_latest {
+        position: relative;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+    }
+
     &:hover {
         background-color: $color-additional-light;
     }
-}
 
-.episode_latest {
-    position: relative;
+    &:hover .actions, &:hover .actions_spoti {
+        opacity: 1;
+    }
 }
 
 .actions_spoti { //onmouseover
@@ -26,16 +34,24 @@
     position: absolute;
     right: 0;
     bottom: 0.7rem;
+    opacity: 0;
 }
 
 .episode__image_spoti {
-    width: 14%;
+    width: 15rem;
+    height: 15rem;
     border-radius: $radius;
     border: 1px solid $color-bright; //delete at the end
+
+    @include media-mobile {
+        display: none;
+    }
 }
 
 .episode__info {
-    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .episode__time {
@@ -44,51 +60,38 @@
     padding-bottom: 1rem;
 }
 
-.episode__description {
-    padding: 1rem 0 0.5rem;
-}
+// .episode__description {
+//     padding: 1rem 0 0.5rem;
+// }
 
 .actions {
     display: flex;
     gap: 2rem;
     align-items: center;
     justify-self: end;
+    opacity: 0;
+}
+
+.button_action {
+    width: 3rem;
+    height: 3rem;
+    background-color: $color-bright;
+    cursor: pointer;
 }
 
 .save {
-    background: url('./assets/icons/save.svg') no-repeat;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
+    -webkit-mask: url('./assets/icons/save.svg') no-repeat center;
+    mask: url('./assets/icons/save.svg') no-repeat center;
 }
 
-.download {
-    background: url('./assets/icons/download.svg') no-repeat;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
-}
-
-.add {
-    -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
-    mask: url('./assets/icons/more.svg') no-repeat center;
-    background-color: $color-additional;
-    background-size: 3rem;
-    width: 3rem;
-    height: 3rem;
-
-    &:hover {
-        background: $color-bright;
-    }
-}
-
-.unvisible {
-    visibility: hidden;
+.share, .download {
+    -webkit-mask: url('./assets/icons/download.svg') no-repeat center;
+    mask: url('./assets/icons/download.svg') no-repeat center;
 }
 
 .title_up-next {
     color: $color-additional;
-    padding-bottom: 1rem;
+    padding-left: 1rem;
 }
 
 .episode__title_spoti {
@@ -108,26 +111,7 @@
     }
 }
 
-.share_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
-    -webkit-mask: url('./assets/icons/share.svg') no-repeat center;
-    mask: url('./assets/icons/share.svg') no-repeat center;
-    background-color: $color-additional;
-}
-
-.add_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
-    -webkit-mask: url('./assets/icons/add.svg') no-repeat center;
-    mask: url('./assets/icons/add.svg') no-repeat center;
-    background-color: $color-additional;
-}
-
-.more_spoti {
-    width: 2.5rem;
-    height: 2.8rem;
+.more_spoti, .add {
     -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
     mask: url('./assets/icons/more.svg') no-repeat center;
-    background-color: $color-additional;
 }

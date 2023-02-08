@@ -2,13 +2,13 @@ type podcastCard = {
   categories: object,
   description: string,
   id: number,
-  itunesId: number | null, 
+  itunesId: number | null,
   image: string,
   language: string,
-  newestItemPublishTime: number, 
-  oldestItemPublishTime: number, 
-  title: string, 
-  url: string 
+  newestItemPublishTime: number,
+  oldestItemPublishTime: number,
+  title: string,
+  url: string
 }
 
 type episode = {
@@ -39,5 +39,7 @@ persons: Array<object>,
 title: string,
 // transcriptUrl: null,
 }
+
+export type OnRangeInput = (event: Event) => void;
 
 export {podcastCard, episode};

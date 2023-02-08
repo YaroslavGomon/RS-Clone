@@ -2,12 +2,23 @@
     background-color: $color-menu;
     padding: 2rem 0;
     margin-left: 14%;
+    margin-top: 2rem;
+
+    @include media-mobile {
+        margin-left: 0;
+        padding: 1rem 0;
+    }
 }
 
 .footer__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include media-mobile {
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 
 .rss {

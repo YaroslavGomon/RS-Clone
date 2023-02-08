@@ -1,5 +1,7 @@
 .podcast {
-    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .podcast__header {
@@ -7,7 +9,11 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    margin-bottom: 3rem;
+
+    @include media-mobile {
+        flex-direction: column;
+        gap: 2rem;
+    }
 }
 
 .podcast__image {
@@ -15,16 +21,22 @@
     width: 13%;
     border-radius: $radius;
     border: 1px solid $color-bright; //delete at the end
+
+    @include media-mobile {
+        width: 80%;
+    }
 }
 
 .podcast__info {
     width: 85%;
     display: flex;
     flex-direction: column;
-}
+    gap: 1.5rem;
 
-.podcast__title {
-    padding-bottom: 1.5rem;
+    @include media-mobile {
+        gap: 0;
+        align-items: center;
+    }
 }
 
 .podcast__owner {
@@ -41,25 +53,30 @@
 .podcast__subscribe_spoti {
     display: flex;
     gap: 1rem;
-    padding-bottom: 2rem;
+
+    @include media-mobile {
+        justify-content: center;
+    }
 }
 
 .podcast__data {
     display: flex;
     justify-content: space-between;
-    padding-top: 2rem;
     gap: 1%;
-}
 
-.wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 2rem;
+    @include media-mobile {
+        flex-direction: column-reverse;
+        gap: 3rem
+    }
 }
 
 .podcast__description {
     //spotify edition
     width: 30%;
+
+    @include media-mobile {
+        width: 100%;
+    }
 }
 
 .podcast__about__rr {
@@ -86,10 +103,13 @@
     }
 }
 
-.episode_latest {
-    padding-bottom: 2rem;
-}
-
 .podcast__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     width: 67%;
+
+    @include media-mobile {
+        width: 100%;
+    }
 }
