@@ -40,6 +40,7 @@
     @include text-clamp(2);
     font-size: 2rem;
     margin: 1.5rem 0 1rem;
+    text-transform: capitalize;
   }
 
   &__descr {
@@ -62,6 +63,10 @@
   & > .card__play:hover {
     opacity: 1;
     transform: translateY(-1rem) scale(1.05);
+  }
+
+  & > .card__play:active {
+    background-color: $color-bright;
   }
 
   &__play::after {
