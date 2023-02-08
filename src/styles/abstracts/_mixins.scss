@@ -4,3 +4,15 @@
     font-weight: $weight;
     font-style: $style;
 }
+
+@mixin media-tablet {
+    @media (max-width: $content-width - 1) and (min-width: $table-width) {
+      @content;
+    }
+}
+
+@mixin media-mobile {
+    @media (max-width: $table-width - 1) and (min-width: $mobile-width) {
+      @content;
+    }
+}
