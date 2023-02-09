@@ -1,4 +1,4 @@
-const FOOTER = `    
+const footerDOM = `    
     <div class="container footer__container">
       <a class="link rss" href="https://rs.school/"></a>
       <p class="year-of-production">&copy;2023</p>
@@ -10,4 +10,4 @@ const FOOTER = `
     </div>
 `;
 
-export default FOOTER;
+export default footerDOM;

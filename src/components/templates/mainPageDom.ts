@@ -1,4 +1,4 @@
-const mainPage = `  
+const mainPageDOM = `  
 <header class="header__container"></header>
 
 <aside class="menu"></aside>
@@ -8,4 +8,4 @@ const mainPage = `
 <footer class="footer"></footer>
 `;
 
-export default mainPage;
+export default mainPageDOM;
