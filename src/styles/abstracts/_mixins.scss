@@ -16,7 +16,8 @@
   @if $line-height {
     max-height: $line-height * $lines * 1px;
   }
-  
+}
+
 @mixin media-tablet {
     @media (max-width: $content-width - 1) and (min-width: $table-width) {
       @content;
