@@ -1,9 +1,10 @@
+import MainPage from './mainPage';
 import { Player } from './player';
-
-const headerContainer: Element | null = document.querySelector('.header__container');
 
 export class App {
     public start(): void {
+        new MainPage().draw();
+        const headerContainer: Element | null = document.querySelector('.header__container');
         if (headerContainer !== null) {
             new Player(headerContainer, this.onRangeInput).drawPlayer();
         }
