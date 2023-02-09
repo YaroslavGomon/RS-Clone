@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    color: $color-dark;
+    @include font($size: 2rem);
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.h1 {
+    @include font($size: 6rem, $weight: 800);
+
+    @include media-mobile {
+        @include font($size: 4rem, $weight: 800);
+    }
+}
+
+.h2 {
+    @include font($size: 3rem, $weight: 800);
+
+    @include media-mobile {
+        @include font($size: 2.5rem, $weight: 800);
+    }
+}
+
+.h3 {
+    @include font($size: 2.4rem, $weight: 800);
+}

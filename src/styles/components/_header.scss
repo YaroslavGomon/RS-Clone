@@ -1,0 +1,15 @@
+.header__container {
+    margin-left: 15%;
+    width: 85%;
+    padding: 2rem 5rem;
+    position: fixed;
+    top: 0;
+    background: $color-light;
+    z-index: 50;
+
+    @include media-mobile {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+    }
+}

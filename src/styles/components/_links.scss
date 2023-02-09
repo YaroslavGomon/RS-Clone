@@ -1,0 +1,10 @@
+.link {
+    display: inline-block;
+    text-decoration: none;
+    color: $color-dark;
+
+    &:hover {
+        cursor: pointer;
+        color: $color-bright;
+    }
+}
