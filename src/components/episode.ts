@@ -1,12 +1,6 @@
-// import Controller from './controller';
 import { episode } from './types/type';
 
 export class Episode {
-    // private controller: Controller;
-
-    // constructor() {
-    //     this.controller = new Controller();
-    // }
 
     public createEpisode(data: episode): Element {
         const episode: Element = document.createElement('div');
@@ -113,6 +107,7 @@ export class Episode {
         return result;
     }
 
+    //Will be delete or use later
     // private getEpisodeData(id: number): void {
     //     this.controller.fetchEpisodeById(id).then((data) => this.createEpisode(data));
     // }
