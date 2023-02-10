@@ -1,8 +1,8 @@
 @mixin font($size, $height: $size, $weight: 400, $style: normal) {
-    font-size: $size;
-    line-height: $height;
-    font-weight: $weight;
-    font-style: $style;
+  font-size: $size;
+  line-height: $height;
+  font-weight: $weight;
+  font-style: $style;
 }
 
 @mixin text-clamp($lines: 2, $line-height: false) {
@@ -19,13 +19,13 @@
 }
 
 @mixin media-tablet {
-    @media (max-width: $content-width - 1) and (min-width: $table-width) {
-      @content;
-    }
+  @media (max-width: ($content-width - 1)) and (min-width: $table-width) {
+    @content;
+  }
 }
 
 @mixin media-mobile {
-    @media (max-width: $table-width - 1) and (min-width: $mobile-width) {
-      @content;
-    }
+  @media (max-width: ($table-width - 1)) and (min-width: $mobile-width) {
+    @content;
+  }
 }

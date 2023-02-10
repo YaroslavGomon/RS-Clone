@@ -1,6 +1,6 @@
 .card {
 
-  width: 24rem;
+  width: 23rem;
   padding: 2rem;
   margin: 1rem;
   aspect-ratio: 1 / 1;
@@ -16,7 +16,7 @@
 
   &:hover .card__play {
     opacity: 1;
-    transform: translateY(-1rem) scale(1);
+    transform: translateY(-2rem) scale(1);
   }
 
   &__image-container {
@@ -62,7 +62,7 @@
 
   & > .card__play:hover {
     opacity: 1;
-    transform: translateY(-1rem) scale(1.05);
+    transform: translateY(-2rem) scale(1.05);
   }
 
   & > .card__play:active {
