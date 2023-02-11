@@ -1,11 +1,11 @@
 import menuDOM from './templates/menuDom';
 
 class Menu {
-    menuLayout: string;
+    private menuLayout: string;
     constructor() {
       this.menuLayout = menuDOM;
     }
-    drawMenu(): void {
+    public drawMenu(): void {
         const menuSection = (document.querySelector('.menu') || document.body) as HTMLElement;
         menuSection.innerHTML += this.menuLayout;
         this.addListeners();

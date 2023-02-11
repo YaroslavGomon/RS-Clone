@@ -24,10 +24,10 @@ export default class Cards {
             podcastCards.innerHTML += `
                 <li class="card" data-id=${data.id.toString()}>
                 <div class="card__image-container" data-id=${data.id.toString()}>
-                <img class="card__image" src=${data.image} alt="Podcast logo">
+                <img data-id=${data.id.toString()} class="card__image" src=${data.image} alt="Podcast logo">
                 </div>
-                <h3 class="card__title">${data.title}</h3>
-                <p class="card__descr">${this.replaceTags(data.description)}</p>
+                <h3 data-id=${data.id.toString()} class="card__title">${data.title}</h3>
+                <p data-id=${data.id.toString()} class="card__descr">${this.replaceTags(data.description)}</p>
                 <div class="card__play" data-id=${data.id.toString()}></div>
                 </li>
                 `;

@@ -54,7 +54,8 @@ class Loader {
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
-            .then((res) => res.json());
+            .then((res) => res.json())
+            .then((res) => res.feed);
         return result;
     }
 
