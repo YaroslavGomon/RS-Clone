@@ -20,7 +20,7 @@ export class App {
     }
 
     private onRangeInput(event: Event): void {
-        const target = event.target as HTMLInputElement;
+        const target: HTMLInputElement = event.target as HTMLInputElement;
         const value = Number(target.value);
         const duration = Number(target.max);
         const percent = value / duration * 100;

@@ -42,7 +42,7 @@ export class Player {
         episodeImage.src = './assets/img/tedtalksdaily.png';
         episodeImage.alt = 'Episode Image';
 
-        const saveButton = document.createElement('div');
+        const saveButton: Element = document.createElement('div');
         saveButton.classList.add('player__button');
         saveButton.classList.add('save');
         saveButton.addEventListener('click', (event: Event) => this.onClickPlayerButton(event));
@@ -142,7 +142,7 @@ export class Player {
         progressTrack.value = '0';
         progressTrack.step = '1';
         progressTrack.addEventListener('input', (event: Event) => {
-            const target = event.target as HTMLInputElement;
+            const target: HTMLInputElement = event.target as HTMLInputElement;
             const value: string = target.value;
             this.audio.currentTime = Number(value);
             this.updateCurrentTime(Number(value));
@@ -175,7 +175,7 @@ export class Player {
     }
 
     private createProgressVolume(): Element {
-        const wrapper = document.createElement('div');
+        const wrapper: Element = document.createElement('div');
         wrapper.classList.add('player-volume__wrapper');
 
         const progressVolume: HTMLInputElement = document.createElement('input');
@@ -218,20 +218,20 @@ export class Player {
     }
 
     private formatTime(duration: number) {
-        const minutes = Math.floor(duration / 60);
-        const seconds = Math.floor(duration % 60);
+        const minutes: number = Math.floor(duration / 60);
+        const seconds: number = Math.floor(duration % 60);
 
         return seconds < 10 ? `${minutes}:0${seconds}` : `${minutes}:${seconds}`;
     }
 
     public skipBack(): void {
-        const currentValue = this.audio.currentTime - 10;
+        const currentValue: number = this.audio.currentTime - 10;
         this.audio.currentTime = currentValue;
         this.updateCurrentTime(currentValue);
     }
 
     public skipForward(): void {
-        const currentValue = this.audio.currentTime + 10;
+        const currentValue: number = this.audio.currentTime + 10;
         this.audio.currentTime = currentValue;
         this.updateCurrentTime(currentValue);
     }
