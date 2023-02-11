@@ -15,8 +15,6 @@ export default class PodcastPage {
 
     public drawPodcastPage(layout = 'apple'): void {
         const mainDOM = document.querySelector('.main__container') as HTMLElement;
-        const appleEpisodesListDOM = document.querySelector('.episodes-list') as HTMLElement;
-        const spotifyEpisodesListDOM = document.querySelector('.podcast__list') as HTMLElement;
         let spotifyEpisodeElement = ``;
         let appleEpisodeElement = ``;
         switch (layout) {
@@ -49,7 +47,7 @@ export default class PodcastPage {
                           </div>
                           </div>
                           `;
-                        appleEpisodesListDOM.innerHTML += appleEpisodeElement;
+                          (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
                     });
                 });
                 break;
@@ -58,11 +56,12 @@ export default class PodcastPage {
                 this.addGeneralDescription(this.podcastId);
                 this.data.then(episodes => {
                     episodes.forEach(episode => {
+                        const episodeImg = episode.image || (document.querySelector('.podcast__image') as HTMLImageElement).src;
                         spotifyEpisodeElement = `
                           <div class="episode">
                               <img
                                   class="episode__image_spoti"
-                                  src="${episode.image}"
+                                  src="${episodeImg}"
                                   alt="Episode image"
                               />
                               <div class="episode__info">
@@ -87,7 +86,7 @@ export default class PodcastPage {
                               </div>
                           </div>
                          `;
-                        spotifyEpisodesListDOM.innerHTML += spotifyEpisodeElement;
+                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
                     });
                 });
                 break;
@@ -98,14 +97,20 @@ export default class PodcastPage {
         .then(podcastData => {
             const podcastImg = document.querySelector('.podcast__image') as HTMLImageElement;
             const podcastTitle = document.querySelector('.podcast__title') as HTMLElement;
-            const podcastDesctiption = document.querySelector('.podcast__about__rr') as HTMLElement || undefined;
-            podcastImg.src = podcastData.image;
+            const podcastDescription = document.querySelector('.podcast__about__text') as HTMLElement || undefined;
+            if (podcastData.image != ''){
+                podcastImg.src = podcastData.image;
+            }
+            else {
+                podcastImg.src = `../assets/img/fav-icon.png`;
+            }
             podcastTitle.innerText = podcastData.title;
-            if (podcastDesctiption != undefined){
-                podcastDesctiption.innerText = podcastData.description;
+            if (podcastDescription != undefined){
+                podcastDescription.innerText = podcastData.description;
             }
         });
     }
+    // TO DO
     // private addListeners():void {
     //     const mainDOM = document.querySelector('.main__container') as HTMLElement;
     // }
