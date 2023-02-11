@@ -46,5 +46,18 @@ export { podcastCard, episode };
 
 export function requiresNonNull<Type>(object: Type | null | undefined): Type {
     if (object === null || object == undefined) throw new Error('Element not found');
+
     return object;
 }
+
+export enum PlayerButtons {
+  Play = 'play',
+  Pause = 'pause',
+  Previous = 'previous',
+  Next = 'next',
+  Skipback = 'skip-back',
+  Skipforward = 'skip-forward',
+  Save = 'save'
+}
+
+export type OnClickPlayerButton = (event: Event) => void;

@@ -61,6 +61,7 @@
     height: 2rem;
     background-color: $color-additional;
     position: relative;
+    cursor: pointer;
 
     &:hover {
         background-color: $color-bright;
@@ -90,6 +91,11 @@
 .play {
     -webkit-mask: url('./assets/icons/play.svg') no-repeat center;
     mask: url('./assets/icons/play.svg') no-repeat center;
+}
+
+.pause {
+    -webkit-mask: url('./assets/icons/pause.svg') no-repeat center;
+    mask: url('./assets/icons/pause.svg') no-repeat center;
 }
 
 .player_save {
@@ -136,14 +142,16 @@
 
 .progress {
     height: 0.5rem;
-    background: linear-gradient(to right, #993aed 0%, #993aed 0%, #8a8a8a 0%, #8a8a8a 100%);
+    background: $color-additional-light;
     border-radius: $radius;
     -webkit-appearance: none;
     appearance: none;
+    cursor: pointer;
 }
 
 .progress::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     margin-top: -0.3rem;
     height: 1rem;
     width: 1rem;
@@ -182,6 +190,7 @@
 
 .player__podcast-data {
     display: flex;
+    justify-content: space-between;
     gap: 1rem;
     align-items: center;
     @include font($size: 1.5rem);
