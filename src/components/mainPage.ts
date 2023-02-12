@@ -5,13 +5,14 @@ import mainPageDOM from './templates/mainPageDom';
 
 export default class MainPage {
     menu: Menu;
-    cards: Cards;
+    // cards: Cards;
     footer: Footer;
 
     constructor() {
         this.menu = new Menu();
-        this.cards = new Cards();
+        // this.cards = new Cards();
         this.footer = new Footer();
+
     }
 
     addStructure() {
@@ -24,7 +25,7 @@ export default class MainPage {
     draw() {
         this.addStructure();
         this.menu.drawMenu();
-        this.cards.draw();
+        // this.cards.draw();
         this.footer.draw();
     }
 }
