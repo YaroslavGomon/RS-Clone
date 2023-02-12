@@ -3,10 +3,10 @@ import { OnClickPlayerButton, OnRangeInput } from './types/type';
 import { requiresNonNull } from './utils';
 
 export class Player {
-    private onRangeInput: OnRangeInput;
-    private onClickPlayerButton: OnClickPlayerButton;
+    private readonly onRangeInput: OnRangeInput;
+    private readonly onClickPlayerButton: OnClickPlayerButton;
+    public readonly audio: HTMLAudioElement;
     private isPlay: boolean = false;
-    public audio: HTMLAudioElement;
 
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
         this.audio = document.createElement('audio');
@@ -203,8 +203,7 @@ export class Player {
     }
 
     public playAudio(): void {
-        let playButton: Element = requiresNonNull(document.querySelector('.play'));
-        if (!playButton) playButton = requiresNonNull(document.querySelector('.pause'));
+        const playButton: Element = requiresNonNull(document.querySelector('#play'));
         const durationTime: Element = requiresNonNull(document.querySelector('.time_duration'));
         durationTime.textContent = this.formatTime(this.audio.duration);
 
