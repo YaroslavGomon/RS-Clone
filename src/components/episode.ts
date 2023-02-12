@@ -1,114 +1,119 @@
-import { episode } from './types/type';
+import Controller from './controller';
+import { episode, requiresNonNull } from './types/type';
 
 export class Episode {
+    private controller: Controller;
 
-    public createEpisode(data: episode): Element {
+    constructor() {
+        this.controller = new Controller();
+    }
+
+    public draw(data: episode): void {
         const episode: Element = document.createElement('div');
-        episode.classList.add('episode');
+        episode.classList.add('episodeContent');
 
-        episode.appendChild(this.createEpisodeImage(data.image));
-        episode.appendChild(this.createEpisodeInfo(data));
+        episode.appendChild(this.createEpisodeHeader(data.image, data.title, data.title));
+        episode.appendChild(this.createButtonsBlock());
+        episode.appendChild(this.createEpisodeDescription(data.description));
+        episode.appendChild(this.createButtonSeeAll(data.feedId));
 
-        return episode;
+        const mainContainer = requiresNonNull(document.querySelector('.main__container'));
+        mainContainer.innerHTML = ``;
+        mainContainer.appendChild(episode);
     }
 
-    private createEpisodeImage(image: string): Element {
+    private createEpisodeHeader(image: string, title: string, owner: string): Element {
+        const episodeHeader: Element = document.createElement('div');
+        episodeHeader.classList.add('episodeContent__header');
+
         const episodeImage: HTMLImageElement = document.createElement('img');
-        episodeImage.classList.add('episode__image_spoti');
+        episodeImage.classList.add('episodeContent__image');
         episodeImage.src = image;
-        episodeImage.alt = 'Episode Image';
 
-        return episodeImage;
-    }
-
-    private createEpisodeInfo(data: episode): Element {
         const episodeInfo: Element = document.createElement('div');
+        episodeInfo.classList.add('episodeContent__header__info');
 
-        const episodeTitle: Element = document.createElement('h4');
-        episodeTitle.classList.add('episode__title_spoti');
-        episodeTitle.innerHTML = `${data.title} | <span class="episode__author">Marins</span>`; // ???
+        const episodeTitle: Element = document.createElement('h1');
+        episodeTitle.classList.add('episodeContent__title');
+        episodeTitle.classList.add('h1');
+        episodeTitle.textContent = title;
 
-        const episodeDescription: Element = document.createElement('div');
-        episodeDescription.classList.add('episode__description');
-        episodeDescription.textContent = data.description;
+        const episodeOwner: Element = document.createElement('h3');
+        episodeOwner.classList.add('episodeContent__owner');
+        episodeOwner.classList.add('h3');
+        episodeOwner.textContent = owner;
 
         episodeInfo.appendChild(episodeTitle);
-        episodeInfo.appendChild(episodeDescription);
-        episodeInfo.appendChild(this.createEpisodePlayer(data.duration));
-        episodeInfo.appendChild(this.createActionsButton());
+        episodeInfo.appendChild(episodeOwner);
+        episodeHeader.appendChild(episodeImage);
+        episodeHeader.appendChild(episodeInfo);
 
-        return episodeInfo;
+        return episodeHeader;
     }
 
-    private createEpisodePlayer(duration: number): Element {
-        const player: Element = document.createElement('div');
-        player.classList.add('player_small');
+    private createButtonsBlock(): Element {
+        const buttonsContainer: Element = document.createElement('div');
+        buttonsContainer.classList.add('episodeContent__buttons');
 
         const playButton: Element = document.createElement('div');
         playButton.classList.add('button');
-        playButton.classList.add('button-play');
+        playButton.classList.add('button_big');
+        playButton.classList.add('play');
 
-        const episodeTime: Element = document.createElement('div');
-        episodeTime.classList.add('episode__time_spoti');
+        const libraryButton: Element = document.createElement('div');
+        libraryButton.classList.add('button');
+        libraryButton.classList.add('button_big');
+        libraryButton.classList.add('save');
 
-        const episodeDuration: Element = document.createElement('div');
-        episodeDuration.classList.add('duration');
-        episodeDuration.textContent = this.getTime(duration);
+        const actionsButton: Element = document.createElement('div');
+        actionsButton.classList.add('button');
+        actionsButton.classList.add('button_big');
+        actionsButton.classList.add('button_actions');
+        actionsButton.textContent = '...';
 
-        const episodeProgress: HTMLInputElement = document.createElement('input');
-        episodeProgress.type = 'range';
-        episodeProgress.classList.add('progress_small');
-        episodeProgress.classList.add('unvisible');
+        buttonsContainer.appendChild(playButton);
+        buttonsContainer.appendChild(libraryButton);
+        buttonsContainer.appendChild(actionsButton);
 
-        player.appendChild(playButton);
-        player.appendChild(episodeTime);
-        player.appendChild(episodeDuration);
-        player.appendChild(episodeProgress);
-
-        return player;
+        return buttonsContainer;
     }
 
-    private createActionsButton(): Element {
-        const wrapper: Element = document.createElement('div');
-        wrapper.classList.add('actions_spoti');
+    private createEpisodeDescription(desription: string): Element {
+        const section: Element = document.createElement('section');
+        section.classList.add('episodeContent__description');
 
-        const shareButton: Element = document.createElement('div');
-        shareButton.classList.add('button_action');
-        shareButton.classList.add('share');
+        const sectionHeader: Element = document.createElement('h2');
+        sectionHeader.classList.add('h2');
+        sectionHeader.textContent = 'Episode Description';
 
-        const saveButton: Element = document.createElement('div');
-        saveButton.classList.add('button_action');
-        saveButton.classList.add('save');
+        const sectionText: Element = document.createElement('div');
+        sectionText.classList.add('episode__text');
+        sectionText.textContent = desription;
 
-        const moreButton: Element = document.createElement('div');
-        moreButton.classList.add('button_action');
-        moreButton.classList.add('more_spoti');
+        section.appendChild(sectionHeader);
+        section.appendChild(sectionText);
 
-        wrapper.appendChild(shareButton);
-        wrapper.appendChild(saveButton);
-        wrapper.appendChild(moreButton);
-
-        return wrapper;
-
+        return section;
     }
 
-    private getTime(duration: number): string {
-        let result = '';
-        let hour = 0;
-        if (duration >= 3600) {
-            hour = Math.floor(duration / 3600);
-            result += `${hour} hr `;
-        }
-        const minutes = Math.floor((duration - hour * 3600) / 60);
-        const seconds = Math.floor(duration - hour * 3600 - minutes * 60);
+    private createButtonSeeAll(podcastId: number): Element {
+        const seeAllButton = document.createElement('div');
+        seeAllButton.classList.add('button');
+        seeAllButton.classList.add('button_light');
+        seeAllButton.classList.add('button_see-all');
+        seeAllButton.textContent = 'See All Episodes';
 
-        result += `${minutes} min ${seconds} sec`;
+        // seeAllButton.addEventListener('click', () => this.getAllEpisode(podcastId));
 
-        return result;
+        return seeAllButton;
     }
 
-    //Will be delete or use later
-    // private getEpisodeData(id: number): void {
-    //     this.controller.fetchEpisodeById(id).then((data) => this.createEpisode(data));
+    public getEpisodeData(id: number): void {
+        this.controller.fetchEpisodeById(id).then((data) => this.draw(data));
+    }
+
+    //TO DO
+    // public getAllEpisode(podcastId: number): void {
+        // this.onClickPodcastCard(podcastId);
     // }
 }
