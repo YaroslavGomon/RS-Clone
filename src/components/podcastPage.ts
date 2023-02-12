@@ -27,7 +27,7 @@ export default class PodcastPage {
                 this.data.then(episodes => {
                     episodes.forEach(episode => {
                         appleEpisodeElement = `
-                          <div class="episode">
+                          <div class="episode" data-id=${episode.id}>
                           <div class="episode__info">
                           <div class="episode__time">${episode.datePublishedPretty}</div>
                           <h4 class="episode__title">
@@ -65,7 +65,7 @@ export default class PodcastPage {
                     episodes.forEach(episode => {
                         const episodeImg = episode.image || (document.querySelector('.podcast__image') as HTMLImageElement).src;
                         spotifyEpisodeElement = `
-                          <div class="episode">
+                          <div class="episode" data-id=${episode.id}>
                               <img
                                   class="episode__image_spoti"
                                   src="${episodeImg}"
