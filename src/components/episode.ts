@@ -1,8 +1,9 @@
 import Controller from './controller';
-import { episode, requiresNonNull } from './types/type';
+import { episode } from './types/type';
+import { requiresNonNull } from './utils';
 
-export class Episode {
-    private controller: Controller;
+export class EpisodeComponent {
+    private readonly controller: Controller;
 
     constructor() {
         this.controller = new Controller();
@@ -103,17 +104,10 @@ export class Episode {
         seeAllButton.classList.add('button_see-all');
         seeAllButton.textContent = 'See All Episodes';
 
-        // seeAllButton.addEventListener('click', () => this.getAllEpisode(podcastId));
-
         return seeAllButton;
     }
 
-    public getEpisodeData(id: number): void {
+    public fetchData(id: number): void {
         this.controller.fetchEpisodeById(id).then((data) => this.draw(data));
     }
-
-    //TO DO
-    // public getAllEpisode(podcastId: number): void {
-        // this.onClickPodcastCard(podcastId);
-    // }
 }

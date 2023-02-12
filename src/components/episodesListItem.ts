@@ -93,17 +93,12 @@ export class EpisodesListItem {
     }
 
     private getTime(duration: number): string {
-        let result = '';
-        let hour = 0;
-        if (duration >= 3600) {
-            hour = Math.floor(duration / 3600);
-            result += `${hour} hr `;
-        }
-        const minutes = Math.floor((duration - hour * 3600) / 60);
-        const seconds = Math.floor(duration - hour * 3600 - minutes * 60);
+        const hoursStr = duration >= 3600
+            ? `${Math.floor(duration / 3600)} hr `
+            : ``;
+        const minutes = Math.floor((duration - Number(hoursStr) * 3600) / 60);
+        const seconds = Math.floor(duration - Number(hoursStr) * 3600 - minutes * 60);
 
-        result += `${minutes} min ${seconds} sec`;
-
-        return result;
+        return `${hoursStr} ${minutes} min ${seconds} sec`;
     }
 }

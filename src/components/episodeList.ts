@@ -4,7 +4,7 @@ import { EpisodesListItem } from './episodesListItem';
 export class EpisodeList {
     private podcastId: number;
 
-    private controller: Controller;
+    private readonly controller: Controller;
 
     constructor(podcatId: number) {
         this.podcastId = podcatId;
@@ -20,12 +20,12 @@ export class EpisodeList {
         latestHeader.textContent = 'Latest Episode';
 
         section.appendChild(latestHeader);
-        this.getEpisodeListData(section);
+        this.fetchData(section);
 
         return section;
     }
 
-    private getEpisodeListData(parent: Element): void {
+    private fetchData(parent: Element): void {
         this.controller.fetchEpisodesById(this.podcastId).then((data) =>
             data.forEach((item, index) => {
                 if (index === 0) {
