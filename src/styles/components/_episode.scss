@@ -10,6 +10,7 @@
     border-bottom: 1px solid $color-additional-light;
     border-radius: $radius;
     position: relative;
+    cursor: pointer;
 
     &_latest {
         position: relative;
