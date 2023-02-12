@@ -1,41 +1,56 @@
+import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import Controller from './controller';
-import PodcastPage from './podcastPage';
+import { PlayerButtons } from './types/type';
+import { requiresNonNull } from './utils';
 
 export class App {
+    private player: Player;
+
+    constructor() {
+        this.player = new Player(
+            (event) => this.onRangeInput(event),
+            (event) => this.onClickPlayerButton(event)
+        );
+    }
+
     public start(): void {
         new MainPage().draw();
-        const headerContainer: Element | null = document.querySelector('.header__container');
-        if (headerContainer !== null) {
-            new Player(headerContainer, this.onRangeInput).drawPlayer();
-        }
-        addEventListener();
+        new Header().draw();
+        this.player.draw();
     }
 
     private onRangeInput(event: Event): void {
-        const target = event.target as HTMLInputElement;
-        const value: string = target.value;
-        target.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${value}%, #8a8a8a ${value}%, #8a8a8a 100%)`;
+        const target: HTMLInputElement = event.target as HTMLInputElement;
+        const value: number = Number(target.value);
+        const duration: number = Number(target.max);
+        const percent: number = value / duration * 100;
+        target.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${percent}%, #dddddd ${percent}%, #dddddd 100%)`;
     }
-}
 
-function addEventListener(){
-    const mainDOM = document.querySelector('main') as HTMLElement;
-    const track = document.querySelector('.track') as HTMLAudioElement;
-    const controller = new Controller;
-    mainDOM.addEventListener('click', (event) => {
-        const target = event.target as HTMLElement;
-        if (target.dataset.id && target.classList.contains("card__play") === false){
-            const podcastPage = new PodcastPage(Number(target.dataset.id));
-            podcastPage.drawPodcastPage("spotify");
+    public onClickPlayerButton(event: Event): void {
+        const target: Element = requiresNonNull(event.target) as Element;
+        switch (target.id) {
+            case PlayerButtons.Play:
+                this.player.playAudio();
+                break;
+            case PlayerButtons.Next:
+                this.player.nextEpisode();
+                break;
+            case PlayerButtons.Previous:
+                this.player.previousEpisode();
+                break;
+            case PlayerButtons.Skipback:
+                this.player.skipBack();
+                break;
+            case PlayerButtons.Skipforward:
+                this.player.skipForward();
+                break;
+            case PlayerButtons.Save:
+                console.log('save to library');
+                break;
+            default:
+                console.log('button');
         }
-        else if (target.dataset.id && target.classList.contains("card__play") === true){
-            controller.fetchEpisodesById(Number(target.dataset.id))
-            .then(data => {
-                track.src = data[0].enclosureUrl;
-                track.play();
-            });
-        }
-    });
+    }
 }

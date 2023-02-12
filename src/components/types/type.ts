@@ -43,3 +43,15 @@ type episode = {
 export type OnRangeInput = (event: Event) => void;
 
 export { podcastCard, episode };
+
+export enum PlayerButtons {
+    Play = 'play',
+    Pause = 'pause',
+    Previous = 'previous',
+    Next = 'next',
+    Skipback = 'skip-back',
+    Skipforward = 'skip-forward',
+    Save = 'save'
+  }
+
+  export type OnClickPlayerButton = (event: Event) => void;
