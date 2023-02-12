@@ -16,10 +16,11 @@
     },
     "rules": {
         "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-inferrable-types": 0,
         "no-debugger": "off",
         "no-console": 0,
         "class-methods-use-this": "off",
-        "no-var": "error", 
+        "no-var": "error",
         "semi": "error"
     }
 }

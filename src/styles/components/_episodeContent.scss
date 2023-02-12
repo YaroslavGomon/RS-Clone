@@ -1,0 +1,47 @@
+.episodeContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 70%;
+    @include font($size: 2.5rem);
+}
+
+.episodeContent__header {
+    display: flex;
+    gap: 2rem;
+}
+
+.episodeContent__image {
+    width: 30rem;
+    height: 30rem;
+}
+
+.episodeContent__header__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.episodeContent__buttons {
+    display: flex;
+    gap: 2rem;
+}
+
+.button_big {
+    width: 5rem;
+    height: 5rem;
+    // background-size: contain;
+    background-color: $color-bright;
+}
+
+.episodeContent__description {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.button_see-all {
+    width: 20%;
+    padding: 0.5rem 0.5rem;
+}

@@ -28,6 +28,10 @@
     }
 }
 
+.episode_latest .episode__image_spoti {
+    display: none;
+}
+
 .actions_spoti { //onmouseover
     display: flex;
     gap: 1rem;

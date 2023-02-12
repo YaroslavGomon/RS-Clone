@@ -9,7 +9,7 @@ class Loader {
         apiHeaderTime: string
     ): Promise<string> {
         const arrayBuffer: ArrayBuffer = new TextEncoder().encode(apiKey + apiSecret + apiHeaderTime);
-        const digest = await crypto.subtle.digest('SHA-1', arrayBuffer);
+        const digest: ArrayBuffer = await crypto.subtle.digest('SHA-1', arrayBuffer);
         return [...new Uint8Array(digest)].map((x) => x.toString(16).padStart(2, '0')).join('');
     }
 
@@ -25,50 +25,57 @@ class Loader {
     }
 
     async fetchRecent(apiKey: string, apiSecret: string): Promise<podcastCard[]>  {
-        const url = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=10';
+        const url: string = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=10';
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        const result = this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
             .then((json) => json.feeds);
-        return result;
     }
 
     async fetchSearchCall(qString: string, apiKey: string, apiSecret: string): Promise<podcastCard[]>  {
-        const url = `https://api.podcastindex.org/api/1.0/search/byterm?q=${qString}&pretty`;
+        const url: string = `https://api.podcastindex.org/api/1.0/search/byterm?q=${qString}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        const result = this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
-            .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
-            .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit) => fetch(url, requestInit))
-            .then((res) => res.json())
-            .then((json) => json.feeds);
-        return result;
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+                .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
+                .then((headers: HeadersInit) => ({ method: 'GET', headers }))
+                .then((requestInit) => fetch(url, requestInit))
+                .then((res) => res.json())
+                .then((json) => json.feeds);
     }
     fetchById(id: number, apiKey: string, apiSecret: string): Promise<podcastCard>  {
-        const url = `https://api.podcastindex.org/api/1.0/podcasts/byfeedid?id=${id}&pretty`;
+        const url: string = `https://api.podcastindex.org/api/1.0/podcasts/byfeedid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        const result = this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
-            .then((res) => res.feed);
-        return result;
+            .then((json) => json.feed);
     }
 
     fetchEpisodesById(id: number, apiKey: string, apiSecret: string): Promise<episode[]>  {
-        const url = `https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${id}&pretty`;
+        const url: string = `https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        const result = this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
             .then(res => res.items);
-        return result;
+    }
+
+    fetchEpisodeById(id: number, apiKey: string, apiSecret: string): Promise<episode>  {
+        const url: string = `https://api.podcastindex.org/api/1.0/episodes/byid?id=${id}&pretty`;
+        const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+            .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
+            .then((headers: HeadersInit) => ({ method: 'GET', headers }))
+            .then((requestInit) => fetch(url, requestInit))
+            .then((res) => res.json())
+            .then(res => res.episode);
     }
 }
 
@@ -87,6 +94,9 @@ class Controller implements IController {
     }
     fetchEpisodesById(id: number): Promise<episode[]> {
         return new Loader().fetchEpisodesById(id, this.apiKey, this.apiSecret);
+    }
+    fetchEpisodeById(id: number): Promise<episode> {
+        return new Loader().fetchEpisodeById(id, this.apiKey, this.apiSecret);
     }
     fetchSearchCall(qString: string): Promise<podcastCard[]> {
         return new Loader().fetchSearchCall(qString, this.apiKey, this.apiSecret);
@@ -179,7 +189,7 @@ function generatePodcastSearchList(search: string){
 }
 
 function generateEpisodesList(id: number, title: string){
-    document.body.innerHTML = PODCAST_EPISODES_LIST_DOM; 
+    document.body.innerHTML = PODCAST_EPISODES_LIST_DOM;
     const PODCAST_ITEMS = document.querySelector('.podcast_items') as HTMLElement;
     const PODCAST_NAME = document.querySelector('.podcast_items__title') as HTMLElement;
     const controller = new Controller();
