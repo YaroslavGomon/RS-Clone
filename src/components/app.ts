@@ -76,19 +76,19 @@ export class App {
         new Cards((id: number) => this.onClickPodcastCard(id)).draw();
     }
 
-    private onClickPodcastCard(id: number): void {
-        this.router.updateUrl(`/#podcast/${id}`);
+    private onClickPodcastCard(podcastId: number): void {
+        this.router.updateUrl(`/#podcast/${podcastId}`);
     }
 
-    private onLoadPodcastPage(id: number): void {
-        new PodcastPage(id, (id: number) => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
+    private onLoadPodcastPage(podcastId: number): void {
+        new PodcastPage(podcastId, (id: number) => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
     }
 
-    private onClickEpisodeCard(id: number): void {
-        this.router.updateUrl(`/#episode/${id}`);
+    private onClickEpisodeCard(episodeId: number): void {
+        this.router.updateUrl(`/#episode/${episodeId}`);
     }
 
-    private onLoadEpisodePage(id: number): void {
-        new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(id);
+    private onLoadEpisodePage(episodeId: number): void {
+        new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
     }
 }
