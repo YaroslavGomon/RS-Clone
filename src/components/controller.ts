@@ -70,13 +70,12 @@ class Loader {
     fetchEpisodeById(id: number, apiKey: string, apiSecret: string): Promise<episode>  {
         const url: string = `https://api.podcastindex.org/api/1.0/episodes/byid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        const result = this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
             .then(res => res.episode);
-        return result;
     }
 }
 
