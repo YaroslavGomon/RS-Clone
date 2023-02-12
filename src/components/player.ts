@@ -5,7 +5,7 @@ import { requiresNonNull } from './utils';
 export class Player {
     private onRangeInput: OnRangeInput;
     private onClickPlayerButton: OnClickPlayerButton;
-    private isPlay: Boolean = false;
+    private isPlay: boolean = false;
     public audio: HTMLAudioElement;
 
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {

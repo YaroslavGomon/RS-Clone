@@ -15,7 +15,7 @@ export class EpisodeComponent {
         const episode: Element = document.createElement('div');
         episode.classList.add('episodeContent');
 
-        episode.appendChild(this.createEpisodeHeader(data.image, data.title, data.title));
+        episode.appendChild(this.createEpisodeHeader(data.image || data.feedImage, data.title, data.title));
         episode.appendChild(this.createButtonsBlock());
         episode.appendChild(this.createEpisodeDescription(data.description));
         episode.appendChild(this.createButtonSeeAll(data.feedId));
