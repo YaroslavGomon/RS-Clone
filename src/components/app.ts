@@ -81,7 +81,7 @@ export class App {
     }
 
     private onLoadPodcastPage(id: number): void {
-        new PodcastPage(id, () => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
+        new PodcastPage(id, (id: number) => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
     }
 
     private onClickEpisodeCard(id: number): void {
@@ -89,6 +89,6 @@ export class App {
     }
 
     private onLoadEpisodePage(id: number): void {
-        new EpisodeComponent(() => this.onClickPodcastCard(id)).fetchEpisode(id);
+        new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(id);
     }
 }
