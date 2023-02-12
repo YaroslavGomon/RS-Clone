@@ -3,21 +3,39 @@ import MainPage from './mainPage';
 import { Player } from './player';
 import { PlayerButtons } from './types/type';
 import { requiresNonNull } from './utils';
+import PodcastPage from './podcastPage';
+import { Router } from './router';
+import { EpisodeComponent } from './episode';
+import Cards from './cards';
 
 export class App {
     private player: Player;
+    private router: Router;
 
     constructor() {
         this.player = new Player(
             (event) => this.onRangeInput(event),
             (event) => this.onClickPlayerButton(event)
         );
+
+        this.router = new Router();
     }
 
     public start(): void {
         new MainPage().draw();
         new Header().draw();
         this.player.draw();
+
+        this.createBasicRoutes();
+        this.router.handleLocation();
+
+        window.addEventListener('popstate', () => this.router.handleLocation());
+    }
+
+    private createBasicRoutes() {
+        this.router.addRoute('/', () => this.onLoadMainPage());
+        this.router.addRoute('podcast', (id: number) => this.onLoadPodcastPage(id));
+        this.router.addRoute('episode', (id: number) => this.onLoadEpisodePage(id));
     }
 
     private onRangeInput(event: Event): void {
@@ -52,5 +70,25 @@ export class App {
             default:
                 console.log('button');
         }
+    }
+
+    private onLoadMainPage(): void {
+        new Cards((id: number) => this.onClickPodcastCard(id)).draw();
+    }
+
+    private onClickPodcastCard(id: number): void {
+        this.router.updateUrl(`/#podcast/${id}`);
+    }
+
+    private onLoadPodcastPage(id: number): void {
+        new PodcastPage(id, () => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
+    }
+
+    private onClickEpisodeCard(id: number): void {
+        this.router.updateUrl(`/#episode/${id}`);
+    }
+
+    private onLoadEpisodePage(id: number): void {
+        new EpisodeComponent(() => this.onClickPodcastCard(id)).fetchEpisode(id);
     }
 }
