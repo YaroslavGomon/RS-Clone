@@ -18,7 +18,7 @@ export class App {
     public start(): void {
         new MainPage().draw();
         new Header().draw();
-        this.player.drawPlayer();
+        this.player.draw();
     }
 
     private onRangeInput(event: Event): void {
