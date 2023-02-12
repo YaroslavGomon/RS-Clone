@@ -9,8 +9,8 @@ import { EpisodeComponent } from './episode';
 import Cards from './cards';
 
 export class App {
-    private player: Player;
-    private router: Router;
+    private readonly player: Player;
+    private readonly router: Router;
 
     constructor() {
         this.player = new Player(
