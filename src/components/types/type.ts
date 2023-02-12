@@ -52,6 +52,9 @@ export enum PlayerButtons {
     Skipback = 'skip-back',
     Skipforward = 'skip-forward',
     Save = 'save'
-  }
+}
 
-  export type OnClickPlayerButton = (event: Event) => void;
+export type OnClickPlayerButton = (event: Event) => void;
+export type OnReloadPage = (id: number) => void;
+export type OnClickPodcastCard = (id: number) => void;
+export type OnClickCard = (id: number) => void;
