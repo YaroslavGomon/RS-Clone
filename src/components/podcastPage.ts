@@ -1,16 +1,19 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode } from './types/type';
+import { episode, OnClickCard } from './types/type';
+import { requiresNonNull } from './utils';
 
 export default class PodcastPage {
     private podcastId: number;
-    private controller: Controller;
+    private readonly controller: Controller;
     private data: Promise<episode[]>;
+    private onClickEpisodeCard: OnClickCard;
 
-    constructor(id: number) {
+    constructor(id: number, onClickEpisodeCard: OnClickCard) {
         this.podcastId = id;
         this.controller = new Controller();
         this.data = this.controller.fetchEpisodesById(id);
+        this.onClickEpisodeCard = onClickEpisodeCard;
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -21,10 +24,10 @@ export default class PodcastPage {
             case 'apple':
                 mainDOM.innerHTML = applePodcastPageDOM;
                 this.addGeneralDescription(this.podcastId);
-                this.data.then(episodes => {
-                    episodes.forEach(episode => {
+                this.data.then((episodes) => {
+                    episodes.forEach((episode) => {
                         appleEpisodeElement = `
-                          <div class="episode">
+                          <div class="episode" data-id=${episode.id}>
                           <div class="episode__info">
                           <div class="episode__time">${episode.datePublishedPretty}</div>
                           <h4 class="episode__title">
@@ -37,7 +40,9 @@ export default class PodcastPage {
                           <div class="player_small">
                           <div class="button button-play"></div>
                           <div class="progress_small unvisible"></div>
-                          <div class="duration">${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec</div>
+                          <div class="duration">${Math.floor(episode.duration / 60)} min ${
+                            episode.duration % 60
+                        } sec</div>
                           </div>
                           </div>
                           <div class="actions">
@@ -47,18 +52,25 @@ export default class PodcastPage {
                           </div>
                           </div>
                           `;
-                          (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
+                        (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
+                        const episodesWrapper: NodeListOf<Element> = requiresNonNull(
+                            document.querySelectorAll('.episode')
+                        );
+                        episodesWrapper.forEach((episodeWrapper) =>
+                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
+                        );
                     });
                 });
                 break;
             case 'spotify':
                 mainDOM.innerHTML = spotifyPodcastPageDOM;
                 this.addGeneralDescription(this.podcastId);
-                this.data.then(episodes => {
-                    episodes.forEach(episode => {
-                        const episodeImg = episode.image || (document.querySelector('.podcast__image') as HTMLImageElement).src;
+                this.data.then((episodes) => {
+                    episodes.forEach((episode) => {
+                        const episodeImg =
+                            episode.image || (document.querySelector('.podcast__image') as HTMLImageElement).src;
                         spotifyEpisodeElement = `
-                          <div class="episode">
+                          <div class="episode" data-id=${episode.id}>
                               <img
                                   class="episode__image_spoti"
                                   src="${episodeImg}"
@@ -75,7 +87,9 @@ export default class PodcastPage {
                                   <div class="player_small">
                                       <div class="button button-play"></div>
                                       <div class="episode__time_spoti">${episode.datePublishedPretty}</div>
-                                      <div class="duration">${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec</div>
+                                      <div class="duration">${Math.floor(episode.duration / 60)} min ${
+                            episode.duration % 60
+                        } sec</div>
                                       <div class="progress_small unvisible"></div>
                                   </div>
                                   <div class="actions_spoti">
@@ -86,26 +100,30 @@ export default class PodcastPage {
                               </div>
                           </div>
                          `;
-                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
+                        (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
+                        const episodesWrapper: NodeListOf<Element> = requiresNonNull(
+                            document.querySelectorAll('.episode')
+                        );
+                        episodesWrapper.forEach((episodeWrapper) =>
+                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
+                        );
                     });
                 });
                 break;
         }
     }
     private addGeneralDescription(id: number) {
-        this.controller.fetchById(id)
-        .then(podcastData => {
+        this.controller.fetchById(id).then((podcastData) => {
             const podcastImg = document.querySelector('.podcast__image') as HTMLImageElement;
             const podcastTitle = document.querySelector('.podcast__title') as HTMLElement;
-            const podcastDescription = document.querySelector('.podcast__about__text') as HTMLElement || undefined;
-            if (podcastData.image != ''){
+            const podcastDescription = (document.querySelector('.podcast__about__text') as HTMLElement) || undefined;
+            if (podcastData.image != '') {
                 podcastImg.src = podcastData.image;
-            }
-            else {
+            } else {
                 podcastImg.src = `../assets/img/fav-icon.png`;
             }
             podcastTitle.innerText = podcastData.title;
-            if (podcastDescription != undefined){
+            if (podcastDescription != undefined) {
                 podcastDescription.innerText = podcastData.description;
             }
         });

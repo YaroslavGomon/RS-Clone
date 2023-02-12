@@ -1,19 +1,21 @@
 import Controller from './controller';
-import { episode } from './types/type';
+import { episode, OnClickPodcastCard } from './types/type';
 import { requiresNonNull } from './utils';
 
 export class EpisodeComponent {
     private readonly controller: Controller;
+    private onClickPodcastCard: OnClickPodcastCard;
 
-    constructor() {
+    constructor(onClickPodcastCard: OnClickPodcastCard) {
         this.controller = new Controller();
+        this.onClickPodcastCard = onClickPodcastCard;
     }
 
     public draw(data: episode): void {
         const episode: Element = document.createElement('div');
         episode.classList.add('episodeContent');
 
-        episode.appendChild(this.createEpisodeHeader(data.image, data.title, data.title));
+        episode.appendChild(this.createEpisodeHeader(data.image || data.feedImage, data.title, data.title));
         episode.appendChild(this.createButtonsBlock());
         episode.appendChild(this.createEpisodeDescription(data.description));
         episode.appendChild(this.createButtonSeeAll(data.feedId));
@@ -104,10 +106,16 @@ export class EpisodeComponent {
         seeAllButton.classList.add('button_see-all');
         seeAllButton.textContent = 'See All Episodes';
 
+        seeAllButton.addEventListener('click', () => this.fetchAllEpisode(podcastId));
+
         return seeAllButton;
     }
 
-    public fetchData(id: number): void {
+    public fetchEpisode(id: number): void {
         this.controller.fetchEpisodeById(id).then((data) => this.draw(data));
+    }
+
+    public fetchAllEpisode(podcastId: number): void {
+        this.onClickPodcastCard(podcastId);
     }
 }

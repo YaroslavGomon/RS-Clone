@@ -4,13 +4,13 @@
 
 .episode {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 2rem;
     padding: 1rem;
     border-bottom: 1px solid $color-additional-light;
     border-radius: $radius;
     position: relative;
+    cursor: pointer;
 
     &_latest {
         position: relative;
