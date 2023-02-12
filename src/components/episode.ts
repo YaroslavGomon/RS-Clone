@@ -1,11 +1,13 @@
 import Controller from './controller';
-import { episode, requiresNonNull } from './types/type';
+import { episode, OnClickPodcastCard, requiresNonNull } from './types/type';
 
 export class Episode {
     private controller: Controller;
+    private onClickPodcastCard: OnClickPodcastCard;
 
-    constructor() {
+    constructor(onClickPodcastCard: OnClickPodcastCard) {
         this.controller = new Controller();
+        this.onClickPodcastCard = onClickPodcastCard;
     }
 
     public draw(data: episode): void {
@@ -103,7 +105,7 @@ export class Episode {
         seeAllButton.classList.add('button_see-all');
         seeAllButton.textContent = 'See All Episodes';
 
-        // seeAllButton.addEventListener('click', () => this.getAllEpisode(podcastId));
+        seeAllButton.addEventListener('click', () => this.getAllEpisode(podcastId));
 
         return seeAllButton;
     }
@@ -112,8 +114,7 @@ export class Episode {
         this.controller.fetchEpisodeById(id).then((data) => this.draw(data));
     }
 
-    //TO DO
-    // public getAllEpisode(podcastId: number): void {
-        // this.onClickPodcastCard(podcastId);
-    // }
+    public getAllEpisode(podcastId: number): void {
+        this.onClickPodcastCard(podcastId);
+    }
 }

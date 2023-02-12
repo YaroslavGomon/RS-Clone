@@ -1,15 +1,17 @@
 import Controller from './controller';
-import { podcastCard } from './types/type';
+import { OnClickPodcastCard, podcastCard, requiresNonNull } from './types/type';
 
 export default class Cards {
     controller: Controller;
+    private onClickPodcastCard: OnClickPodcastCard;
 
-    constructor() {
+    constructor(onClickPodcastCard: OnClickPodcastCard) {
         this.controller = new Controller();
+        this.onClickPodcastCard = onClickPodcastCard;
     }
 
     addStructure() {
-        const main = document.querySelector('main');
+        const main = document.querySelector('.main__container');
         if (main) {
             main.innerHTML = `
                 <h3 class="h3 podcast__cards--title">Recent Podcasts</h3>
@@ -32,6 +34,11 @@ export default class Cards {
                 </li>
                 `;
         }
+        const listCards: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.card'));
+        listCards.forEach(card => {
+            const id = Number(card.getAttribute('data-id'));
+            card.addEventListener('click', () => this.onClickPodcastCard(id));
+        });
     }
 
     replaceTags(str: string) {
