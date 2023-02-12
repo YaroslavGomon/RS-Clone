@@ -5,7 +5,7 @@ import { PlayerButtons } from './types/type';
 import { requiresNonNull } from './utils';
 
 export class App {
-    private player: Player;
+    private readonly player: Player;
 
     constructor() {
         this.player = new Player(
