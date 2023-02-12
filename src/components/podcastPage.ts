@@ -1,16 +1,19 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode } from './types/type';
+import { episode, OnClickCard } from './types/type';
+import { requiresNonNull } from './utils';
 
 export default class PodcastPage {
     private podcastId: number;
-    private controller: Controller;
+    private readonly controller: Controller;
     private data: Promise<episode[]>;
+    private onClickEpisodeCard: OnClickCard;
 
-    constructor(id: number) {
+    constructor(id: number, onClickEpisodeCard: OnClickCard) {
         this.podcastId = id;
         this.controller = new Controller();
         this.data = this.controller.fetchEpisodesById(id);
+        this.onClickEpisodeCard = onClickEpisodeCard;
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -48,6 +51,10 @@ export default class PodcastPage {
                           </div>
                           `;
                           (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
+                          const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+                        episodesWrapper.forEach((episodeWrapper) =>
+                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
+                        );
                     });
                 });
                 break;
@@ -87,6 +94,10 @@ export default class PodcastPage {
                           </div>
                          `;
                          (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
+                         const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+                        episodesWrapper.forEach((episodeWrapper) =>
+                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
+                        );
                     });
                 });
                 break;

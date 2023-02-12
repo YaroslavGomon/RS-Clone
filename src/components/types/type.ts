@@ -57,3 +57,4 @@ export enum PlayerButtons {
 export type OnClickPlayerButton = (event: Event) => void;
 export type OnReloadPage = (id: number) => void;
 export type OnClickPodcastCard = (id: number) => void;
+export type OnClickCard = (id: number) => void;
