@@ -96,8 +96,10 @@ export default class PodcastPage {
                           </div>
                          `;
                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
-                        const episodeWrapper = requiresNonNull(document.querySelector('.episode'));
-                        episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id));
+                        const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+                        episodesWrapper.forEach((episodeWrapper) =>
+                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
+                        );
                     });
                 });
                 break;
