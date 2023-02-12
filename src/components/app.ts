@@ -84,8 +84,6 @@ export class App {
     }
 
     private onClickEpisodeCard(id: number): void {
-        console.log('onclickEpisode');
-
         this.router.updateUrl(`/#episode/${id}`);
     }
 
