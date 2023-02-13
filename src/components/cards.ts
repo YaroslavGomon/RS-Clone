@@ -14,10 +14,18 @@ export default class Cards {
     private addStructure() {
         const main = document.querySelector('main');
         if (main) {
+            main.innerHTML = '';
             main.innerHTML = `
                 <h3 class="h3 podcast__cards--title">Recent Podcasts</h3>
                 <ul class="podcast__cards"></ul>
                 `;
+        }
+    }
+
+    private changeTitle(str: string) {
+        const title: HTMLElement | null = document.querySelector('.h3.podcast__cards--title');
+        if (title) {
+            title.textContent = `"${str}" Podcasts`;
         }
     }
 
@@ -58,11 +66,19 @@ export default class Cards {
         });
     }
 
-    public draw() {
+    public draw(searchString: string = '') {
         this.addStructure();
-        this.controller.fetchRecent().then((res) => {
-            res.forEach((val) => this.drawCard(val));
-            this.setDefaultImage();
-        });
+        if (searchString === '') {
+            this.controller.fetchRecent().then((res) => {
+                res.forEach((val) => this.drawCard(val));
+                this.setDefaultImage();
+            });
+        } else {
+            this.changeTitle(searchString);
+            this.controller.fetchSearchCall(searchString).then((res) => {
+                res.forEach((val) => this.drawCard(val));
+                this.setDefaultImage();
+            });
+        }
     }
 }
