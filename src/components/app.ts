@@ -7,10 +7,16 @@ import PodcastPage from './podcastPage';
 import { Router } from './router';
 import { EpisodeComponent } from './episode';
 import Cards from './cards';
+import Menu from './menu';
+import Footer from './footer';
 
 export class App {
     private readonly player: Player;
     private readonly router: Router;
+    private readonly mainPage: MainPage;
+    private readonly menu: Menu;
+    private readonly footer: Footer;
+
 
     constructor() {
         this.player = new Player(
@@ -19,12 +25,17 @@ export class App {
         );
 
         this.router = new Router();
+        this.mainPage = new MainPage();
+        this.menu = new Menu();
+        this.footer = new Footer();
     }
 
     public start(): void {
-        new MainPage().draw();
+        this.mainPage.draw();
         new Header().draw();
         this.player.draw();
+        this.menu.drawMenu();
+        this.footer.draw();
 
         this.createBasicRoutes();
         this.router.handleLocation();
