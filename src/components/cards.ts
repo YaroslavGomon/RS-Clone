@@ -11,7 +11,7 @@ export default class Cards {
         this.onClickPodcastCard = onClickPodcastCard;
     }
 
-    addStructure() {
+    private addStructure() {
         const main = document.querySelector('main');
         if (main) {
             main.innerHTML = `
@@ -21,7 +21,7 @@ export default class Cards {
         }
     }
 
-    drawCard(data: podcastCard) {
+    private drawCard(data: podcastCard) {
         const podcastCards = document.querySelector('.podcast__cards');
         if (podcastCards) {
             podcastCards.innerHTML += `
@@ -36,18 +36,18 @@ export default class Cards {
                 `;
         }
         const listCards: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.card'));
-        listCards.forEach(card => {
+        listCards.forEach((card) => {
             const id = Number(card.getAttribute('data-id'));
             card.addEventListener('click', () => this.onClickPodcastCard(id));
         });
     }
 
-    replaceTags(str: string) {
+    private replaceTags(str: string) {
         const regexForStripHTML = /<.*>.*?/gi;
         return str.replace(regexForStripHTML, '').toLowerCase();
     }
 
-    setDefaultImage() {
+    private setDefaultImage() {
         const images = document.getElementsByClassName('card__image');
         Array.from(images).forEach((val) => {
             val.addEventListener('error', () => {
@@ -58,7 +58,7 @@ export default class Cards {
         });
     }
 
-    draw() {
+    public draw() {
         this.addStructure();
         this.controller.fetchRecent().then((res) => {
             res.forEach((val) => this.drawCard(val));
