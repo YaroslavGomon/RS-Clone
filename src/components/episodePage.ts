@@ -1,14 +1,16 @@
 import Controller from './controller';
-import { episode, OnClickPodcastCard } from './types/type';
+import { episode, OnClickPlayButton, OnClickPodcastCard } from './types/type';
 import { requiresNonNull } from './utils';
 
-export class EpisodeComponent {
+export class EpisodePage {
     private readonly controller: Controller;
     private onClickPodcastCard: OnClickPodcastCard;
+    private onClickPlayButton: OnClickPlayButton;
 
-    constructor(onClickPodcastCard: OnClickPodcastCard) {
+    constructor(onClickPodcastCard: OnClickPodcastCard, onClickPlayButton: OnClickPlayButton) {
         this.controller = new Controller();
         this.onClickPodcastCard = onClickPodcastCard;
+        this.onClickPlayButton = onClickPlayButton;
     }
 
     public draw(data: episode): void {
@@ -16,7 +18,7 @@ export class EpisodeComponent {
         episode.classList.add('episodeContent');
 
         episode.appendChild(this.createEpisodeHeader(data.image || data.feedImage, data.title, data.title));
-        episode.appendChild(this.createButtonsBlock());
+        episode.appendChild(this.createButtonsBlock(data.id));
         episode.appendChild(this.createEpisodeDescription(data.description));
         episode.appendChild(this.createButtonSeeAll(data.feedId));
 
@@ -54,7 +56,7 @@ export class EpisodeComponent {
         return episodeHeader;
     }
 
-    private createButtonsBlock(): Element {
+    private createButtonsBlock(id: number): Element {
         const buttonsContainer: Element = document.createElement('div');
         buttonsContainer.classList.add('episodeContent__buttons');
 
@@ -62,6 +64,11 @@ export class EpisodeComponent {
         playButton.classList.add('button');
         playButton.classList.add('button_big');
         playButton.classList.add('play');
+        playButton.addEventListener('click', () => {
+            playButton.classList.toggle('play');
+            playButton.classList.toggle('pause');
+            this.onClickPlayButton(id);
+        });
 
         const libraryButton: Element = document.createElement('div');
         libraryButton.classList.add('button');

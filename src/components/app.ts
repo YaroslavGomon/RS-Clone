@@ -108,7 +108,7 @@ export class App {
     }
 
     private onLoadEpisodePage(episodeId: number): void {
-        new EpisodePage((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
+        new EpisodePage((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id)).fetchEpisode(episodeId);
     }
 
     public onClickPlayButton(id: number): void {
