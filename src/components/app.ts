@@ -5,7 +5,7 @@ import { PlayerButtons } from './types/type';
 import { requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
-import { EpisodeComponent } from './episode';
+import { EpisodePage } from './episodePage';
 import Cards from './cards';
 import Menu from './menu';
 import Footer from './footer';
@@ -80,7 +80,7 @@ export class App {
                 console.log('save to library');
                 break;
             default:
-                console.log('button');
+                throw new Error('Something went wrong');
         }
     }
 
@@ -90,6 +90,9 @@ export class App {
 
     private onChangeSearchValue(searchString: string): void {
         this.cards.draw(searchString);
+        const cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id));
+        cards.draw();
+        // new Cards((id: number) => this.onClickPodcastCard(id)).draw();
     }
 
     private onClickPodcastCard(podcastId: number): void {
@@ -105,6 +108,12 @@ export class App {
     }
 
     private onLoadEpisodePage(episodeId: number): void {
-        new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
+        new EpisodePage((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
+    }
+
+    public onClickPlayButton(id: number): void {
+        console.log('click');
+
+        this.player.updatePlayerSource(id);
     }
 }

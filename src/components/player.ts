@@ -11,7 +11,7 @@ export class Player {
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
         this.audio = document.createElement('audio');
         this.audio.classList.add('track');
-        this.testAudio(this.audio);
+        this.testAudio();
         this.onRangeInput = onRangeInput;
         this.onClickPlayerButton = onClickPlayerButton;
     }
@@ -245,11 +245,20 @@ export class Player {
         this.playAudio();
     }
 
-    private testAudio(audio: HTMLAudioElement): void {
+    private testAudio(): void {
         const controller: Controller = new Controller();
         controller.fetchEpisodeById(16795089).then((data) => {
-            audio.src = data.enclosureUrl;
+            this.audio.src = data.enclosureUrl;
             this.updateProgressTrackDuration(data.duration);
+        });
+    }
+
+    public updatePlayerSource(id: number): void {
+        const controller: Controller = new Controller();
+        controller.fetchEpisodeById(id).then((data) => {
+            this.audio.src = data.enclosureUrl;
+            this.updateProgressTrackDuration(data.duration);
+            this.playAudio();
         });
     }
 }
