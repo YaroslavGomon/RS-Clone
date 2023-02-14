@@ -1,7 +1,7 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
 import { episode, OnClickCard, OnClickPlayButton } from './types/type';
-import { requiresNonNull } from './utils';
+import { replaceTags, requiresNonNull } from './utils';
 
 export default class PodcastPage {
     private readonly podcastId: number;
@@ -37,7 +37,7 @@ export default class PodcastPage {
                           <span class="episode__author">Authors</span>
                           </h4>
                           <div class="episode__description">
-                          ${episode.description}
+                          ${replaceTags(episode.description)}
                           </div>
                           <div class="player_small">
                           <div class="button button-play"></div>
@@ -79,7 +79,7 @@ export default class PodcastPage {
                                       <span class="episode__author">Author</span>
                                   </h4>
                                   <div class="episode__description">
-                                  ${episode.description}
+                                  ${replaceTags(episode.description)}
                                   </div>
                                   <div class="player_small">
                                       <div class="button button-play play"></div>
@@ -116,7 +116,7 @@ export default class PodcastPage {
             }
             podcastTitle.innerText = podcastData.title;
             if (podcastDescription != undefined) {
-                podcastDescription.innerText = podcastData.description;
+                podcastDescription.innerText = replaceTags(podcastData.description);
             }
         });
     }
