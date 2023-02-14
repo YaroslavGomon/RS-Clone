@@ -253,10 +253,14 @@ export class Player {
         });
     }
 
-    public updatePlayerSource(id: number): void {
+    public updatePlayerSource(episodeId: number): void {
         const controller: Controller = new Controller();
-        controller.fetchEpisodeById(id).then((data) => {
+        controller.fetchEpisodeById(episodeId).then((data) => {
             this.audio.src = data.enclosureUrl;
+            const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
+            episodeTitle.textContent = data.title;
+            const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
+            episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
             this.updateProgressTrackDuration(data.duration);
             this.playAudio();
         });
