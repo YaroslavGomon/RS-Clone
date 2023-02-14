@@ -100,7 +100,7 @@ export class App {
     }
 
     private onLoadPodcastPage(podcastId: number): void {
-        new PodcastPage(podcastId, (id: number) => this.onClickEpisodeCard(id)).drawPodcastPage('spotify');
+        new PodcastPage(podcastId, (id: number) => this.onClickEpisodeCard(id), (id: number) => this.onClickPlayButton(id)).drawPodcastPage('spotify');
     }
 
     private onClickEpisodeCard(episodeId: number): void {
@@ -112,8 +112,6 @@ export class App {
     }
 
     public onClickPlayButton(id: number): void {
-        console.log('click');
-
-        this.player.updatePlayerSource(id);
+       this.player.updatePlayerSource(id);
     }
 }

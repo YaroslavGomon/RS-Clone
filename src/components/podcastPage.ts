@@ -1,19 +1,21 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode, OnClickCard } from './types/type';
+import { episode, OnClickCard, OnClickPlayButton } from './types/type';
 import { requiresNonNull } from './utils';
 
 export default class PodcastPage {
-    private podcastId: number;
+    private readonly podcastId: number;
     private readonly controller: Controller;
-    private data: Promise<episode[]>;
-    private onClickEpisodeCard: OnClickCard;
+    private readonly data: Promise<episode[]>;
+    private readonly onClickEpisodeCard: OnClickCard;
+    private readonly onClickPlayButton: OnClickPlayButton;
 
-    constructor(id: number, onClickEpisodeCard: OnClickCard) {
-        this.podcastId = id;
+    constructor(podcastId: number, onClickEpisodeCard: OnClickCard, onClickPlayButton: OnClickPlayButton) {
+        this.podcastId = podcastId;
         this.controller = new Controller();
-        this.data = this.controller.fetchEpisodesById(id);
+        this.data = this.controller.fetchEpisodesById(podcastId);
         this.onClickEpisodeCard = onClickEpisodeCard;
+        this.onClickPlayButton = onClickPlayButton;
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -53,12 +55,7 @@ export default class PodcastPage {
                           </div>
                           `;
                         (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
-                        const episodesWrapper: NodeListOf<Element> = requiresNonNull(
-                            document.querySelectorAll('.episode')
-                        );
-                        episodesWrapper.forEach((episodeWrapper) =>
-                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
-                        );
+                        this.addListeners(episode.id);
                     });
                 });
                 break;
@@ -85,7 +82,7 @@ export default class PodcastPage {
                                   ${episode.description}
                                   </div>
                                   <div class="player_small">
-                                      <div class="button button-play"></div>
+                                      <div class="button button-play play"></div>
                                       <div class="episode__time_spoti">${episode.datePublishedPretty}</div>
                                       <div class="duration">${Math.floor(episode.duration / 60)} min ${
                             episode.duration % 60
@@ -101,12 +98,7 @@ export default class PodcastPage {
                           </div>
                          `;
                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
-                        const episodesWrapper: NodeListOf<Element> = requiresNonNull(
-                            document.querySelectorAll('.episode')
-                        );
-                        episodesWrapper.forEach((episodeWrapper) =>
-                            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episode.id))
-                        );
+                        this.addListeners(episode.id);
                     });
                 });
                 break;
@@ -128,8 +120,21 @@ export default class PodcastPage {
             }
         });
     }
-    // TO DO
-    // private addListeners():void {
-    //     const mainDOM = document.querySelector('.main__container') as HTMLElement;
-    // }
+
+    private addListeners(episodeId: number): void {
+        const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+        episodesWrapper.forEach((episodeWrapper) =>
+            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episodeId))
+        );
+
+        const buttonsPlay: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+        buttonsPlay.forEach((button) => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                button.classList.toggle('play');
+                button.classList.toggle('pause');
+                this.onClickPlayButton(episodeId);
+            });
+        });
+    }
 }
