@@ -20,21 +20,18 @@ class Menu {
         const menuInner = document.querySelector('.menu__inner') as HTMLElement;
         const menuSearch = document.querySelector('.menu__search') as HTMLInputElement;
         let delay = setTimeout(() => {
-            // this.onChangeSearchValue(menuSearch.value);
-            // menuSearch.value = '';
-            console.log('Redraw cards 1');
+            this.onChangeSearchValue(menuSearch.value);
+            menuSearch.value = '';
         }, 500);
         menuSearch.addEventListener('keyup', (event) => {
             if (event.code === 'Enter') {
                 this.onChangeSearchValue(menuSearch.value);
                 menuSearch.value = '';
-                console.log('Redraw cards 2');
             } else {
                 clearTimeout(delay);
                 delay = setTimeout(() => {
                     this.onChangeSearchValue(menuSearch.value);
                     menuSearch.value = '';
-                    console.log('Redraw cards 3');
                 }, 500);
             }
         });
