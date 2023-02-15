@@ -6,7 +6,7 @@ export class Player {
     private readonly onRangeInput: OnRangeInput;
     private readonly onClickPlayerButton: OnClickPlayerButton;
     public readonly audio: HTMLAudioElement;
-    private isPlay: boolean = false;
+    public isPlay: boolean = false;
 
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
         this.audio = document.createElement('audio');
@@ -165,6 +165,8 @@ export class Player {
         const progressTrack: HTMLInputElement = requiresNonNull(document.querySelector<HTMLInputElement>('.progress_track'));
         progressTrack.max = String(duration);
         progressTrack.step = '1';
+        const durationTime: Element = requiresNonNull(document.querySelector('.time_duration'));
+        durationTime.textContent = this.formatTime(duration);
     }
 
     private updateCurrentTime(value: number): void {
@@ -198,22 +200,22 @@ export class Player {
         return wrapper;
     }
 
-    private changeIsPlay(): void {
-        this.isPlay = !this.isPlay;
-    }
-
     public playAudio(): void {
         const playButton: Element = requiresNonNull(document.querySelector('#play'));
-        const durationTime: Element = requiresNonNull(document.querySelector('.time_duration'));
-        durationTime.textContent = this.formatTime(this.audio.duration);
-
-        if (!this.isPlay) {
-            this.audio.play();
-        } else {
-            this.audio.pause();
+        this.audio.play();
+        if(!this.isPlay){
+            this.isPlay = true;
+            playButton.classList.toggle('pause');
         }
-        this.changeIsPlay();
-        playButton.classList.toggle('pause');
+    }
+
+    public pauseAudio(): void {
+        const playButton: Element = requiresNonNull(document.querySelector('#play'));
+        this.audio.pause();
+        if(this.isPlay){
+            this.isPlay = false;
+            playButton.classList.toggle('pause');
+        }
     }
 
     private formatTime(duration: number) {
@@ -262,6 +264,8 @@ export class Player {
             episodeTitle.textContent = data.title;
             const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
             episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
+            console.log(data);
+
             this.updateProgressTrackDuration(data.duration);
             this.playAudio();
         });

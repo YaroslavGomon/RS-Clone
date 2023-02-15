@@ -62,7 +62,11 @@ export class App {
         const target: Element = requiresNonNull(event.target) as Element;
         switch (target.id) {
             case PlayerButtons.Play:
-                this.player.playAudio();
+                if (!this.player.isPlay) {
+                    this.player.playAudio();
+                    break;
+                }
+                this.player.pauseAudio();
                 break;
             case PlayerButtons.Next:
                 this.player.nextEpisode();

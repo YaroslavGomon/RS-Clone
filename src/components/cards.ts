@@ -56,7 +56,6 @@ export default class Cards {
         });
         card.appendChild(playButton);
         podcastCards.appendChild(card);
-
     }
 
     private setDefaultImage(): void {
