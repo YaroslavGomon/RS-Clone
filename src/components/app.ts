@@ -121,5 +121,6 @@ export class App {
 
     public onClickPlayButton(episodeId: number): void {
         this.player.updatePlayerSource(episodeId);
+        this.player.playAudio();
     }
 }

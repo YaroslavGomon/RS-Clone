@@ -195,6 +195,7 @@
     align-items: center;
     @include font($size: 1.5rem);
     width: 30%;
+    overflow: hidden;
 
     @include media-mobile {
         width: 100%;
@@ -206,11 +207,34 @@
     display: inline-block;
     width: 5rem;
     height: 5rem;
-    background: url('./assets/img/tedtalksdaily.png');
+    z-index: 1;
 }
 
 .player__info {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.player__title {
+    max-width: 26.5rem;
+    max-height: 1.5rem;
+    overflow: hidden;
+
+    &:hover {
+        animation: movingText 5s infinite linear;
+        overflow: hidden;
+    }
+}
+
+@keyframes movingText {
+    0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(0);
+      }
 }

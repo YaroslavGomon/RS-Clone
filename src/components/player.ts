@@ -11,7 +11,7 @@ export class Player {
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
         this.audio = document.createElement('audio');
         this.audio.classList.add('track');
-        this.testAudio();
+        this.setFirstAudio();
         this.onRangeInput = onRangeInput;
         this.onClickPlayerButton = onClickPlayerButton;
     }
@@ -39,8 +39,6 @@ export class Player {
 
         const episodeImage: HTMLImageElement = document.createElement('img');
         episodeImage.classList.add('player__image');
-        episodeImage.src = './assets/img/tedtalksdaily.png';
-        episodeImage.alt = 'Episode Image';
 
         const saveButton: Element = document.createElement('div');
         saveButton.classList.add('player__button');
@@ -48,23 +46,20 @@ export class Player {
         saveButton.addEventListener('click', (event: Event) => this.onClickPlayerButton(event));
 
         episodeData.appendChild(episodeImage);
-        episodeData.appendChild(this.createPlayerInfo('Title', 'Ted Talks')); //???
+        episodeData.appendChild(this.createPlayerInfo());
         episodeData.appendChild(saveButton);
 
         return episodeData;
     }
 
-    private createPlayerInfo(title: string, owner: string): Element {
+    private createPlayerInfo(): Element {
         const episodeInfo: Element = document.createElement('div');
         episodeInfo.classList.add('player__info');
-
         const episodeTitle: Element = document.createElement('div');
         episodeTitle.classList.add('player__title');
-        episodeTitle.innerHTML = `${title} | ${owner}</div>`;
 
         const episodeOwner: Element = document.createElement('div');
         episodeOwner.classList.add('player__owner');
-        episodeOwner.textContent = owner;
 
         episodeInfo.appendChild(episodeTitle);
         episodeInfo.appendChild(episodeOwner);
@@ -248,11 +243,12 @@ export class Player {
     }
 
     //will be deleted
-    private testAudio(): void {
+    private setFirstAudio(): void {
         const controller: Controller = new Controller();
-        controller.fetchEpisodeById(16795089).then((data) => {
-            this.audio.src = data.enclosureUrl;
-            this.updateProgressTrackDuration(data.duration);
+        controller.fetchRecent().then((data) => {
+            controller.fetchEpisodesById(data[0].id).then((episodes) => {
+                this.updatePlayerSource(episodes[0].id);
+            });
         });
     }
 
@@ -264,10 +260,9 @@ export class Player {
             episodeTitle.textContent = data.title;
             const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
             episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
-            console.log(data);
+            episodeImage.alt = data.title;
 
             this.updateProgressTrackDuration(data.duration);
-            this.playAudio();
         });
     }
 }
