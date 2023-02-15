@@ -242,12 +242,20 @@ export class Player {
         this.playAudio();
     }
 
-    //will be deleted
     private setFirstAudio(): void {
         const controller: Controller = new Controller();
         controller.fetchRecent().then((data) => {
             controller.fetchEpisodesById(data[0].id).then((episodes) => {
-                this.updatePlayerSource(episodes[0].id);
+                controller.fetchEpisodeById(episodes[0].id).then((data) => {
+                    this.audio.src = data.enclosureUrl;
+                    const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
+                    episodeTitle.textContent = data.title;
+                    const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
+                    episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
+                    episodeImage.alt = data.title;
+
+                    this.updateProgressTrackDuration(data.duration);
+                });
             });
         });
     }
@@ -263,6 +271,7 @@ export class Player {
             episodeImage.alt = data.title;
 
             this.updateProgressTrackDuration(data.duration);
+            this.playAudio();
         });
     }
 }
