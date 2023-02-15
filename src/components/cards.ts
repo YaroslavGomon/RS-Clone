@@ -16,16 +16,16 @@ export default class Cards {
         if (main) {
             main.innerHTML = '';
             main.innerHTML = `
-                <h3 class="h3 podcast__cards--title">Podcasts</h3>
+                <h3 class="h3 podcast__cards--title"></h3>
                 <ul class="podcast__cards"></ul>
                 `;
         }
     }
 
-    private changeTitle(str: string = 'Recent') {
+    private changeTitle(str: string) {
         const title: HTMLElement | null = document.querySelector('.h3.podcast__cards--title');
         if (title) {
-            title.textContent = `${str} Podcasts`;
+            title.textContent = `${str ? str : 'Recent'} Podcasts`;
         }
     }
 
@@ -68,17 +68,16 @@ export default class Cards {
 
     public draw(searchString: string = '') {
         this.addStructure();
+        this.changeTitle(searchString);
         if (searchString === '') {
             this.controller.fetchRecent().then((res) => {
                 res.forEach((val) => this.drawCard(val));
                 this.setDefaultImage();
-                this.changeTitle();
             });
         } else {
             this.controller.fetchSearchCall(searchString).then((res) => {
                 res.forEach((val) => this.drawCard(val));
                 this.setDefaultImage();
-                this.changeTitle(searchString);
             });
         }
     }

@@ -22,19 +22,22 @@ class Menu {
         let delay = setTimeout(() => {
             // this.onChangeSearchValue(menuSearch.value);
             // menuSearch.value = '';
-        }, 500);
+        }, 1000);
+
         menuSearch.addEventListener('keyup', (event) => {
-            if (event.code === 'Enter') {
+            if (event.code === 'Enter' || event.code === 'NumpadEnter') {
                 this.onChangeSearchValue(menuSearch.value);
-                menuSearch.value = '';
-            } else {
                 clearTimeout(delay);
-                delay = setTimeout(() => {
-                    this.onChangeSearchValue(menuSearch.value);
-                    menuSearch.value = '';
-                }, 1000);
             }
         });
+
+        menuSearch.addEventListener('input', () => {
+            clearTimeout(delay);
+            delay = setTimeout(() => {
+                this.onChangeSearchValue(menuSearch.value);
+            }, 1000);
+        });
+
         menuInner.addEventListener('click', (event) => {
             if ((event.target as HTMLElement).innerText === 'Your Library') {
                 // TO DO
