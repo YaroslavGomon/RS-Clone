@@ -20,8 +20,8 @@ class Menu {
         const menuInner = document.querySelector('.menu__inner') as HTMLElement;
         const menuSearch = document.querySelector('.menu__search') as HTMLInputElement;
         let delay = setTimeout(() => {
-            this.onChangeSearchValue(menuSearch.value);
-            menuSearch.value = '';
+            // this.onChangeSearchValue(menuSearch.value);
+            // menuSearch.value = '';
         }, 500);
         menuSearch.addEventListener('keyup', (event) => {
             if (event.code === 'Enter') {
@@ -32,7 +32,7 @@ class Menu {
                 delay = setTimeout(() => {
                     this.onChangeSearchValue(menuSearch.value);
                     menuSearch.value = '';
-                }, 500);
+                }, 1000);
             }
         });
         menuInner.addEventListener('click', (event) => {
