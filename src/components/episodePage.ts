@@ -4,8 +4,8 @@ import { requiresNonNull } from './utils';
 
 export class EpisodePage {
     private readonly controller: Controller;
-    private onClickPodcastCard: OnClickPodcastCard;
-    private onClickPlayButton: OnClickPlayButton;
+    private readonly onClickPodcastCard: OnClickPodcastCard;
+    private readonly onClickPlayButton: OnClickPlayButton;
 
     constructor(onClickPodcastCard: OnClickPodcastCard, onClickPlayButton: OnClickPlayButton) {
         this.controller = new Controller();
@@ -56,7 +56,7 @@ export class EpisodePage {
         return episodeHeader;
     }
 
-    private createButtonsBlock(id: number): Element {
+    private createButtonsBlock(episodeId: number): Element {
         const buttonsContainer: Element = document.createElement('div');
         buttonsContainer.classList.add('episodeContent__buttons');
 
@@ -67,7 +67,7 @@ export class EpisodePage {
         playButton.addEventListener('click', () => {
             playButton.classList.toggle('play');
             playButton.classList.toggle('pause');
-            this.onClickPlayButton(id);
+            this.onClickPlayButton(episodeId);
         });
 
         const libraryButton: Element = document.createElement('div');

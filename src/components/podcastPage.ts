@@ -1,16 +1,16 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode, OnClickCard, OnClickPlayButton } from './types/type';
+import { episode, onClickEpisodeCard, OnClickPlayButton } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
 
 export default class PodcastPage {
     private readonly podcastId: number;
     private readonly controller: Controller;
     private readonly data: Promise<episode[]>;
-    private readonly onClickEpisodeCard: OnClickCard;
+    private readonly onClickEpisodeCard: onClickEpisodeCard;
     private readonly onClickPlayButton: OnClickPlayButton;
 
-    constructor(podcastId: number, onClickEpisodeCard: OnClickCard, onClickPlayButton: OnClickPlayButton) {
+    constructor(podcastId: number, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
         this.podcastId = podcastId;
         this.controller = new Controller();
         this.data = this.controller.fetchEpisodesById(podcastId);

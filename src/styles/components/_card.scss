@@ -55,7 +55,7 @@
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
-    background-color: $color-very-bright;
+    background-color: $color-bright;
     opacity: 0;
     transition: transform .3s, opacity .3s;
   }
@@ -76,7 +76,7 @@
     top: calc(50% - .9rem);
     width: 0;
     height: 0;
-    border-left: 1.8rem solid $color-dark;
+    border-left: 1.8rem solid $color-light;
     border-bottom: .9rem solid transparent;
     border-top: .9rem solid transparent;
   }

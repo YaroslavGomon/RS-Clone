@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { OnClickPlayButton, OnClickPodcastCard, podcastCard } from './types/type';
-import { requiresNonNull } from './utils';
+import { replaceTags, requiresNonNull } from './utils';
 
 export default class Cards {
     private readonly controller: Controller;
@@ -13,7 +13,7 @@ export default class Cards {
         this.onClickPlayButton = onClickPlayButton;
     }
 
-    private addStructure() {
+    private addStructure(): void {
         const main = document.querySelector('main');
         if (main) {
             main.innerHTML = '';
@@ -41,13 +41,13 @@ export default class Cards {
             <img data-id=${data.id} class="card__image" src=${data.image} alt="Podcast logo">
             </div>
             <h3 data-id=${data.id} class="card__title">${data.title}</h3>
-            <p data-id=${data.id} class="card__descr">${this.replaceTags(data.description)}</p>
+            <p data-id=${data.id} class="card__descr">${replaceTags(data.description)}</p>
             `;
         card.addEventListener('click', () => this.onClickPodcastCard(data.id));
 
         const playButton: Element = document.createElement('div');
         playButton.classList.add('card__play');
-        playButton.classList.add('play');
+        // playButton.classList.add('play');
         playButton.setAttribute('data-id', data.id.toString());
         playButton.addEventListener('click', (event) => {
             // playButton.classList.toggle('play');
@@ -110,12 +110,12 @@ export default class Cards {
         //         });
     }
 
-    private replaceTags(str: string) {
-        const regexForStripHTML = /<.*>.*?/gi;
-        return str.replace(regexForStripHTML, '').toLowerCase();
-    }
+    // private replaceTags(str: string) {
+    //     const regexForStripHTML = /<.*>.*?/gi;
+    //     return str.replace(regexForStripHTML, '').toLowerCase();
+    // }
 
-    private setDefaultImage() {
+    private setDefaultImage(): void {
         const images = document.getElementsByClassName('card__image');
         Array.from(images).forEach((val) => {
             val.addEventListener('error', () => {

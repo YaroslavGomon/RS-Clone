@@ -245,6 +245,7 @@ export class Player {
         this.playAudio();
     }
 
+    //will be deleted
     private testAudio(): void {
         const controller: Controller = new Controller();
         controller.fetchEpisodeById(16795089).then((data) => {

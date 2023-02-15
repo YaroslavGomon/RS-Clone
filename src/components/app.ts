@@ -28,7 +28,7 @@ export class App {
         this.mainPage = new MainPage();
         this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue));
         this.footer = new Footer();
-        this.cards = new Cards((id: number) => this.onClickPodcastCard(id));
+        this.cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id));
     }
 
     public start(): void {
@@ -46,8 +46,8 @@ export class App {
 
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
-        this.router.addRoute('podcast', (id: number) => this.onLoadPodcastPage(id));
-        this.router.addRoute('episode', (id: number) => this.onLoadEpisodePage(id));
+        this.router.addRoute('podcast', (podcastId: number) => this.onLoadPodcastPage(podcastId));
+        this.router.addRoute('episode', (episodeId: number) => this.onLoadEpisodePage(episodeId));
     }
 
     private onRangeInput(event: Event): void {
@@ -90,9 +90,6 @@ export class App {
 
     private onChangeSearchValue(searchString: string): void {
         this.cards.draw(searchString);
-        const cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id));
-        cards.draw();
-        // new Cards((id: number) => this.onClickPodcastCard(id)).draw();
     }
 
     private onClickPodcastCard(podcastId: number): void {
@@ -100,7 +97,11 @@ export class App {
     }
 
     private onLoadPodcastPage(podcastId: number): void {
-        new PodcastPage(podcastId, (id: number) => this.onClickEpisodeCard(id), (id: number) => this.onClickPlayButton(id)).drawPodcastPage('spotify');
+        new PodcastPage(
+            podcastId,
+            (episodeId: number) => this.onClickEpisodeCard(episodeId),
+            (episodeId: number) => this.onClickPlayButton(episodeId)
+        ).drawPodcastPage('spotify');
     }
 
     private onClickEpisodeCard(episodeId: number): void {
@@ -108,10 +109,13 @@ export class App {
     }
 
     private onLoadEpisodePage(episodeId: number): void {
-        new EpisodePage((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id)).fetchEpisode(episodeId);
+        new EpisodePage(
+            (id: number) => this.onClickPodcastCard(id),
+            (id: number) => this.onClickPlayButton(id)
+        ).fetchEpisode(episodeId);
     }
 
-    public onClickPlayButton(id: number): void {
-       this.player.updatePlayerSource(id);
+    public onClickPlayButton(episodeId: number): void {
+        this.player.updatePlayerSource(episodeId);
     }
 }
