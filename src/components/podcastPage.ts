@@ -129,11 +129,9 @@ export default class PodcastPage {
 
         const buttonsPlay: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
         buttonsPlay.forEach((button) => {
-            button.addEventListener('click', (event) => {
+            button.addEventListener('click', (event: Event) => {
                 event.stopPropagation();
-                button.classList.toggle('play');
-                button.classList.toggle('pause');
-                this.onClickPlayButton(episodeId);
+                this.onClickPlayButton(episodeId, event);
             });
         });
     }

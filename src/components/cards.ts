@@ -52,7 +52,7 @@ export default class Cards {
             event.stopImmediatePropagation();
             const target: Element = event.currentTarget as Element;
             const podcastId: number = Number(target.getAttribute('data-id'));
-            this.controller.fetchEpisodesById(podcastId).then((res) => this.onClickPlayButton(res[0].id));
+            this.controller.fetchEpisodesById(podcastId).then((res) => this.onClickPlayButton(res[0].id, event));
         });
         card.appendChild(playButton);
         podcastCards.appendChild(card);

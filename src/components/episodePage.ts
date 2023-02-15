@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPlayButton, OnClickPodcastCard } from './types/type';
-import { requiresNonNull } from './utils';
+import { replaceTags, requiresNonNull } from './utils';
 
 export class EpisodePage {
     private readonly controller: Controller;
@@ -19,7 +19,7 @@ export class EpisodePage {
 
         episode.appendChild(this.createEpisodeHeader(data.image || data.feedImage, data.title, data.title));
         episode.appendChild(this.createButtonsBlock(data.id));
-        episode.appendChild(this.createEpisodeDescription(data.description));
+        episode.appendChild(this.createEpisodeDescription(replaceTags(data.description)));
         episode.appendChild(this.createButtonSeeAll(data.feedId));
 
         const mainContainer = requiresNonNull(document.querySelector('.main__container'));
@@ -64,10 +64,8 @@ export class EpisodePage {
         playButton.classList.add('button');
         playButton.classList.add('button_big');
         playButton.classList.add('play');
-        playButton.addEventListener('click', () => {
-            playButton.classList.toggle('play');
-            playButton.classList.toggle('pause');
-            this.onClickPlayButton(episodeId);
+        playButton.addEventListener('click', (event: Event) => {
+            this.onClickPlayButton(episodeId, event);
         });
 
         const libraryButton: Element = document.createElement('div');

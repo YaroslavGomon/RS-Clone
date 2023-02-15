@@ -5,6 +5,7 @@ export function requiresNonNull<Type>(object: Type | null | undefined): Type {
 }
 
 export function replaceTags(str: string): string {
-    const regexForStripHTML = /<.*>.*?/gi;
+    const regexForStripHTML = /<.*?>.*?/gi;
+    // const regexForStripHTML = /<.*>.*?/gi;
     return str.replace(regexForStripHTML, '').toLowerCase();
 }

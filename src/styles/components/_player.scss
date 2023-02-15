@@ -205,6 +205,7 @@
 
 .player__image {
     display: inline-block;
+    object-fit: contain;
     width: 5rem;
     height: 5rem;
     z-index: 1;
@@ -229,12 +230,12 @@
 
 @keyframes movingText {
     0% {
-        transform: translateX(0);
-      }
-      50% {
-        transform: translateX(-100%);
-      }
-      100% {
-        transform: translateX(0);
-      }
+        translate: 0;
+    }
+    50% {
+        translate: -100%;
+    }
+    100% {
+        translate: 0;
+    }
 }

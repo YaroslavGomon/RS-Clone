@@ -21,7 +21,7 @@ export class Player {
         player.classList.add('player');
 
         this.audio.addEventListener('timeupdate', () => {
-                this.updateCurrentTime(this.audio.currentTime);
+            this.updateCurrentTime(this.audio.currentTime);
         });
 
         player.appendChild(this.audio);
@@ -157,7 +157,9 @@ export class Player {
     }
 
     private updateProgressTrackDuration(duration: number): void {
-        const progressTrack: HTMLInputElement = requiresNonNull(document.querySelector<HTMLInputElement>('.progress_track'));
+        const progressTrack: HTMLInputElement = requiresNonNull(
+            document.querySelector<HTMLInputElement>('.progress_track')
+        );
         progressTrack.max = String(duration);
         progressTrack.step = '1';
         const durationTime: Element = requiresNonNull(document.querySelector('.time_duration'));
@@ -167,7 +169,9 @@ export class Player {
     private updateCurrentTime(value: number): void {
         const currentTime: Element = requiresNonNull(document.querySelector('.time_current'));
         currentTime.textContent = this.formatTime(value);
-        const progressBarTrack: HTMLInputElement = requiresNonNull(document.querySelector<HTMLInputElement>('.progress_track'));
+        const progressBarTrack: HTMLInputElement = requiresNonNull(
+            document.querySelector<HTMLInputElement>('.progress_track')
+        );
         progressBarTrack.value = String(value);
     }
 
@@ -183,7 +187,9 @@ export class Player {
         progressVolume.min = '0';
         progressVolume.max = '1';
         progressVolume.value = '0.2';
-        progressVolume.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${Number(progressVolume.value) * 100}%, #dddddd ${Number(progressVolume.value) * 100}%, #dddddd 100%)`;
+        progressVolume.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${
+            Number(progressVolume.value) * 100
+        }%, #dddddd ${Number(progressVolume.value) * 100}%, #dddddd 100%)`;
         this.audio.volume = Number(progressVolume.value);
 
         progressVolume.addEventListener('input', (event) => {
@@ -198,7 +204,7 @@ export class Player {
     public playAudio(): void {
         const playButton: Element = requiresNonNull(document.querySelector('#play'));
         this.audio.play();
-        if(!this.isPlay){
+        if (!this.isPlay) {
             this.isPlay = true;
             playButton.classList.toggle('pause');
         }
@@ -207,7 +213,7 @@ export class Player {
     public pauseAudio(): void {
         const playButton: Element = requiresNonNull(document.querySelector('#play'));
         this.audio.pause();
-        if(this.isPlay){
+        if (this.isPlay) {
             this.isPlay = false;
             playButton.classList.toggle('pause');
         }
@@ -250,8 +256,10 @@ export class Player {
                     this.audio.src = data.enclosureUrl;
                     const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
                     episodeTitle.textContent = data.title;
-                    const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
-                    episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
+                    const episodeImage: HTMLImageElement = requiresNonNull(
+                        document.querySelector<HTMLImageElement>('.player__image')
+                    );
+                    episodeImage.src = data.image ?? data.feedImage ?? '../assets/img/fav-icon.png';
                     episodeImage.alt = data.title;
 
                     this.updateProgressTrackDuration(data.duration);
@@ -260,18 +268,28 @@ export class Player {
         });
     }
 
-    public updatePlayerSource(episodeId: number): void {
+    public updatePlayerSource(episodeId: number, event: Event): void {
         const controller: Controller = new Controller();
         controller.fetchEpisodeById(episodeId).then((data) => {
             this.audio.src = data.enclosureUrl;
             const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
             episodeTitle.textContent = data.title;
-            const episodeImage: HTMLImageElement = requiresNonNull(document.querySelector<HTMLImageElement>('.player__image'));
-            episodeImage.src = data.image ?? data.feedImage ??  '../assets/img/fav-icon.png';
+            const episodeImage: HTMLImageElement = requiresNonNull(
+                document.querySelector<HTMLImageElement>('.player__image')
+            );
+
+            episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
             episodeImage.alt = data.title;
 
             this.updateProgressTrackDuration(data.duration);
-            this.playAudio();
+            const target: Element = event.target as Element;
+            if (!target.classList.value.includes('pause') || target.classList.value.includes('card__play')) {
+                target.classList.toggle('pause');
+                this.playAudio();
+                return;
+            }
+            target.classList.toggle('pause');
+            this.pauseAudio();
         });
     }
 }

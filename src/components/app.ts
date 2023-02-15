@@ -28,7 +28,7 @@ export class App {
         this.mainPage = new MainPage();
         this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue));
         this.footer = new Footer();
-        this.cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number) => this.onClickPlayButton(id));
+        this.cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
     }
 
     public start(): void {
@@ -104,7 +104,7 @@ export class App {
         new PodcastPage(
             podcastId,
             (episodeId: number) => this.onClickEpisodeCard(episodeId),
-            (episodeId: number) => this.onClickPlayButton(episodeId)
+            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
         ).drawPodcastPage('spotify');
     }
 
@@ -115,11 +115,11 @@ export class App {
     private onLoadEpisodePage(episodeId: number): void {
         new EpisodePage(
             (id: number) => this.onClickPodcastCard(id),
-            (id: number) => this.onClickPlayButton(id)
+            (id: number, event: Event) => this.onClickPlayButton(id, event)
         ).fetchEpisode(episodeId);
     }
 
-    public onClickPlayButton(episodeId: number): void {
-        this.player.updatePlayerSource(episodeId);
+    public onClickPlayButton(episodeId: number, event: Event): void {
+        this.player.updatePlayerSource(episodeId, event);
     }
 }
