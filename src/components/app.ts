@@ -16,7 +16,7 @@ export class App {
     private readonly mainPage: MainPage;
     private readonly menu: Menu;
     private readonly footer: Footer;
-
+    private readonly cards: Cards;
 
     constructor() {
         this.player = new Player(
@@ -26,8 +26,9 @@ export class App {
 
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu();
+        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue));
         this.footer = new Footer();
+        this.cards = new Cards((id: number) => this.onClickPodcastCard(id));
     }
 
     public start(): void {
@@ -53,7 +54,7 @@ export class App {
         const target: HTMLInputElement = event.target as HTMLInputElement;
         const value: number = Number(target.value);
         const duration: number = Number(target.max);
-        const percent: number = value / duration * 100;
+        const percent: number = (value / duration) * 100;
         target.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${percent}%, #dddddd ${percent}%, #dddddd 100%)`;
     }
 
@@ -84,7 +85,11 @@ export class App {
     }
 
     private onLoadMainPage(): void {
-        new Cards((id: number) => this.onClickPodcastCard(id)).draw();
+        this.cards.draw();
+    }
+
+    private onChangeSearchValue(searchString: string): void {
+        this.cards.draw(searchString);
     }
 
     private onClickPodcastCard(podcastId: number): void {
