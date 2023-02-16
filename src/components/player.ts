@@ -250,21 +250,18 @@ export class Player {
 
     private setFirstAudio(): void {
         const controller: Controller = new Controller();
-        controller.fetchRecent().then((data) => {
-            controller.fetchEpisodesById(data[0].id).then((episodes) => {
-                controller.fetchEpisodeById(episodes[0].id).then((data) => {
-                    this.audio.src = data.enclosureUrl;
-                    const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
-                    episodeTitle.textContent = data.title;
-                    const episodeImage: HTMLImageElement = requiresNonNull(
-                        document.querySelector<HTMLImageElement>('.player__image')
-                    );
-                    episodeImage.src = data.image ?? data.feedImage ?? '../assets/img/fav-icon.png';
-                    episodeImage.alt = data.title;
+        controller.fetchDataForUpdatePlayer().then((data) => {
+            this.audio.src = data.enclosureUrl;
+            const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
+            episodeTitle.textContent = data.title;
+            const episodeImage: HTMLImageElement = requiresNonNull(
+                document.querySelector<HTMLImageElement>('.player__image')
+            );
 
-                    this.updateProgressTrackDuration(data.duration);
-                });
-            });
+            episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
+            episodeImage.alt = data.title;
+
+            this.updateProgressTrackDuration(data.duration);
         });
     }
 

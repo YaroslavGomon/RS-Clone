@@ -1,6 +1,5 @@
-import { podcastCard, episode } from "./types/type";
-import { IController } from "./types/interfaces";
-
+import { podcastCard, episode } from './types/type';
+import { IController } from './types/interfaces';
 
 class Loader {
     private async getAuthorizationHeaderValue(
@@ -24,7 +23,7 @@ class Loader {
         return requestHeaders;
     }
 
-    async fetchRecent(apiKey: string, apiSecret: string): Promise<podcastCard[]>  {
+    async fetchRecent(apiKey: string, apiSecret: string): Promise<podcastCard[]> {
         const url: string = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=12';
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
@@ -35,17 +34,17 @@ class Loader {
             .then((json) => json.feeds);
     }
 
-    async fetchSearchCall(qString: string, apiKey: string, apiSecret: string): Promise<podcastCard[]>  {
+    async fetchSearchCall(qString: string, apiKey: string, apiSecret: string): Promise<podcastCard[]> {
         const url: string = `https://api.podcastindex.org/api/1.0/search/byterm?q=${qString}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
-                .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
-                .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-                .then((requestInit) => fetch(url, requestInit))
-                .then((res) => res.json())
-                .then((json) => json.feeds);
+            .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
+            .then((headers: HeadersInit) => ({ method: 'GET', headers }))
+            .then((requestInit) => fetch(url, requestInit))
+            .then((res) => res.json())
+            .then((json) => json.feeds);
     }
-    fetchById(id: number, apiKey: string, apiSecret: string): Promise<podcastCard>  {
+    fetchById(id: number, apiKey: string, apiSecret: string): Promise<podcastCard> {
         const url: string = `https://api.podcastindex.org/api/1.0/podcasts/byfeedid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
@@ -56,7 +55,7 @@ class Loader {
             .then((json) => json.feed);
     }
 
-    fetchEpisodesById(id: number, apiKey: string, apiSecret: string): Promise<episode[]>  {
+    fetchEpisodesById(id: number, apiKey: string, apiSecret: string): Promise<episode[]> {
         const url: string = `https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
@@ -64,10 +63,10 @@ class Loader {
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
-            .then(res => res.items);
+            .then((res) => res.items);
     }
 
-    fetchEpisodeById(id: number, apiKey: string, apiSecret: string): Promise<episode>  {
+    fetchEpisodeById(id: number, apiKey: string, apiSecret: string): Promise<episode> {
         const url: string = `https://api.podcastindex.org/api/1.0/episodes/byid?id=${id}&pretty`;
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
@@ -75,7 +74,34 @@ class Loader {
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit) => fetch(url, requestInit))
             .then((res) => res.json())
-            .then(res => res.episode);
+            .then((res) => res.episode);
+    }
+
+    fetchPlayer(apiKey: string, apiSecret: string): Promise<episode> {
+        const url: string = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=12';
+        const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
+        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
+            .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
+            .then((headers: HeadersInit) => ({ method: 'GET', headers }))
+            .then((requestInit) =>
+                fetch(url, requestInit)
+                    .then((response) => response.json())
+                    .then((json) =>
+                        fetch(
+                            `https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${json.feeds[0].id}&pretty`,
+                            requestInit
+                        )
+                    )
+                    .then((response) => response.json())
+                    .then((json) =>
+                        fetch(
+                            `https://api.podcastindex.org/api/1.0/episodes/byid?id=${json.items[0].id}&pretty`,
+                            requestInit
+                        )
+                    )
+                    .then((response) => response.json())
+                    .then((json) => json.episode)
+            );
     }
 }
 
@@ -101,8 +127,11 @@ class Controller implements IController {
     fetchSearchCall(qString: string): Promise<podcastCard[]> {
         return new Loader().fetchSearchCall(qString, this.apiKey, this.apiSecret);
     }
-    fetchRecent(): Promise<podcastCard[]>  {
+    fetchRecent(): Promise<podcastCard[]> {
         return new Loader().fetchRecent(this.apiKey, this.apiSecret);
+    }
+    fetchDataForUpdatePlayer(): Promise<episode> {
+        return new Loader().fetchPlayer(this.apiKey, this.apiSecret);
     }
 }
 
@@ -130,10 +159,6 @@ style="display: flex; flex-direction: column; align-items: center; justify-conte
 </div>
 `;
 
-
-
-
-
 function controllerTest() {
     document.body.innerHTML = PODCAST_LIST_DOM;
     generateRecantPodcastCards();
@@ -144,9 +169,8 @@ function controllerTest() {
 function generateRecantPodcastCards() {
     const PODCAST_ITEMS = document.querySelector('.podcast_items') as HTMLElement;
     const controller = new Controller();
-    controller.fetchRecent()
-    .then(res => {
-        res.forEach(elem => {
+    controller.fetchRecent().then((res) => {
+        res.forEach((elem) => {
             const PODCAST_CARD = `
             <div data-id="${elem.id}" data-title="${elem.title}" class="podcast_items__item" style="width: 350px; height: 350px; background-color: aqua;">
             <img data-id="${elem.id}" data-title="${elem.title}" src="${elem.image}" alt="podcast-icon" style="height: 100%;">
@@ -157,9 +181,12 @@ function generateRecantPodcastCards() {
         });
     });
     // Listeners should be in appView class
-    document.body.addEventListener("click", (event) => {
-        if (((event.target) as HTMLElement).dataset.id && ((event.target) as HTMLElement).dataset.title){
-            generateEpisodesList(Number(((event.target) as HTMLElement).dataset.id), (((event.target as HTMLElement).dataset.title) as string) );
+    document.body.addEventListener('click', (event) => {
+        if ((event.target as HTMLElement).dataset.id && (event.target as HTMLElement).dataset.title) {
+            generateEpisodesList(
+                Number((event.target as HTMLElement).dataset.id),
+                (event.target as HTMLElement).dataset.title as string
+            );
         }
     });
     const SEARCH_INPUT = document.querySelector('.search_input') as HTMLInputElement;
@@ -169,14 +196,13 @@ function generateRecantPodcastCards() {
     });
 }
 
-function generatePodcastSearchList(search: string){
+function generatePodcastSearchList(search: string) {
     const PODCAST_ITEMS = document.querySelector('.podcast_items') as HTMLElement;
     const controller = new Controller();
     const qstring = search.split(' ').join('+');
     PODCAST_ITEMS.innerHTML = '';
-    controller.fetchSearchCall(qstring)
-    .then(res => {
-        res.forEach(elem => {
+    controller.fetchSearchCall(qstring).then((res) => {
+        res.forEach((elem) => {
             const PODCAST_CARD = `
             <div data-id="${elem.id}" data-title="${elem.title}" class="podcast_items__item" style="width: 350px; height: 350px; background-color: aqua;">
             <img data-id="${elem.id}" data-title="${elem.title}" src="${elem.image}" alt="podcast-icon" style="height: 100%;">
@@ -188,15 +214,14 @@ function generatePodcastSearchList(search: string){
     });
 }
 
-function generateEpisodesList(id: number, title: string){
+function generateEpisodesList(id: number, title: string) {
     document.body.innerHTML = PODCAST_EPISODES_LIST_DOM;
     const PODCAST_ITEMS = document.querySelector('.podcast_items') as HTMLElement;
     const PODCAST_NAME = document.querySelector('.podcast_items__title') as HTMLElement;
     const controller = new Controller();
-    controller.fetchEpisodesById(id)
-    .then(res => {
+    controller.fetchEpisodesById(id).then((res) => {
         PODCAST_NAME.innerText = title;
-        res.forEach(elem => {
+        res.forEach((elem) => {
             const PODCAST_ITEM = `
             <div class="podcast_items__item" style="display: grid; grid-template-columns:  3fr 1fr 1fr 1fr 2fr; width: 100vw; height: 350px; background-color: aqua;">
             <img src="${elem.image}" alt="podcast-icon" height="350px">
@@ -210,7 +235,5 @@ function generateEpisodesList(id: number, title: string){
         });
     });
 }
-
-
 
 export default Controller;
