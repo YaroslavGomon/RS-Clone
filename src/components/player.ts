@@ -283,7 +283,11 @@ export class Player {
 
             this.updateProgressTrackDuration(data.duration);
             const target: Element = event.target as Element;
-            if (!target.classList.value.includes('pause') || target.classList.value.includes('card__play')) {
+            if (target.classList.value.includes('card__play')) {
+                this.playAudio();
+                return;
+            }
+            if (!target.classList.value.includes('pause')) {
                 target.classList.toggle('pause');
                 this.playAudio();
                 return;

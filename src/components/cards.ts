@@ -49,7 +49,8 @@ export default class Cards {
         playButton.classList.add('card__play');
         playButton.setAttribute('data-id', data.id.toString());
         playButton.addEventListener('click', (event) => {
-            event.stopImmediatePropagation();
+            // event.stopImmediatePropagation();
+            event.stopPropagation();
             const target: Element = event.currentTarget as Element;
             const podcastId: number = Number(target.getAttribute('data-id'));
             this.controller.fetchEpisodesById(podcastId).then((res) => this.onClickPlayButton(res[0].id, event));
