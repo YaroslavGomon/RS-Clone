@@ -1,5 +1,5 @@
 import Controller from './controller';
-import { OnClickPlayerButton, OnRangeInput } from './types/type';
+import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
 import { requiresNonNull } from './utils';
 
 export class Player {
@@ -7,6 +7,7 @@ export class Player {
     private readonly onClickPlayerButton: OnClickPlayerButton;
     public readonly audio: HTMLAudioElement;
     public isPlay: boolean = false;
+    private controller: Controller = new Controller();
 
     constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
         this.audio = document.createElement('audio');
@@ -14,6 +15,7 @@ export class Player {
         this.setFirstAudio();
         this.onRangeInput = onRangeInput;
         this.onClickPlayerButton = onClickPlayerButton;
+        this.controller = new Controller();
     }
 
     public draw(): void {
@@ -249,34 +251,15 @@ export class Player {
     }
 
     private setFirstAudio(): void {
-        const controller: Controller = new Controller();
-        controller.fetchDataForUpdatePlayer().then((data) => {
-            this.audio.src = data.enclosureUrl;
-            const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
-            episodeTitle.textContent = data.title;
-            const episodeImage: HTMLImageElement = requiresNonNull(
-                document.querySelector<HTMLImageElement>('.player__image')
-            );
-
-            episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
-            episodeImage.alt = data.title;
-
+        this.controller.fetchDataForUpdatePlayer().then((data) => {
+            this.updateData(data);
             this.updateProgressTrackDuration(data.duration);
         });
     }
 
     public updatePlayerSource(episodeId: number, event: Event): void {
-        const controller: Controller = new Controller();
-        controller.fetchEpisodeById(episodeId).then((data) => {
-            this.audio.src = data.enclosureUrl;
-            const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
-            episodeTitle.textContent = data.title;
-            const episodeImage: HTMLImageElement = requiresNonNull(
-                document.querySelector<HTMLImageElement>('.player__image')
-            );
-
-            episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
-            episodeImage.alt = data.title;
+        this.controller.fetchEpisodeById(episodeId).then((data) => {
+            this.updateData(data);
 
             this.updateProgressTrackDuration(data.duration);
             const target: Element = event.target as Element;
@@ -292,5 +275,17 @@ export class Player {
             target.classList.toggle('pause');
             this.pauseAudio();
         });
+    }
+
+    private updateData(data: episode) {
+        this.audio.src = data.enclosureUrl;
+        const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
+        episodeTitle.textContent = data.title;
+        const episodeImage: HTMLImageElement = requiresNonNull(
+            document.querySelector<HTMLImageElement>('.player__image')
+        );
+
+        episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
+        episodeImage.alt = data.title;
     }
 }
