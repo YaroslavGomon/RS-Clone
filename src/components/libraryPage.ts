@@ -3,7 +3,7 @@ import { querySelectNonNull } from './utils';
 export class LibraryPage {
     public draw(): void {
         const mainContainer: Element = querySelectNonNull<Element>('.main__container');
-
+        mainContainer.innerHTML = '';
         const header: Element = document.createElement('h2');
         header.classList.add('h2');
         header.textContent = 'Playlists';
