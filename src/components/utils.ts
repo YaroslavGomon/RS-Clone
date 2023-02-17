@@ -3,3 +3,7 @@ export function requiresNonNull<Type>(object: Type | null | undefined): Type {
 
     return object;
 }
+
+export function querySelectNonNull<Type>(selector: string): Type {
+    return requiresNonNull(document.querySelector(selector) as Type | null);
+}

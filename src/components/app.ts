@@ -9,6 +9,7 @@ import { EpisodeComponent } from './episode';
 import Cards from './cards';
 import Menu from './menu';
 import Footer from './footer';
+import { LibraryPage } from './libraryPage';
 
 export class App {
     private readonly player: Player;
@@ -26,7 +27,7 @@ export class App {
 
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue));
+        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), () => this.onClickLink());
         this.footer = new Footer();
         this.cards = new Cards((id: number) => this.onClickPodcastCard(id));
     }
@@ -48,6 +49,7 @@ export class App {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (id: number) => this.onLoadPodcastPage(id));
         this.router.addRoute('episode', (id: number) => this.onLoadEpisodePage(id));
+        this.router.addRoute('library', () => this.onLoadLibraryPage());
     }
 
     private onRangeInput(event: Event): void {
@@ -106,5 +108,13 @@ export class App {
 
     private onLoadEpisodePage(episodeId: number): void {
         new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
+    }
+
+    private onClickLink(): void {
+        this.router.updateUrl(`/#library`);
+    }
+
+    private onLoadLibraryPage(): void {
+        new LibraryPage().draw();
     }
 }
