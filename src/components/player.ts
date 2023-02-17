@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { requiresNonNull } from './utils';
+import { querySelectNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
@@ -31,7 +31,7 @@ export class Player {
         player.appendChild(this.createPlayerWrapper());
         player.appendChild(this.createProgressVolume());
 
-        const header: Element = requiresNonNull(document.querySelector('.header__container'));
+        const header: Element = querySelectNonNull<Element>('.header__container');
         header.appendChild(player);
     }
 
@@ -159,21 +159,17 @@ export class Player {
     }
 
     private updateProgressTrackDuration(duration: number): void {
-        const progressTrack: HTMLInputElement = requiresNonNull(
-            document.querySelector<HTMLInputElement>('.progress_track')
-        );
+        const progressTrack: HTMLInputElement = querySelectNonNull<HTMLInputElement>('.progress_track');
         progressTrack.max = String(duration);
         progressTrack.step = '1';
-        const durationTime: Element = requiresNonNull(document.querySelector('.time_duration'));
+        const durationTime: Element = querySelectNonNull<Element>('.time_duration');
         durationTime.textContent = this.formatTime(duration);
     }
 
     private updateCurrentTime(value: number): void {
-        const currentTime: Element = requiresNonNull(document.querySelector('.time_current'));
+        const currentTime: Element = querySelectNonNull<Element>('.time_current');
         currentTime.textContent = this.formatTime(value);
-        const progressBarTrack: HTMLInputElement = requiresNonNull(
-            document.querySelector<HTMLInputElement>('.progress_track')
-        );
+        const progressBarTrack: HTMLInputElement = querySelectNonNull<HTMLInputElement>('.progress_track');
         progressBarTrack.value = String(value);
     }
 
@@ -204,7 +200,7 @@ export class Player {
     }
 
     public playAudio(): void {
-        const playButton: Element = requiresNonNull(document.querySelector('#play'));
+        const playButton: Element = querySelectNonNull<Element>('#play');
         this.audio.play();
         if (!this.isPlay) {
             this.isPlay = true;
@@ -213,7 +209,7 @@ export class Player {
     }
 
     public pauseAudio(): void {
-        const playButton: Element = requiresNonNull(document.querySelector('#play'));
+        const playButton: Element = querySelectNonNull<Element>('#play');
         this.audio.pause();
         if (this.isPlay) {
             this.isPlay = false;
@@ -279,11 +275,9 @@ export class Player {
 
     private updateData(data: episode) {
         this.audio.src = data.enclosureUrl;
-        const episodeTitle: Element = requiresNonNull(document.querySelector('.player__title'));
+        const episodeTitle: Element = querySelectNonNull<Element>('.player__title');
         episodeTitle.textContent = data.title;
-        const episodeImage: HTMLImageElement = requiresNonNull(
-            document.querySelector<HTMLImageElement>('.player__image')
-        );
+        const episodeImage: HTMLImageElement = querySelectNonNull<HTMLImageElement>('.player__image');
 
         episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
         episodeImage.alt = data.title;
