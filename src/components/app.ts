@@ -84,7 +84,7 @@ export class App {
                 console.log('save to library');
                 break;
             default:
-                throw new Error('Something went wrong');
+                throw new Error(`Unknown target ID: ${target.id}`);
         }
     }
 
