@@ -13,7 +13,7 @@ const menuDOM = `
           </li>
           <li class="menu__item">
             <span class="menu__item-logo library"></span>
-            <p class="menu__item-text">Your Library</p>
+            <p class="menu__item-text">Library</p>
           </li>
         </ul>
       </nav>

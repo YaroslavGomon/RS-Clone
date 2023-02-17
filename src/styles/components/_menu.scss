@@ -1,7 +1,6 @@
 .menu {
   height: 100%;
   width: 15%;
-  // min-width: 30rem;
   background-color: $color-menu;
   border-radius: $radius;
   position: fixed;
@@ -43,6 +42,7 @@
 
   &__title {
     @include font($size: 3rem, $weight: 800);
+    font-size: calc(100vw / 1920 * 30);
     color: $color-dark;
     display: inline-block;
     transition: color .3s;
