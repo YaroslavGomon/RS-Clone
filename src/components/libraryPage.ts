@@ -27,7 +27,7 @@ export class LibraryPage {
         list.classList.add('navigation__list');
 
         list.appendChild(this.createNavItem('playlists'));
-        list.appendChild(this.createNavItem('podcasts'));
+        list.appendChild(this.createNavItem('episodes'));
         nav.appendChild(list);
 
         return nav;
