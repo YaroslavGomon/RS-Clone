@@ -29,7 +29,7 @@ class Loader {
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: { method: string, headers: HeadersInit }) => fetch(url, requestInit))
+            .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
             .then((json: PodcastsJson) => json.feeds);
     }
@@ -40,7 +40,7 @@ class Loader {
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: { method: string, headers: HeadersInit }) => fetch(url, requestInit))
+            .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
             .then((json: SearchJson) => json.feeds);
     }
@@ -50,7 +50,7 @@ class Loader {
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: { method: string, headers: HeadersInit }) => fetch(url, requestInit))
+            .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
             .then((json: PodcastJson) => json.feed);
     }
@@ -61,7 +61,7 @@ class Loader {
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: { method: string, headers: HeadersInit }) => fetch(url, requestInit))
+            .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
             .then((json: EpisodesJson) => json.items);
     }
@@ -72,24 +72,21 @@ class Loader {
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: { method: string, headers: HeadersInit }) => fetch(url, requestInit))
+            .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
             .then((json: EpisodeJson) => json.episode);
     }
 
-    fetchPlayer(apiKey: string, apiSecret: string): Promise<episode> {
-        const url: string = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=12';
+    async fetchPlayer(apiKey: string, apiSecret: string): Promise<episode> {
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
-        return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
-            .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))
-            .then((headers: HeadersInit) => ({ method: 'GET', headers }))
-            .then((requestInit: {method: string, headers: HeadersInit}) => fetch(url, requestInit)
-            .then((response: Response) => response.json())
-            .then((json) => fetch(`https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${json.feeds[0].id}&pretty`, requestInit))
-            .then((response: Response) => response.json())
-            .then((json) => fetch( `https://api.podcastindex.org/api/1.0/episodes/byid?id=${json.items[0].id}&pretty`, requestInit))
-            .then((response: Response) => response.json())
-            .then((json: EpisodeJson) => json.episode));
+        const authorization: string = await this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime);
+        const headers: HeadersInit = this.getHeaders(apiHeaderTime, apiKey, authorization);
+        const requestInit: RequestInit = { method: 'GET', headers };
+        const recentPodcast: PodcastsJson = await (await fetch('https://api.podcastindex.org/api/1.0/recent/feeds?max=12', requestInit)).json();
+        const episodesList: EpisodesJson = await (await fetch(`https://api.podcastindex.org/api/1.0/episodes/byfeedid?id=${recentPodcast.feeds[0].id}&pretty`, requestInit)).json();
+        const episodeJson: EpisodeJson = await (await fetch( `https://api.podcastindex.org/api/1.0/episodes/byid?id=${episodesList.items[0].id}&pretty`, requestInit)).json();
+
+        return episodeJson.episode;
     }
 }
 
