@@ -19,8 +19,6 @@
 .library__episodes__image {
     -webkit-mask: url('./assets/icons/saved.svg') no-repeat center;
     mask: url('./assets/icons/saved.svg') no-repeat center;
-    // background-image: url('./assets/icons/save.svg');
-    // // fill: hotmask-size: cover;pink;
     -webkit-mask-size: 15rem;
     mask-size: 15rem;
     background: $color-light;

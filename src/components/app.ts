@@ -50,8 +50,8 @@ export class App {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (id: number) => this.onLoadPodcastPage(id));
         this.router.addRoute('episode', (id: number) => this.onLoadEpisodePage(id));
-        this.router.addRoute('library', () => this.onLoadLibraryPage());
-        this.router.addRoute('saved', () => this.onLoadLibraryEpisodes());
+        this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
+        this.router.addRoute('saved', this.onLoadLibraryEpisodes.bind(this));
     }
 
     private onRangeInput(event: Event): void {
