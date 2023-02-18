@@ -59,3 +59,4 @@ export type OnReloadPage = (id: number) => void;
 export type OnClickPodcastCard = (id: number) => void;
 export type OnClickCard = (id: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
+export type OnClickLink = (path: string) => void;

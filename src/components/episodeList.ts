@@ -29,7 +29,7 @@ export class EpisodeList {
         this.controller.fetchEpisodesById(this.podcastId).then((data) =>
             data.forEach((item, index) => {
                 if (index === 0) {
-                    const episode: Element = new EpisodesListItem().createEpisode(item);
+                    const episode: Element = new EpisodesListItem(parent).createEpisode(item);
                     episode.classList.add('episode_latest');
                     parent.appendChild(episode);
 
@@ -39,8 +39,7 @@ export class EpisodeList {
                     listHeader.textContent = 'Episodes';
                     parent.appendChild(listHeader);
                 } else {
-                    const episode: Element = new EpisodesListItem().createEpisode(item);
-                    parent.appendChild(episode);
+                    new EpisodesListItem(parent).createEpisode(item);
                 }
             })
         );

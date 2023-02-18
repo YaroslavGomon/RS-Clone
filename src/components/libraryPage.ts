@@ -1,6 +1,13 @@
+import { OnClickLink } from './types/type';
 import { querySelectNonNull } from './utils';
 
 export class LibraryPage {
+    private readonly onClickLink: OnClickLink;
+
+    constructor(onClickLink: OnClickLink) {
+        this.onClickLink = onClickLink;
+    }
+
     public draw(): void {
         const mainContainer: Element = querySelectNonNull<Element>('.main__container');
         mainContainer.innerHTML = '';
@@ -43,7 +50,7 @@ export class LibraryPage {
         }
         const link: HTMLAnchorElement = document.createElement('a');
         link.classList.add('link');
-        link.href = `/#${name}List`;
+        name === 'episodes' ? link.href = `/#saved`: link.href = `/#${name}List`;
         link.textContent = `${name}`;
         item.appendChild(link);
 
@@ -62,7 +69,7 @@ export class LibraryPage {
 
         //TO DO
         //will be change
-        wrapper.addEventListener('click', () => console.log('Go To Episodes Page'));
+        wrapper.addEventListener('click', () => this.onClickLink('saved'));
 
         return wrapper;
     }

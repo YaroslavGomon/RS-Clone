@@ -10,6 +10,7 @@ import Cards from './cards';
 import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
+import { LibraryEpisodes } from './libraryEpisodes';
 
 export class App {
     private readonly player: Player;
@@ -27,7 +28,7 @@ export class App {
 
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), () => this.onClickLink());
+        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
         this.footer = new Footer();
         this.cards = new Cards((id: number) => this.onClickPodcastCard(id));
     }
@@ -50,6 +51,7 @@ export class App {
         this.router.addRoute('podcast', (id: number) => this.onLoadPodcastPage(id));
         this.router.addRoute('episode', (id: number) => this.onLoadEpisodePage(id));
         this.router.addRoute('library', () => this.onLoadLibraryPage());
+        this.router.addRoute('saved', () => this.onLoadLibraryEpisodes());
     }
 
     private onRangeInput(event: Event): void {
@@ -110,11 +112,18 @@ export class App {
         new EpisodeComponent((id: number) => this.onClickPodcastCard(id)).fetchEpisode(episodeId);
     }
 
-    private onClickLink(): void {
-        this.router.updateUrl(`/#library`);
+    private onClickLink(path: string): void {
+        console.log('here');
+        console.log(path);
+
+        this.router.updateUrl(`/#${path}`);
     }
 
     private onLoadLibraryPage(): void {
-        new LibraryPage().draw();
+        new LibraryPage((path: string) => this.onClickLink(path)).draw();
+    }
+
+    private onLoadLibraryEpisodes(): void {
+        new LibraryEpisodes().draw();
     }
 }

@@ -1,6 +1,12 @@
 import { episode } from './types/type';
+import { replaceTags } from './utils';
 
 export class EpisodesListItem {
+    private readonly parent: Element;
+
+    constructor(parent: Element) {
+        this.parent = parent;
+    }
 
     public createEpisode(data: episode): Element {
         const episode: Element = document.createElement('div');
@@ -8,7 +14,7 @@ export class EpisodesListItem {
 
         episode.appendChild(this.createEpisodeImage(data.image));
         episode.appendChild(this.createEpisodeInfo(data));
-
+        this.parent.appendChild(episode);
         return episode;
     }
 
@@ -30,7 +36,7 @@ export class EpisodesListItem {
 
         const episodeDescription: Element = document.createElement('div');
         episodeDescription.classList.add('episode__description');
-        episodeDescription.textContent = data.description;
+        episodeDescription.textContent = replaceTags(data.description);
 
         episodeInfo.appendChild(episodeTitle);
         episodeInfo.appendChild(episodeDescription);
@@ -89,13 +95,10 @@ export class EpisodesListItem {
         wrapper.appendChild(moreButton);
 
         return wrapper;
-
     }
 
     private getTime(duration: number): string {
-        const hoursStr = duration >= 3600
-            ? `${Math.floor(duration / 3600)} hr `
-            : ``;
+        const hoursStr = duration >= 3600 ? `${Math.floor(duration / 3600)} hr ` : ``;
         const minutes = Math.floor((duration - Number(hoursStr) * 3600) / 60);
         const seconds = Math.floor(duration - Number(hoursStr) * 3600 - minutes * 60);
 

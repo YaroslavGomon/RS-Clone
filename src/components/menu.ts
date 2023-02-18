@@ -1,7 +1,5 @@
 import menuDOM from './templates/menuDom';
-import { OnChangeSearchValue } from './types/type';
-
-type OnClickLink = () => void;
+import { OnChangeSearchValue, OnClickLink } from './types/type';
 
 class Menu {
     private menuLayout: string;
@@ -44,7 +42,7 @@ class Menu {
 
         menuInner.addEventListener('click', (event) => {
             if ((event.target as HTMLElement).innerText === 'Your Library') {
-                this.onClickLink();
+                this.onClickLink('library');
             } else if ((event.target as HTMLElement).innerText === 'Home') {
                 // TO DO
                 // go to home
