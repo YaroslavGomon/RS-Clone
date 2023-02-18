@@ -44,6 +44,7 @@ export class LibraryPage {
         const item: Element = document.createElement('li');
         item.classList.add('nav__item');
         item.classList.add(`item_${name}`);
+        //TO DO
         //will be change for active link
         if (name === 'playlists') {
             item.classList.add('active');

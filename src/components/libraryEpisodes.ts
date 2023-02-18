@@ -53,7 +53,9 @@ export class LibraryEpisodes {
     private createList(): Element {
         const wrapper: Element = document.createElement('div');
 
-        const array: number[] = [13519920619, 13519920619, 1066003]; //will be delete
+        //TO DO
+        //will be delete
+        const array: number[] = [13519920619, 13519920619, 1066003];
         array.forEach(item => {
             this.controller.fetchEpisodeById(item).then(data => new EpisodesListItem(wrapper, (episodeId: number) => this.onClickEpisodeCard(episodeId)).createEpisode(data));
         });

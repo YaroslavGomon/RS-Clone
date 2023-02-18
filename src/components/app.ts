@@ -113,9 +113,6 @@ export class App {
     }
 
     private onClickLink(path: string): void {
-        console.log('here');
-        console.log(path);
-
         this.router.updateUrl(`/#${path}`);
     }
 
