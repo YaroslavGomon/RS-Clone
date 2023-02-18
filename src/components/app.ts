@@ -124,6 +124,6 @@ export class App {
     }
 
     private onLoadLibraryEpisodes(): void {
-        new LibraryEpisodes().draw();
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId)).draw();
     }
 }

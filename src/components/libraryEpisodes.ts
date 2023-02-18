@@ -1,12 +1,15 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
+import { OnClickCard } from './types/type';
 import { querySelectNonNull } from './utils';
 
 export class LibraryEpisodes {
     private readonly controller: Controller;
+    private readonly onClickEpisodeCard: OnClickCard;
 
-    constructor() {
+    constructor(onClickEpisodeCard: OnClickCard) {
         this.controller = new Controller();
+        this.onClickEpisodeCard = onClickEpisodeCard;
     }
 
     public draw(): void {
@@ -52,7 +55,7 @@ export class LibraryEpisodes {
 
         const array: number[] = [13519920619, 13519920619, 1066003]; //will be delete
         array.forEach(item => {
-            this.controller.fetchEpisodeById(item).then(data => new EpisodesListItem(wrapper).createEpisode(data));
+            this.controller.fetchEpisodeById(item).then(data => new EpisodesListItem(wrapper, (episodeId: number) => this.onClickEpisodeCard(episodeId)).createEpisode(data));
         });
 
         return wrapper;

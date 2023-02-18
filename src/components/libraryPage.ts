@@ -67,8 +67,6 @@ export class LibraryPage {
         wrapper.appendChild(header);
         wrapper.appendChild(amount);
 
-        //TO DO
-        //will be change
         wrapper.addEventListener('click', () => this.onClickLink('saved'));
 
         return wrapper;

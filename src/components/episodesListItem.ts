@@ -1,11 +1,13 @@
-import { episode } from './types/type';
+import { episode, OnClickCard } from './types/type';
 import { replaceTags } from './utils';
 
 export class EpisodesListItem {
     private readonly parent: Element;
+    private readonly onClickEpisodeCard: OnClickCard;
 
-    constructor(parent: Element) {
+    constructor(parent: Element, onClickEpisodeCard: OnClickCard) {
         this.parent = parent;
+        this.onClickEpisodeCard = onClickEpisodeCard;
     }
 
     public createEpisode(data: episode): Element {
@@ -14,6 +16,7 @@ export class EpisodesListItem {
 
         episode.appendChild(this.createEpisodeImage(data.image));
         episode.appendChild(this.createEpisodeInfo(data));
+        episode.addEventListener('click', this.onClickEpisodeCard.bind(this, data.id));
         this.parent.appendChild(episode);
         return episode;
     }

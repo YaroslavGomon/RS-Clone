@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPodcastCard } from './types/type';
-import { requiresNonNull } from './utils';
+import { replaceTags, requiresNonNull } from './utils';
 
 export class EpisodeComponent {
     private readonly controller: Controller;
@@ -91,7 +91,7 @@ export class EpisodeComponent {
 
         const sectionText: Element = document.createElement('div');
         sectionText.classList.add('episode__text');
-        sectionText.textContent = desription;
+        sectionText.textContent = replaceTags(desription);
 
         section.appendChild(sectionHeader);
         section.appendChild(sectionText);
