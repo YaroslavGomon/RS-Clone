@@ -59,3 +59,10 @@ export type OnReloadPage = (id: number) => void;
 export type OnClickPodcastCard = (id: number) => void;
 export type OnClickCard = (id: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
+
+export type user = {
+    userName: string;
+    userPassword: string;
+    email: string;
+    phone: string;
+};
