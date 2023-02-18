@@ -1,4 +1,4 @@
-import Controller from './controller';
+import Controller from './api/controller';
 import { OnClickPodcastCard, podcastCard } from './types/type';
 import { requiresNonNull } from './utils';
 

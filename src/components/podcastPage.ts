@@ -1,5 +1,5 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
-import Controller from './controller';
+import Controller from './api/controller';
 import { episode, OnClickCard } from './types/type';
 import { requiresNonNull } from './utils';
 
