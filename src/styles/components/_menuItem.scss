@@ -45,4 +45,25 @@
     opacity: .6;
     transition: opacity .3s;
   }
+
+  // user btn
+  &.account {
+    align-self: flex-start;
+    width: calc(100% - 4rem);
+    margin: 2rem;
+  }
+
+  &.account:hover {
+    background-color: $color-not-active;
+  }
+
+  &.account:active {
+    opacity: .5;
+  }
+
+
+  &-logo.account {
+    -webkit-mask: url('./assets/icons/user.svg') no-repeat center;
+    mask: url('./assets/icons/user.svg') no-repeat center;
+  }
 }
