@@ -56,6 +56,48 @@ export enum PlayerButtons {
 
 export type OnClickPlayerButton = (event: Event) => void;
 export type OnReloadPage = (id: number) => void;
-export type OnClickPodcastCard = (id: number) => void;
-export type OnClickCard = (id: number) => void;
+export type OnClickPodcastCard = (podcastId: number) => void;
+export type onClickEpisodeCard = (episodeId: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
+export type OnClickPlayButton = (episodeId: number, event: Event) => void;
+
+
+export type PodcastsJson = {
+    count: number,
+    description: string,
+    feeds: podcastCard[],
+    max: string,
+    since: string,
+    status: string,
+};
+
+export type SearchJson = {
+    count: number,
+    description: string,
+    feeds: podcastCard[],
+    query: string,
+    status: string,
+}
+
+export type PodcastJson = {
+    description: string,
+    feed: podcastCard,
+    query: {id: string},
+    status: string,
+}
+
+export type EpisodesJson = {
+    count: number,
+    description: string,
+    items: episode[],
+    liveItems: episode[],
+    query: string,
+    status: string,
+};
+
+export type EpisodeJson = {
+    description: string,
+    episode: episode,
+    id: string,
+    status: string,
+};
