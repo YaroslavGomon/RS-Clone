@@ -13,11 +13,12 @@ interface IAuthorization {
   signIn(email: string, password: string): void;
   signOut(email: string): void;
   addUser(newUser: user): void;
-  updateUser(updateFields: user): void;
+  updateUser(updateFields: user, email: string): void;
   deleteUser(email: string): void;
 }
 interface ILibrary {
   allPlaylists(adminPass: string): void;
+  userLibrary(email: string): void;
   addNewPlaylist(email: string, playlistName:string): void;
   renamePlaylist(email: string, playlistName:string, newPlaylistName: string): void;
   addItemToPlaylist(email: string, playlistName:string, itemId: string): void;
@@ -25,4 +26,4 @@ interface ILibrary {
   removePlaylist(email: string, playlistName:string): void;
 }
 
-export {IController};
+export {IController, IAuthorization, ILibrary};
