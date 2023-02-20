@@ -1,4 +1,4 @@
-import Controller from './api/controller';
+import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
 
 export class EpisodeList {

@@ -1,5 +1,5 @@
-import { podcastCard, episode } from "../types/type";
-import { IController } from "../types/interfaces";
+import { podcastCard, episode } from "./types/type";
+import { IController } from "./types/interfaces";
 
 
 class Loader {

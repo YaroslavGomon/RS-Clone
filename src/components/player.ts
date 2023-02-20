@@ -1,4 +1,4 @@
-import Controller from './api/controller';
+import Controller from './controller';
 import { OnClickPlayerButton, OnRangeInput } from './types/type';
 import { requiresNonNull } from './utils';
 

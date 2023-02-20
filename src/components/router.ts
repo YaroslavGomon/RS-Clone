@@ -1,4 +1,4 @@
-import Controller from './api/controller';
+import Controller from './controller';
 import { OnReloadPage } from './types/type';
 
 type Route = {
