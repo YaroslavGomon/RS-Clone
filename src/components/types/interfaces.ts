@@ -36,4 +36,4 @@ interface ILibrary {
     removePlaylist(playlistName: string): void;
 }
 
-export { IController, IAuthorization, ILibrary, IAdmin, IAuthentication, IRegestration };
+export { IController, IAuthorization, ILibrary, IAdmin, IAuthentication, IRegestration }
