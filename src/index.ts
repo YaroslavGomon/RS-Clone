@@ -2,20 +2,22 @@ import './style.scss';
 import './assets/img/fav-icon.png';
 import { App } from './components/app';
 import { addUser, deleteUser, listUsers, signIn, signOut, updateUser } from './components/api/authorizationController';
+import { addItemToPlaylist, addNewPlaylist, allLibrary, removeItemFromPlaylist, removePlaylist, renamePlaylist, userLibrary } from './components/api/libraryController';
 // import { userLibrary } from './components/api/libraryController';
 
 // const app = new App();
 // app.start();
 
+
+
+
+
 // ***FIRST TEST***
 // get all users and library for all users
 // *** uncomment below code
-
 // listUsers('root');
-
+// allLibrary('root');
 // ***
-
-
 
 
 // ***SECOND TEST***
@@ -32,8 +34,6 @@ import { addUser, deleteUser, listUsers, signIn, signOut, updateUser } from './c
 // // check that user signed out
 // setTimeout(()=>{signIn(EMAIL);}, 1000);
 // ***
-
-
 
 
 // ***THIRD TEST***
@@ -60,3 +60,19 @@ import { addUser, deleteUser, listUsers, signIn, signOut, updateUser } from './c
 // signIn(EMAIL, HASH_PASS);
 // ;
 // ***
+
+
+//***THIRD TEST***
+// LIBRARY
+// const NEW_PLAYLIST = 'MY NEW PLAY LIST';
+// const NEW_PLAYLIST_NAME = 'MY-NEW-PLAYLIST';
+// const ITEM_ID = '12345678';
+// const EMAIL = 'motevich@gmail.com';
+// const HASH_PASS = '995';
+// signIn(EMAIL, HASH_PASS);
+// userLibrary(EMAIL);
+// addNewPlaylist(EMAIL, NEW_PLAYLIST);
+// renamePlaylist(EMAIL, NEW_PLAYLIST, NEW_PLAYLIST_NAME);
+// addItemToPlaylist(EMAIL, NEW_PLAYLIST_NAME, ITEM_ID);
+// removeItemFromPlaylist(EMAIL, NEW_PLAYLIST_NAME, ITEM_ID);
+// removePlaylist(EMAIL, NEW_PLAYLIST_NAME);
