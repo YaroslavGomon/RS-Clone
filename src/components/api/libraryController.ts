@@ -1,6 +1,6 @@
 import { ILibrary } from "../types/interfaces";
 
-class Library implements ILibrary {
+export class Library implements ILibrary {
     private email: string;
     constructor (email: string){
         this.email = email;
@@ -25,8 +25,6 @@ class Library implements ILibrary {
     }
 }
 
-export {Library};
-
 /// API Authorization and Authentication functions
 /// DELETE EXPORT
 /// EXPORT FOR DEVELOP
@@ -46,7 +44,7 @@ export function allLibrary(adminPass: string): void {
         .catch((error) => console.log('error', error));
 }
 
-export function userLibrary(email: string): void {
+function userLibrary(email: string): void {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
@@ -58,7 +56,7 @@ export function userLibrary(email: string): void {
         .catch((error) => console.log('error', error));
 }
 
-export function  addNewPlaylist(email: string, playlistName:string): void {
+function  addNewPlaylist(email: string, playlistName:string): void {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
@@ -70,7 +68,7 @@ export function  addNewPlaylist(email: string, playlistName:string): void {
         .catch((error) => console.log('error', error));
 }
 
-export function  renamePlaylist(email: string, playlistName:string, newPlaylistName: string): void {
+function  renamePlaylist(email: string, playlistName:string, newPlaylistName: string): void {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
@@ -82,7 +80,7 @@ export function  renamePlaylist(email: string, playlistName:string, newPlaylistN
         .catch((error) => console.log('error', error));
 }
 
-export function  addItemToPlaylist(email: string, playlistName:string, itemId: string): void {
+function  addItemToPlaylist(email: string, playlistName:string, itemId: string): void {
     const requestOptions = {
         method: 'POST',
         credentials: 'include',
@@ -94,7 +92,7 @@ export function  addItemToPlaylist(email: string, playlistName:string, itemId: s
         .catch((error) => console.log('error', error));
 }
 
-export function  removeItemFromPlaylist(email: string, playlistName:string, itemId: string): void {
+function  removeItemFromPlaylist(email: string, playlistName:string, itemId: string): void {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',
@@ -106,7 +104,7 @@ export function  removeItemFromPlaylist(email: string, playlistName:string, item
         .catch((error) => console.log('error', error));
 }
 
-export function  removePlaylist(email: string, playlistName:string): void {
+function  removePlaylist(email: string, playlistName:string): void {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',

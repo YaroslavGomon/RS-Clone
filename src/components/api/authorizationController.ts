@@ -57,14 +57,13 @@ export function listUsers(adminPass: string): void {
         headers: myHeaders,
         credentials: 'include',
     } as RequestInit;
-
     fetch('https://rs-clone-api.vercel.app/listUsers', requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
-export function signIn(email: string, password = ''): void {
+function signIn(email: string, password = ''): void {
     const myHeaders = new Headers();
     if (password != '') {
         myHeaders.append('x-hash-pass', `${password}`);
@@ -83,7 +82,7 @@ export function signIn(email: string, password = ''): void {
         .catch((error) => console.log('error', error));
 }
 
-export function signOut(email: string): void {
+function signOut(email: string): void {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
@@ -95,7 +94,7 @@ export function signOut(email: string): void {
         .catch((error) => console.log('error', error));
 }
 
-export function addUser(newUser: object): void {
+function addUser(newUser: object): void {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const reqUser = JSON.stringify(newUser);
@@ -112,7 +111,7 @@ export function addUser(newUser: object): void {
         .catch((error) => console.log('error', error));
 }
 
-export function deleteUser(email: string): void {
+function deleteUser(email: string): void {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',
@@ -124,7 +123,7 @@ export function deleteUser(email: string): void {
         .catch((error) => console.log('error', error));
 }
 
-export function updateUser(updateFields: object, email: string): void {
+function updateUser(updateFields: object, email: string): void {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const reqData = JSON.stringify(updateFields);
