@@ -61,6 +61,12 @@ export type onClickEpisodeCard = (episodeId: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
 export type OnClickPlayButton = (episodeId: number, event: Event) => void;
 
+export type user = {
+    userName: string;
+    userPassword: string;
+    email: string;
+    phone: string;
+};
 
 export type PodcastsJson = {
     count: number,
