@@ -1,3 +1,53 @@
+import { IAuthentication, IAuthorization, IRegestration } from "../types/interfaces";
+import { user } from "../types/type";
+
+class Regestration implements IRegestration {
+    public addUser(newUser: user): void {
+        return addUser(newUser);
+    }
+}
+
+class Authentication implements IAuthentication {
+    private email;
+    private hashPassword;
+    constructor (email: string, password: string){
+        this.email = email;
+        this.hashPassword = this.hash(password);
+    }
+    public signIn(): void {
+        return signIn(this.email, this.hashPassword);
+    }
+    private hash(string: string): string {
+        let result = 0;
+        for (let i = 0; i < string.length; i++) {
+            result += string.charCodeAt(i) + 7;
+        }
+        return result.toString();
+    }
+}
+
+class Authorization implements IAuthorization {
+    private email: string;
+    constructor (email: string) {
+        this.email = email;
+    }
+    signOut(): void {
+        return signOut(this.email);
+    }
+    updateUser(updateFields: user): void {
+        return updateUser(updateFields, this.email);
+    }
+    deleteUser(): void {
+        return deleteUser(this.email);
+    }
+}
+
+export {Authorization, Authentication, Regestration};
+
+/// API Authorization and Authentication functions
+/// DELETE EXPORT
+/// EXPORT FOR DEVELOP
+
 export function listUsers(adminPass: string): void {
     const myHeaders = new Headers();
     myHeaders.append('x-admin-pass', `${adminPass}`);

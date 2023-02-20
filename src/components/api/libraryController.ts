@@ -1,3 +1,36 @@
+import { ILibrary } from "../types/interfaces";
+
+class Library implements ILibrary {
+    private email: string;
+    constructor (email: string){
+        this.email = email;
+    }
+    public userLibrary(): void {
+        return userLibrary(this.email);
+    }
+    public addNewPlaylist(playlistName: string): void {
+        return addNewPlaylist(this.email, playlistName);
+    }
+    public renamePlaylist(playlistName: string, newPlaylistName: string): void {
+        return renamePlaylist(this.email, playlistName, newPlaylistName);
+    }
+    public addItemToPlaylist(playlistName: string, itemId: string): void {
+        return addItemToPlaylist(this.email, playlistName, itemId);
+    }
+    public removeItemFromPlaylist(playlistName: string, itemId: string): void {
+        return removeItemFromPlaylist(this.email, playlistName, itemId);
+    }
+    public removePlaylist(playlistName: string): void {
+        return removePlaylist(this.email, playlistName);
+    }
+}
+
+export {Library};
+
+/// API Authorization and Authentication functions
+/// DELETE EXPORT
+/// EXPORT FOR DEVELOP
+
 export function allLibrary(adminPass: string): void {
     const myHeaders = new Headers();
     myHeaders.append('x-admin-pass', `${adminPass}`);
