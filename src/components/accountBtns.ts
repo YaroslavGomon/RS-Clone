@@ -1,9 +1,9 @@
-export default class Popup {
-    addButtons() {
+export default class AccountBtns {
+    private addButtons() {
         const menu = document.querySelector('.menu');
         if (menu) {
             const menuLogin = document.createElement('div');
-            menuLogin.classList.add('menu__personal', 'active');
+            menuLogin.classList.add('menu__personal');
             menu.append(menuLogin);
 
             const buttonNames = ['register', 'login', 'logout'];
@@ -28,17 +28,34 @@ export default class Popup {
             menuItemText.textContent = 'Account';
             menuAccount.append(menuItemText);
         }
-
-        this.addListeners();
     }
 
-    addListeners() {
+    private openCloseAccountBtns() {
         const menuLogin = document.querySelector('.menu__personal');
+        if (menuLogin) {
+            if (menuLogin.classList.contains('active')) {
+                menuLogin.classList.remove('active');
+            } else {
+                menuLogin.classList.add('active');
+            }
+        }
+    }
+
+    private addListeners() {
         const menuAccount = document.querySelector('.menu__item.account');
-        if (menuLogin && menuAccount) {
-            menuAccount.addEventListener('click', () => {
-                menuLogin.classList.toggle('active');
+        const menuLogin = document.querySelector('.menu__personal');
+        if (menuAccount) menuAccount.addEventListener('click', this.openCloseAccountBtns);
+        if (menuLogin) {
+            menuLogin.addEventListener('click', (e) => {
+                if (e.target && e.target instanceof HTMLButtonElement) {
+                    if (e.target.classList.contains('menu__btn')) this.openCloseAccountBtns();
+                }
             });
         }
+    }
+
+    public draw() {
+        this.addButtons();
+        this.addListeners();
     }
 }

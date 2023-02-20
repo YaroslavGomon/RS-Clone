@@ -1,22 +1,22 @@
-import Popup from './popup';
+import AccountBtns from './accountBtns';
 import menuDOM from './templates/menuDom';
 import { OnChangeSearchValue } from './types/type';
 
 class Menu {
     private menuLayout: string;
-    private popup: Popup;
+    private accountBtns: AccountBtns;
     private onChangeSearchValue: OnChangeSearchValue;
 
     constructor(onChangeSearchValue: OnChangeSearchValue) {
         this.menuLayout = menuDOM;
-        this.popup = new Popup();
+        this.accountBtns = new AccountBtns();
         this.onChangeSearchValue = onChangeSearchValue;
     }
 
     public drawMenu(): void {
         const menuSection = (document.querySelector('.menu') || document.body) as HTMLElement;
         menuSection.innerHTML += this.menuLayout;
-        this.popup.addButtons();
+        this.accountBtns.draw();
         this.addListeners();
     }
 
