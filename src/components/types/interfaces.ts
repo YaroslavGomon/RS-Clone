@@ -5,7 +5,6 @@ interface IController {
     fetchSearchCall(search: string): void;
     fetchById(id: number): void;
     fetchEpisodesById(id: number): void;
-    test(): void;
 }
 
 interface IAdmin {
