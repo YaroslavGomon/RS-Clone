@@ -124,15 +124,20 @@ export default class PodcastPage {
     private addListeners(episodeId: number): void {
         const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
         episodesWrapper.forEach((episodeWrapper) =>
-            episodeWrapper.addEventListener('click', () => this.onClickEpisodeCard(episodeId))
+            episodeWrapper.addEventListener('click', () =>
+                this.onClickEpisodeCard(Number(episodeWrapper.getAttribute('data-id')))
+            )
         );
 
         const buttonsPlay: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
-        buttonsPlay.forEach((button) => {
+        buttonsPlay.forEach((button) =>
             button.addEventListener('click', (event: Event) => {
                 event.stopPropagation();
-                this.onClickPlayButton(episodeId, event);
-            });
-        });
+                this.onClickPlayButton(
+                    Number(requiresNonNull<Element>(button.closest('.episode')).getAttribute('data-id')),
+                    event
+                );
+            })
+        );
     }
 }
