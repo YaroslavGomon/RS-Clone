@@ -96,7 +96,7 @@ export class EpisodePage {
 
         const sectionText: Element = document.createElement('div');
         sectionText.classList.add('episode__text');
-        sectionText.textContent = desription;
+        sectionText.textContent = replaceTags(desription);
 
         section.appendChild(sectionHeader);
         section.appendChild(sectionText);

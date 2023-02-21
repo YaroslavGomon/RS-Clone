@@ -1,13 +1,15 @@
 import menuDOM from './templates/menuDom';
-import { OnChangeSearchValue } from './types/type';
+import { OnChangeSearchValue, OnClickLink } from './types/type';
 
 class Menu {
     private menuLayout: string;
     private onChangeSearchValue: OnChangeSearchValue;
+    private readonly onClickLink: OnClickLink;
 
-    constructor(onChangeSearchValue: OnChangeSearchValue) {
+    constructor(onChangeSearchValue: OnChangeSearchValue, onClickLink: OnClickLink) {
         this.menuLayout = menuDOM;
         this.onChangeSearchValue = onChangeSearchValue;
+        this.onClickLink = onClickLink;
     }
 
     public drawMenu(): void {
@@ -40,9 +42,7 @@ class Menu {
 
         menuInner.addEventListener('click', (event) => {
             if ((event.target as HTMLElement).innerText === 'Your Library') {
-                // TO DO
-                // go to library
-                console.log('Go to Library');
+                this.onClickLink('library');
             } else if ((event.target as HTMLElement).innerText === 'Home') {
                 // TO DO
                 // go to home

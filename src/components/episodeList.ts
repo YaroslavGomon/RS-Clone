@@ -1,14 +1,17 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
+import { OnClickCard } from './types/type';
 
 export class EpisodeList {
     private podcastId: number;
 
     private readonly controller: Controller;
+    private readonly onClickEpisodeCard: OnClickCard;
 
-    constructor(podcatId: number) {
+    constructor(podcatId: number, onClickEpisodeCard: OnClickCard) {
         this.podcastId = podcatId;
         this.controller = new Controller();
+        this.onClickEpisodeCard = onClickEpisodeCard;
     }
 
     public createList(): Element {
@@ -29,7 +32,7 @@ export class EpisodeList {
         this.controller.fetchEpisodesById(this.podcastId).then((data) =>
             data.forEach((item, index) => {
                 if (index === 0) {
-                    const episode: Element = new EpisodesListItem().createEpisode(item);
+                    const episode: Element = new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this,item.id)).createEpisode(item);
                     episode.classList.add('episode_latest');
                     parent.appendChild(episode);
 
@@ -39,8 +42,7 @@ export class EpisodeList {
                     listHeader.textContent = 'Episodes';
                     parent.appendChild(listHeader);
                 } else {
-                    const episode: Element = new EpisodesListItem().createEpisode(item);
-                    parent.appendChild(episode);
+                    new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this,item.id)).createEpisode(item);
                 }
             })
         );
