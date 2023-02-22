@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { querySelectNonNull } from './utils';
+import { querySelectNonNull, requiresNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
@@ -214,6 +214,9 @@ export class Player {
         if (this.isPlay) {
             this.isPlay = false;
             playButton.classList.toggle('pause');
+            const episodePlayButton = requiresNonNull(document.querySelector('.pause'));
+            console.log(episodePlayButton);
+            episodePlayButton.classList.toggle('pause');
         }
     }
 
@@ -250,15 +253,17 @@ export class Player {
         this.controller.fetchDataForUpdatePlayer().then((data) => {
             this.updateData(data);
             this.updateProgressTrackDuration(data.duration);
+            this.audio.setAttribute('data-id', `${data.id}`);
         });
     }
 
     public updatePlayerSource(episodeId: number, event: Event): void {
         this.controller.fetchEpisodeById(episodeId).then((data) => {
-            this.updateData(data);
-
-            this.updateProgressTrackDuration(data.duration);
             const target: Element = event.target as Element;
+            if (episodeId !== Number(this.audio.getAttribute('data-id'))) {
+                this.updateData(data);
+                this.updateProgressTrackDuration(data.duration);
+            }
             if (target.classList.value.includes('card__play')) {
                 this.playAudio();
                 return;
@@ -275,6 +280,7 @@ export class Player {
 
     private updateData(data: episode) {
         this.audio.src = data.enclosureUrl;
+        this.audio.setAttribute('data-id', `${data.id}`);
         const episodeTitle: Element = querySelectNonNull<Element>('.player__title');
         episodeTitle.textContent = data.title;
         const episodeImage: HTMLImageElement = querySelectNonNull<HTMLImageElement>('.player__image');

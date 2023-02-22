@@ -120,6 +120,13 @@ export class App {
     }
 
     public onClickPlayButton(episodeId: number, event: Event): void {
+        const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+        const target: Element = event.target as Element;
+        playButtons.forEach(button => {
+            if (button !== target && button.classList.value.includes('pause')) {
+                button.classList.toggle('pause');
+            }
+        });
         this.player.updatePlayerSource(episodeId, event);
     }
 }
