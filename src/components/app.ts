@@ -1,7 +1,7 @@
 import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import { PlayerButtons } from './types/type';
+import { ActionsButtons, PlayerButtons } from './types/type';
 import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
@@ -101,7 +101,8 @@ export class App {
         new PodcastPage(
             podcastId,
             (episodeId: number) => this.onClickEpisodeCard(episodeId),
-            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
+            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event),
+            (type: ActionsButtons, event: Event) => this.OnClickAction(type, event)
         ).drawPodcastPage('spotify');
     }
 
@@ -125,5 +126,28 @@ export class App {
             }
         });
         this.player.updatePlayerSource(episodeId, event);
+    }
+
+    private OnClickAction(type: ActionsButtons, event: Event) {
+        const target: Element = event.target as Element;
+        const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        switch (type) {
+            case ActionsButtons.Share :
+                console.log('share');
+                const temp: HTMLInputElement = document.createElement('input');
+                document.body.appendChild(temp);
+                temp.value = `${window.location.origin}/#episode/${episodeId}`;
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                break;
+            case ActionsButtons.Save:
+                console.log('saved');
+                break;
+            case ActionsButtons.More:
+                console.log('download');
+                // this.downloadEpisode(event);
+                break;
+        }
     }
 }

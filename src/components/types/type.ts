@@ -60,7 +60,7 @@ export type OnClickPodcastCard = (podcastId: number) => void;
 export type onClickEpisodeCard = (episodeId: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
 export type OnClickPlayButton = (episodeId: number, event: Event) => void;
-export type OnActionClick = (type: ActionsButtons, event: Event) => void;
+export type OnClickAction = (type: ActionsButtons, event: Event) => void;
 
 export type user = {
     userName: string;
