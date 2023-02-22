@@ -1,6 +1,6 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode, OnClickAction, onClickEpisodeCard, OnClickPlayButton } from './types/type';
+import { ActionsButtons, episode, OnClickAction, onClickEpisodeCard, OnClickPlayButton } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
 
 export default class PodcastPage {
@@ -141,5 +141,21 @@ export default class PodcastPage {
                 );
             })
         );
+
+        const buttonsShare: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.share'));
+        buttonsShare.forEach(shareButton => {
+            shareButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.onClickAction(ActionsButtons.Share, event);
+            });
+        });
+
+        const buttonsDownload: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.more_spoti'));
+        buttonsDownload.forEach(dowloadButton => {
+            dowloadButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.onClickAction(ActionsButtons.More, event);
+            });
+        });
     }
 }

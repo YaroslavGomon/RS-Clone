@@ -64,10 +64,6 @@
     padding-bottom: 1rem;
 }
 
-// .episode__description {
-//     padding: 1rem 0 0.5rem;
-// }
-
 .actions {
     display: flex;
     gap: 2rem;
@@ -88,9 +84,9 @@
     mask: url('./assets/icons/save.svg') no-repeat center;
 }
 
-.share, .download {
-    -webkit-mask: url('./assets/icons/download.svg') no-repeat center;
-    mask: url('./assets/icons/download.svg') no-repeat center;
+.share {
+    -webkit-mask: url('./assets/icons/share.svg') no-repeat center;
+    mask: url('./assets/icons/share.svg') no-repeat center;
 }
 
 .title_up-next {

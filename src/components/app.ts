@@ -9,6 +9,7 @@ import { EpisodePage } from './episodePage';
 import Cards from './cards';
 import Menu from './menu';
 import Footer from './footer';
+import Controller from './controller';
 
 export class App {
     private readonly player: Player;
@@ -146,8 +147,23 @@ export class App {
                 break;
             case ActionsButtons.More:
                 console.log('download');
-                // this.downloadEpisode(event);
+                this.downloadEpisode(event);
                 break;
         }
+    }
+
+    private async downloadEpisode(event: Event): Promise<void> {
+        const controller = new Controller();
+        const anchor: HTMLAnchorElement = document.createElement('a');
+        const target: Element = event.target as Element;
+        const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        if (episodeId === null) return;
+        const episodeData = await controller.fetchEpisodeById(Number(episodeId))
+            .then(data => data);
+        anchor.href = episodeData.enclosureUrl;
+        anchor.download = episodeData.title;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
     }
 }
