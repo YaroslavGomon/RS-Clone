@@ -214,8 +214,7 @@ export class Player {
         if (this.isPlay) {
             this.isPlay = false;
             playButton.classList.toggle('pause');
-            const episodePlayButton = requiresNonNull(document.querySelector('.pause'));
-            console.log(episodePlayButton);
+            const episodePlayButton: Element = requiresNonNull(document.querySelector('.pause'));
             episodePlayButton.classList.toggle('pause');
         }
     }
