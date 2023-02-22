@@ -60,6 +60,7 @@ export type OnClickPodcastCard = (podcastId: number) => void;
 export type onClickEpisodeCard = (episodeId: number) => void;
 export type OnChangeSearchValue = (value: string) => void;
 export type OnClickPlayButton = (episodeId: number, event: Event) => void;
+export type OnActionClick = (type: ActionsButtons, event: Event) => void;
 
 export type user = {
     userName: string;
@@ -67,6 +68,13 @@ export type user = {
     email: string;
     phone: string;
 };
+
+export enum ActionsButtons {
+    Share = 'share',
+    Save = 'save',
+    More = 'more',
+}
+
 
 export type PodcastsJson = {
     count: number,
