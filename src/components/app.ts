@@ -2,7 +2,7 @@ import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
 import { PlayerButtons } from './types/type';
-import { requiresNonNull } from './utils';
+import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
 import { EpisodePage } from './episodePage';
@@ -52,10 +52,7 @@ export class App {
 
     private onRangeInput(event: Event): void {
         const target: HTMLInputElement = event.target as HTMLInputElement;
-        const value: number = Number(target.value);
-        const duration: number = Number(target.max);
-        const percent: number = (value / duration) * 100;
-        target.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${percent}%, #dddddd ${percent}%, #dddddd 100%)`;
+        changeRangeBackground(target);
     }
 
     public onClickPlayerButton(event: Event): void {

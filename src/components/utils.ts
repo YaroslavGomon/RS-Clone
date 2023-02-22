@@ -12,3 +12,9 @@ export function replaceTags(str: string): string {
     const regexForStripHTML = /<.*?>.*?/gi;
     return str.replace(regexForStripHTML, '').toLowerCase();
 }
+
+export function changeRangeBackground(range: HTMLInputElement): void {
+    const duration: number = Number(range.max);
+    const percent: number = (Number(range.value) / duration) * 100;
+    range.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${percent}%, #dddddd ${percent}%, #dddddd 100%)`;
+}

@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { querySelectNonNull, requiresNonNull } from './utils';
+import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
@@ -171,6 +171,7 @@ export class Player {
         currentTime.textContent = this.formatTime(value);
         const progressBarTrack: HTMLInputElement = querySelectNonNull<HTMLInputElement>('.progress_track');
         progressBarTrack.value = String(value);
+        changeRangeBackground(progressBarTrack);
     }
 
     private createProgressVolume(): Element {
@@ -185,9 +186,7 @@ export class Player {
         progressVolume.min = '0';
         progressVolume.max = '1';
         progressVolume.value = '0.2';
-        progressVolume.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${
-            Number(progressVolume.value) * 100
-        }%, #dddddd ${Number(progressVolume.value) * 100}%, #dddddd 100%)`;
+        changeRangeBackground(progressVolume);
         this.audio.volume = Number(progressVolume.value);
 
         progressVolume.addEventListener('input', (event) => {
@@ -277,7 +276,7 @@ export class Player {
         });
     }
 
-    private updateData(data: episode) {
+    private updateData(data: episode): void {
         this.audio.src = data.enclosureUrl;
         this.audio.setAttribute('data-id', `${data.id}`);
         const episodeTitle: Element = querySelectNonNull<Element>('.player__title');
