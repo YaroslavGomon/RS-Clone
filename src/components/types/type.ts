@@ -108,3 +108,9 @@ export type EpisodeJson = {
     id: string,
     status: string,
 };
+
+export type UserLibrary = {
+    email: string,
+    likedPodcasts: Array<{id:number}>
+    subscribedPodcasts: Array<{id:number}>
+}

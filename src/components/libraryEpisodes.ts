@@ -1,15 +1,18 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
-import { onClickEpisodeCard } from './types/type';
+import { UserLibrary, onClickEpisodeCard } from './types/type';
 import { querySelectNonNull } from './utils';
+import { Library } from './api/libraryController';
 
 export class LibraryEpisodes {
     private readonly controller: Controller;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
+    private readonly library: Library;
 
     constructor(onClickEpisodeCard: onClickEpisodeCard) {
         this.controller = new Controller();
         this.onClickEpisodeCard = onClickEpisodeCard;
+        this.library = new Library('ivanov@gmail.com');
     }
 
     public draw(): void {
@@ -36,7 +39,7 @@ export class LibraryEpisodes {
         const title: Element = document.createElement('h1');
         title.classList.add('episodeContent__title');
         title.classList.add('h1');
-        title.textContent = 'Your Episode';
+        title.textContent = 'Your Liked Episodes';
 
         const creator: Element = document.createElement('div');
         creator.classList.add('creator');
@@ -44,7 +47,7 @@ export class LibraryEpisodes {
 
         header.appendChild(imageWrapper);
         info.appendChild(title);
-        info.appendChild(creator);
+        // info.appendChild(creator);
         header.appendChild(info);
 
         return header;
@@ -52,14 +55,14 @@ export class LibraryEpisodes {
 
     private createList(): Element {
         const wrapper: Element = document.createElement('div');
-
-        //TO DO
-        //will be delete
-        const array: number[] = [13519920619, 13519920619, 1066003];
-        array.forEach(item => {
-            this.controller.fetchEpisodeById(item).then(data => new EpisodesListItem(wrapper, (episodeId: number) => this.onClickEpisodeCard(episodeId)).createEpisode(data));
+        this.library.userLibrary()
+        .then(res=> {
+            const userLibraryObj = res as UserLibrary;
+            const array: Array<{id:number}> = userLibraryObj.likedPodcasts;
+            array.forEach(item => {
+                this.controller.fetchEpisodeById(item.id).then(data => new EpisodesListItem(wrapper, (episodeId: number) => this.onClickEpisodeCard(episodeId)).createEpisode(data));
+            });
         });
-
         return wrapper;
     }
 }

@@ -1,13 +1,14 @@
 import './style.scss';
 import './assets/img/fav-icon.png';
 import { App } from './components/app';
+import { Authentication } from './components/api/authorizationController';
 // import { addUser, deleteUser, listUsers, signIn, signOut, updateUser } from './components/api/authorizationController';
 // import { addItemToPlaylist, addNewPlaylist, allLibrary, removeItemFromPlaylist, removePlaylist, renamePlaylist, userLibrary } from './components/api/libraryController';
 // import { userLibrary } from './components/api/libraryController';
 
+new Authentication('ivanov@gmail.com', 'password1').signIn();
 const app = new App();
 app.start();
-
 
 
 
