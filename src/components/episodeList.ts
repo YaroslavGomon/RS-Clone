@@ -1,14 +1,14 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
-import { OnClickCard } from './types/type';
+import { onClickEpisodeCard } from './types/type';
 
 export class EpisodeList {
     private podcastId: number;
 
     private readonly controller: Controller;
-    private readonly onClickEpisodeCard: OnClickCard;
+    private readonly onClickEpisodeCard: onClickEpisodeCard;
 
-    constructor(podcatId: number, onClickEpisodeCard: OnClickCard) {
+    constructor(podcatId: number, onClickEpisodeCard: onClickEpisodeCard) {
         this.podcastId = podcatId;
         this.controller = new Controller();
         this.onClickEpisodeCard = onClickEpisodeCard;

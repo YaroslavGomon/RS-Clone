@@ -55,7 +55,7 @@ export default class PodcastPage {
                           </div>
                           `;
                         (document.querySelector('.episodes-list') as HTMLElement).innerHTML += appleEpisodeElement;
-                        this.addListeners(episode.id);
+                        this.addListeners();
                     });
                 });
                 break;
@@ -98,7 +98,7 @@ export default class PodcastPage {
                           </div>
                          `;
                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
-                        this.addListeners(episode.id);
+                        this.addListeners();
                     });
                 });
                 break;
@@ -121,7 +121,7 @@ export default class PodcastPage {
         });
     }
 
-    private addListeners(episodeId: number): void {
+    private addListeners(): void {
         const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
         episodesWrapper.forEach((episodeWrapper) =>
             episodeWrapper.addEventListener('click', () =>
