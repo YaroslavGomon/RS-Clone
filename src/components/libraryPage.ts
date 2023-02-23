@@ -1,14 +1,16 @@
 import { Library } from './api/libraryController';
-import { OnClickLink, UserLibrary } from './types/type';
+import { OnClickLink, UserLibrary, onClickSavedPlaylist } from './types/type';
 import { querySelectNonNull } from './utils';
 
 export class LibraryPage {
     private readonly onClickLink: OnClickLink;
     private library: Library;
+    private readonly onClickSavedPlaylist: onClickSavedPlaylist;
 
-    constructor(onClickLink: OnClickLink) {
+    constructor(onClickLink: OnClickLink, onClickSavedPlaylist: onClickSavedPlaylist) {
         this.onClickLink = onClickLink;
         this.library = new Library('ivanov@gmail.com');
+        this.onClickSavedPlaylist = onClickSavedPlaylist;
     }
 
     public draw(): void {
@@ -95,7 +97,7 @@ export class LibraryPage {
 
         //TO DO
         //will be change
-        wrapper.addEventListener('click', () => console.log('Go To Playlist Page'));
+        wrapper.addEventListener('click', () => this.onClickSavedPlaylist(playlist));
 
         wrapperName.appendChild(playlistName);
         wrapperName.appendChild(owner);
