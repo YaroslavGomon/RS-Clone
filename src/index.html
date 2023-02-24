@@ -9,6 +9,64 @@
   <link rel="icon" type="image/x-icon" href="./assets/img/fav-icon.png">
 </head>
 
-<body></body>
+<body>
+  <style>
+    .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.popup__actions {
+    visibility: hidden;
+    width: 160px;
+    background-color: rgb(186, 186, 186);
+    color: rgb(58, 56, 56);
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    top: 2rem;
+    left: 20rem;
+}
+
+.show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+.popup__text:hover {
+  background-color: blue;
+  color: white;
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+
+  </style>
+  <div class="popup" onclick="myFunction()"> Click
+    <div class="popup__actions">
+      <div class="popup__text share">Copy Link</div>
+      <div class="popup__text download">Download Episode</div>
+      <div class="popup__text save">Save To Your Episodes</div>
+      <div class="popup__text playlist">Add to Playlist</div>
+    </div>
+  </div>
+  <script>
+    function myFunction() {
+    var popup = document.querySelector(".popup__actions");
+    popup.classList.toggle("show");
+}
+  </script>
+</body>
 
 </html>
