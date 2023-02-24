@@ -122,7 +122,8 @@ export default class PodcastPage {
     }
 
     private addListeners(episodeId: number): void {
-        const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+      console.log(episodeId);
+      const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
         episodesWrapper.forEach((episodeWrapper) =>
             episodeWrapper.addEventListener('click', () =>
                 this.onClickEpisodeCard(Number(episodeWrapper.getAttribute('data-id')))

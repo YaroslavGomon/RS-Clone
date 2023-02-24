@@ -1,11 +1,11 @@
-import { episode, OnClickCard } from './types/type';
+import { episode, onClickEpisodeCard } from './types/type';
 import { replaceTags } from './utils';
 
 export class EpisodesListItem {
     private readonly parent: Element;
-    private readonly onClickEpisodeCard: OnClickCard;
+    private readonly onClickEpisodeCard: onClickEpisodeCard;
 
-    constructor(parent: Element, onClickEpisodeCard: OnClickCard) {
+    constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard) {
         this.parent = parent;
         this.onClickEpisodeCard = onClickEpisodeCard;
     }

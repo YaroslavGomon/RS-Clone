@@ -1,13 +1,13 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
-import { OnClickCard } from './types/type';
+import { onClickEpisodeCard } from './types/type';
 import { querySelectNonNull } from './utils';
 
 export class LibraryEpisodes {
     private readonly controller: Controller;
-    private readonly onClickEpisodeCard: OnClickCard;
+    private readonly onClickEpisodeCard: onClickEpisodeCard;
 
-    constructor(onClickEpisodeCard: OnClickCard) {
+    constructor(onClickEpisodeCard: onClickEpisodeCard) {
         this.controller = new Controller();
         this.onClickEpisodeCard = onClickEpisodeCard;
     }
