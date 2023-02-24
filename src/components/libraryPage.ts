@@ -1,11 +1,16 @@
-import { OnClickLink } from './types/type';
+import { Library } from './api/libraryController';
+import { OnClickLink, UserLibrary, onClickSavedPlaylist } from './types/type';
 import { querySelectNonNull } from './utils';
 
 export class LibraryPage {
     private readonly onClickLink: OnClickLink;
+    private library: Library;
+    private readonly onClickSavedPlaylist: onClickSavedPlaylist;
 
-    constructor(onClickLink: OnClickLink) {
+    constructor(onClickLink: OnClickLink, onClickSavedPlaylist: onClickSavedPlaylist) {
         this.onClickLink = onClickLink;
+        this.library = new Library('ivanov@gmail.com');
+        this.onClickSavedPlaylist = onClickSavedPlaylist;
     }
 
     public draw(): void {
@@ -21,10 +26,9 @@ export class LibraryPage {
         mainContainer.appendChild(this.createLibraryNavigation());
         mainContainer.appendChild(header);
         wrapper.appendChild(this.createBlockEpisodes());
-        wrapper.appendChild(this.createPlaylist());
-        wrapper.appendChild(this.createPlaylist());
 
         mainContainer.appendChild(wrapper);
+        this.updateLibrary();
     }
 
     private createLibraryNavigation(): Element {
@@ -34,7 +38,7 @@ export class LibraryPage {
         list.classList.add('navigation__list');
 
         list.appendChild(this.createNavItem('playlists'));
-        list.appendChild(this.createNavItem('episodes'));
+        list.appendChild(this.createNavItem('subscriptions'));
         nav.appendChild(list);
 
         return nav;
@@ -51,7 +55,7 @@ export class LibraryPage {
         }
         const link: HTMLAnchorElement = document.createElement('a');
         link.classList.add('link');
-        name === 'episodes' ? link.href = `/#saved`: link.href = `/#${name}List`;
+        name === 'episodes' ? (link.href = `/#saved`) : (link.href = `/#${name}List`);
         link.textContent = `${name}`;
         item.appendChild(link);
 
@@ -62,8 +66,9 @@ export class LibraryPage {
         const wrapper: Element = document.createElement('div');
         wrapper.classList.add('save-episodes');
         const header: Element = document.createElement('h2');
-        header.textContent = 'Your Episode';
+        header.textContent = 'Your liked episodes';
         const amount: Element = document.createElement('div');
+        amount.classList.add('amount-episodes');
         amount.textContent = `2 episodes`;
         wrapper.appendChild(header);
         wrapper.appendChild(amount);
@@ -73,12 +78,12 @@ export class LibraryPage {
         return wrapper;
     }
 
-    private createPlaylist(): Element {
+    private createPlaylist(playlist: string): Element {
         const wrapper: Element = document.createElement('div');
         wrapper.classList.add('playlist');
 
         const image: HTMLImageElement = document.createElement('img');
-        image.src = './assets/img/tedtalksdaily.png';
+        image.src = './assets/img/fav-icon.png';
         image.alt = 'Playlist Image';
         image.classList.add('playlist__image');
 
@@ -86,13 +91,13 @@ export class LibraryPage {
         wrapperName.classList.add('playlist__name__wrapper');
 
         const playlistName: Element = document.createElement('h3');
-        playlistName.textContent = 'Playlist';
+        playlistName.textContent = `${playlist}`;
         const owner: Element = document.createElement('div');
-        owner.textContent = 'By UserName';
+        owner.textContent = 'User playlist';
 
         //TO DO
         //will be change
-        wrapper.addEventListener('click', () => console.log('Go To Playlist Page'));
+        wrapper.addEventListener('click', () => this.onClickSavedPlaylist(playlist));
 
         wrapperName.appendChild(playlistName);
         wrapperName.appendChild(owner);
@@ -100,5 +105,28 @@ export class LibraryPage {
         wrapper.appendChild(wrapperName);
 
         return wrapper;
+    }
+
+    private updateLibrary() {
+        const amountEpisodes = document.querySelector('.amount-episodes') as HTMLElement;
+        const playlistWrapper = document.querySelector('.playlists') as HTMLElement;
+        console.log("df");
+        this.library
+            .userLibrary()
+            .then((res) => {
+                const result = res as UserLibrary;
+                const usersPlaylistsKeysArray = Object.keys(res);
+                for (let i = 0; i < usersPlaylistsKeysArray.length; i += 1){
+                    if (usersPlaylistsKeysArray[i] != "_id" && usersPlaylistsKeysArray[i] != "email" && usersPlaylistsKeysArray[i] != "subscribedPodcasts" && usersPlaylistsKeysArray[i] != "likedPodcasts"){
+                        playlistWrapper.appendChild(this.createPlaylist(`${usersPlaylistsKeysArray[i]}`));
+                    }
+                }
+                amountEpisodes.innerText = result.likedPodcasts.length.toString() + ' episodes';
+                console.log(res);
+            })
+            .catch((err) => {
+                const mainContainer = document.querySelector('.main__container') as HTMLElement;
+                mainContainer.innerHTML = `${err}`;
+            });
     }
 }

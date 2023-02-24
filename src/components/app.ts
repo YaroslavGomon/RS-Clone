@@ -1,7 +1,7 @@
 import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import { PlayerButtons } from './types/type';
+import { PlayerButtons} from './types/type';
 import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
@@ -48,10 +48,11 @@ export class App {
 
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
-        this.router.addRoute('podcast', (podcastId: number) => this.onLoadPodcastPage(podcastId));
-        this.router.addRoute('episode', (episodeId: number) => this.onLoadEpisodePage(episodeId));
+        this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
+        this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
         this.router.addRoute('saved', this.onLoadLibraryEpisodes.bind(this));
+        this.router.addRoute('savedPodcast', (playlistName: string | number) => this.onLoadSavedPlaylist(playlistName));
     }
 
     private onRangeInput(event: Event): void {
@@ -101,9 +102,10 @@ export class App {
         this.router.updateUrl(`/#podcast/${podcastId}`);
     }
 
-    private onLoadPodcastPage(podcastId: number): void {
+    private onLoadPodcastPage(podcastId: number | string): void {
+        const podcastID = podcastId as number;
         new PodcastPage(
-            podcastId,
+            podcastID,
             (episodeId: number) => this.onClickEpisodeCard(episodeId),
             (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
         ).drawPodcastPage('spotify');
@@ -113,11 +115,12 @@ export class App {
         this.router.updateUrl(`/#episode/${episodeId}`);
     }
 
-    private onLoadEpisodePage(episodeId: number): void {
+    private onLoadEpisodePage(episodeId: number | string): void {
+        const episodeID = episodeId as number;
         new EpisodePage(
             (id: number) => this.onClickPodcastCard(id),
             (id: number, event: Event) => this.onClickPlayButton(id, event)
-        ).fetchEpisode(episodeId);
+        ).fetchEpisode(episodeID);
     }
 
     public onClickPlayButton(episodeId: number, event: Event): void {
@@ -135,11 +138,21 @@ export class App {
         this.router.updateUrl(`/#${path}`);
     }
 
+    private onClickSavedPlaylist(playlist: string): void {
+        this.router.updateUrl(`/#savedPodcast/${playlist}`);
+    }
+
     private onLoadLibraryPage(): void {
-        new LibraryPage((path: string) => this.onClickLink(path)).draw();
+        new LibraryPage((path: string) => this.onClickLink(path), (playlist: string) => this.onClickSavedPlaylist(playlist)).draw();
     }
 
     private onLoadLibraryEpisodes(): void {
         new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId)).draw();
+    }
+
+    private onLoadSavedPlaylist(playlistName: string | number): void {
+        const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
+        console.log(playlistNAME);
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), playlistNAME).draw();
     }
 }

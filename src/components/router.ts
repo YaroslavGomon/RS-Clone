@@ -26,17 +26,22 @@ export class Router {
     public handleLocation(): void {
         let path = window.location.pathname;
         const hash = window.location.hash;
-        let id = 0;
+        let id: number|string = 0;
 
         if (hash !== '') {
             path = hash.substring(1).split('/')[0];
-            id = Number(hash.substring(1).split('/')[1]);
+            id = hash.substring(1).split('/')[1];
         }
 
         if (this.routesSet.has(path)) {
             this.routes.forEach((route) => {
                 if (route.path === path) {
-                    route.onReloadPage(Number(id));
+                    if (Number.isNaN(Number(id))){
+                        route.onReloadPage(id);
+                    }
+                    else {
+                        route.onReloadPage(Number(id));
+                    }
                 }
             });
         }
