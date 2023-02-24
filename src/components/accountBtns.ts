@@ -1,4 +1,12 @@
+import { OnClickAccountsBtn } from './types/type';
+
 export default class AccountBtns {
+    private onclickAccoutnsBtn: OnClickAccountsBtn;
+
+    constructor(onclickAccoutnsBtn: OnClickAccountsBtn) {
+        this.onclickAccoutnsBtn = onclickAccoutnsBtn;
+    }
+
     private addButtons() {
         const menu = document.querySelector('.menu');
         if (menu) {
@@ -6,7 +14,7 @@ export default class AccountBtns {
             menuLogin.classList.add('menu__personal');
             menu.append(menuLogin);
 
-            const buttonNames = ['register', 'login', 'logout'];
+            const buttonNames = ['register', 'login', 'settings', 'logout'];
 
             buttonNames.forEach((val) => {
                 const button = document.createElement('button');
@@ -30,7 +38,7 @@ export default class AccountBtns {
         }
     }
 
-    private openCloseAccountBtns() {
+    private openCloseAccountMenu() {
         const menuLogin = document.querySelector('.menu__personal');
         if (menuLogin) {
             if (menuLogin.classList.contains('active')) {
@@ -44,11 +52,14 @@ export default class AccountBtns {
     private addListeners() {
         const menuAccount = document.querySelector('.menu__item.account');
         const menuLogin = document.querySelector('.menu__personal');
-        if (menuAccount) menuAccount.addEventListener('click', this.openCloseAccountBtns);
+        if (menuAccount) menuAccount.addEventListener('click', this.openCloseAccountMenu);
         if (menuLogin) {
             menuLogin.addEventListener('click', (e) => {
                 if (e.target && e.target instanceof HTMLButtonElement) {
-                    if (e.target.classList.contains('menu__btn')) this.openCloseAccountBtns();
+                    if (e.target.classList.contains('menu__btn')) {
+                        this.openCloseAccountMenu();
+                        if (e.target.textContent) this.onclickAccoutnsBtn(e.target.textContent);
+                    }
                 }
             });
         }

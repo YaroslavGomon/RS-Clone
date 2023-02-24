@@ -1,16 +1,13 @@
-import AccountBtns from './accountBtns';
 import menuDOM from './templates/menuDom';
 import { OnChangeSearchValue, OnClickLink } from './types/type';
 
 class Menu {
     private menuLayout: string;
-    private accountBtns: AccountBtns;
     private onChangeSearchValue: OnChangeSearchValue;
     private readonly onClickLink: OnClickLink;
 
     constructor(onChangeSearchValue: OnChangeSearchValue, onClickLink: OnClickLink) {
         this.menuLayout = menuDOM;
-        this.accountBtns = new AccountBtns();
         this.onChangeSearchValue = onChangeSearchValue;
         this.onClickLink = onClickLink;
     }
@@ -18,7 +15,6 @@ class Menu {
     public drawMenu(): void {
         const menuSection = (document.querySelector('.menu') || document.body) as HTMLElement;
         menuSection.innerHTML += this.menuLayout;
-        this.accountBtns.draw();
         this.addListeners();
     }
 
