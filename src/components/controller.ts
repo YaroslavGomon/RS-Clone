@@ -25,6 +25,7 @@ class Loader {
 
     async fetchRecent(apiKey: string, apiSecret: string): Promise<podcastCard[]> {
         const url: string = 'https://api.podcastindex.org/api/1.0/recent/feeds?max=12';
+
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         return this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime)
             .then((authorization: string) => this.getHeaders(apiHeaderTime, apiKey, authorization))

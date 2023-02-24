@@ -1,0 +1,27 @@
+.library__episodes__header {
+    background: linear-gradient($color-bright-light, $color-bright);
+    display: flex;
+    gap: 2rem;
+    color: $color-light;
+    border: $radius;
+}
+
+.library__episodes__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30rem;
+    height: 30rem;
+    border: $radius;
+    background-color: $color-bright;
+}
+
+.library__episodes__image {
+    -webkit-mask: url('./assets/icons/saved.svg') no-repeat center;
+    mask: url('./assets/icons/saved.svg') no-repeat center;
+    -webkit-mask-size: 15rem;
+    mask-size: 15rem;
+    background: $color-light;
+    width: 15rem;
+    height: 15rem;
+}

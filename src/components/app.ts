@@ -2,13 +2,15 @@ import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
 import { PlayerButtons } from './types/type';
-import { requiresNonNull } from './utils';
+import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
 import { EpisodePage } from './episodePage';
 import Cards from './cards';
 import Menu from './menu';
 import Footer from './footer';
+import { LibraryPage } from './libraryPage';
+import { LibraryEpisodes } from './libraryEpisodes';
 
 export class App {
     private readonly player: Player;
@@ -26,7 +28,7 @@ export class App {
 
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue));
+        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
         this.footer = new Footer();
         this.cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
     }
@@ -48,14 +50,13 @@ export class App {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (podcastId: number) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number) => this.onLoadEpisodePage(episodeId));
+        this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
+        this.router.addRoute('saved', this.onLoadLibraryEpisodes.bind(this));
     }
 
     private onRangeInput(event: Event): void {
         const target: HTMLInputElement = event.target as HTMLInputElement;
-        const value: number = Number(target.value);
-        const duration: number = Number(target.max);
-        const percent: number = (value / duration) * 100;
-        target.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${percent}%, #dddddd ${percent}%, #dddddd 100%)`;
+        changeRangeBackground(target);
     }
 
     public onClickPlayerButton(event: Event): void {
@@ -120,6 +121,25 @@ export class App {
     }
 
     public onClickPlayButton(episodeId: number, event: Event): void {
+        const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+        const target: Element = event.target as Element;
+        playButtons.forEach(button => {
+            if (button !== target && button.classList.value.includes('pause')) {
+                button.classList.toggle('pause');
+            }
+        });
         this.player.updatePlayerSource(episodeId, event);
+    }
+
+    private onClickLink(path: string): void {
+        this.router.updateUrl(`/#${path}`);
+    }
+
+    private onLoadLibraryPage(): void {
+        new LibraryPage((path: string) => this.onClickLink(path)).draw();
+    }
+
+    private onLoadLibraryEpisodes(): void {
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId)).draw();
     }
 }

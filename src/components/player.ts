@@ -1,6 +1,6 @@
 import Controller from './controller';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { querySelectNonNull } from './utils';
+import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
@@ -171,6 +171,7 @@ export class Player {
         currentTime.textContent = this.formatTime(value);
         const progressBarTrack: HTMLInputElement = querySelectNonNull<HTMLInputElement>('.progress_track');
         progressBarTrack.value = String(value);
+        changeRangeBackground(progressBarTrack);
     }
 
     private createProgressVolume(): Element {
@@ -185,9 +186,7 @@ export class Player {
         progressVolume.min = '0';
         progressVolume.max = '1';
         progressVolume.value = '0.2';
-        progressVolume.style.background = `linear-gradient(to right, #993aed 0%, #993aed ${
-            Number(progressVolume.value) * 100
-        }%, #dddddd ${Number(progressVolume.value) * 100}%, #dddddd 100%)`;
+        changeRangeBackground(progressVolume);
         this.audio.volume = Number(progressVolume.value);
 
         progressVolume.addEventListener('input', (event) => {
@@ -214,6 +213,8 @@ export class Player {
         if (this.isPlay) {
             this.isPlay = false;
             playButton.classList.toggle('pause');
+            const episodePlayButton: Element = requiresNonNull(document.querySelector('.pause'));
+            episodePlayButton.classList.toggle('pause');
         }
     }
 
@@ -250,15 +251,17 @@ export class Player {
         this.controller.fetchDataForUpdatePlayer().then((data) => {
             this.updateData(data);
             this.updateProgressTrackDuration(data.duration);
+            this.audio.setAttribute('data-id', `${data.id}`);
         });
     }
 
     public updatePlayerSource(episodeId: number, event: Event): void {
         this.controller.fetchEpisodeById(episodeId).then((data) => {
-            this.updateData(data);
-
-            this.updateProgressTrackDuration(data.duration);
             const target: Element = event.target as Element;
+            if (episodeId !== Number(this.audio.getAttribute('data-id'))) {
+                this.updateData(data);
+                this.updateProgressTrackDuration(data.duration);
+            }
             if (target.classList.value.includes('card__play')) {
                 this.playAudio();
                 return;
@@ -273,8 +276,9 @@ export class Player {
         });
     }
 
-    private updateData(data: episode) {
+    private updateData(data: episode): void {
         this.audio.src = data.enclosureUrl;
+        this.audio.setAttribute('data-id', `${data.id}`);
         const episodeTitle: Element = querySelectNonNull<Element>('.player__title');
         episodeTitle.textContent = data.title;
         const episodeImage: HTMLImageElement = querySelectNonNull<HTMLImageElement>('.player__image');
