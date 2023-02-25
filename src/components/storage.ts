@@ -2,8 +2,8 @@ import { StorageEpisode } from './types/type';
 
 export class PodcastStorage {
 
-    public setEpisodeOrder(episodeOrder: string): void {
-        localStorage.setItem('episodeOrder', episodeOrder);
+    public setEpisodeOrder(episodeOrder: StorageEpisode[]): void {
+        localStorage.setItem('episodeOrder', JSON.stringify(episodeOrder));
     }
 
     public getEpisodeOrder(): StorageEpisode[] {

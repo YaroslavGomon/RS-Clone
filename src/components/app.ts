@@ -1,7 +1,7 @@
 import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import { PlayerButtons} from './types/type';
+import { PlayerButtons, StorageEpisode} from './types/type';
 import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
@@ -11,6 +11,7 @@ import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
 import { LibraryEpisodes } from './libraryEpisodes';
+import { PodcastStorage } from './storage';
 
 export class App {
     private readonly player: Player;
@@ -131,6 +132,23 @@ export class App {
                 button.classList.toggle('pause');
             }
         });
+        const storage: PodcastStorage = new PodcastStorage();
+        const arrayStart: StorageEpisode[] = storage.getEpisodeOrder();
+        let arrayPrevs: StorageEpisode[] = [];
+        let arrayNexts: StorageEpisode[] = [];
+        const currentIndex = arrayStart.findIndex((item) => item.id === episodeId);
+        arrayStart.forEach((item, index) => {
+            index <= currentIndex
+                ? arrayNexts.push(item)
+                : arrayPrevs.push(item);
+        });
+        arrayNexts.pop();
+        arrayNexts.reverse();
+        arrayPrevs.reverse();
+        let resultArray = [...arrayNexts, ...arrayPrevs];
+        resultArray.push(arrayStart[currentIndex]);
+        storage.setEpisodeOrder(resultArray);
+
         this.player.updatePlayerSource(episodeId, event);
     }
 
