@@ -136,14 +136,17 @@ export class App {
     }
 
     public onClickPlayButton(episodeId: number, event: Event): void {
-        const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
         const target: Element = event.target as Element;
-        playButtons.forEach((button) => {
-            if (button !== target && button.classList.value.includes('pause')) {
-                button.classList.toggle('pause');
-            }
-        });
-        target.classList.toggle('pause');
+        if (!target.classList.value.includes('card__play')) {
+            const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+
+            playButtons.forEach((button) => {
+                if (button !== target && button.classList.value.includes('pause')) {
+                    button.classList.toggle('pause');
+                }
+            });
+            target.classList.toggle('pause');
+        }
 
         const storage: PodcastStorage = new PodcastStorage();
         const arrayStart: StorageEpisode[] = storage.getEpisodeOrder();

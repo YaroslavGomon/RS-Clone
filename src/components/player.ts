@@ -306,5 +306,6 @@ export class Player {
 
         episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
         episodeImage.alt = data.title;
+        this.updateProgressTrackDuration(data.duration);
     }
 }
