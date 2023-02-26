@@ -87,6 +87,10 @@
     -webkit-mask: url('./assets/icons/save.svg') no-repeat center;
     mask: url('./assets/icons/save.svg') no-repeat center;
 }
+.saved {
+    -webkit-mask: url('./assets/icons/saved.svg') no-repeat center;
+    mask: url('./assets/icons/saved.svg') no-repeat center;
+}
 
 .share, .download {
     -webkit-mask: url('./assets/icons/download.svg') no-repeat center;

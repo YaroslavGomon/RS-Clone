@@ -1,13 +1,16 @@
 import { episode, onClickEpisodeCard } from './types/type';
 import { replaceTags } from './utils';
+import { Library } from './api/libraryController';
 
 export class EpisodesListItem {
     private readonly parent: Element;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
+    private readonly library: Library;
 
     constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard) {
         this.parent = parent;
         this.onClickEpisodeCard = onClickEpisodeCard;
+        this.library = new Library('ivanov@gmail.com');
     }
 
     public createEpisode(data: episode): Element {
@@ -44,7 +47,7 @@ export class EpisodesListItem {
         episodeInfo.appendChild(episodeTitle);
         episodeInfo.appendChild(episodeDescription);
         episodeInfo.appendChild(this.createEpisodePlayer(data.duration));
-        episodeInfo.appendChild(this.createActionsButton());
+        episodeInfo.appendChild(this.createActionsButton(data.id));
 
         return episodeInfo;
     }
@@ -77,7 +80,7 @@ export class EpisodesListItem {
         return player;
     }
 
-    private createActionsButton(): Element {
+    private createActionsButton(episodeId: number): Element {
         const wrapper: Element = document.createElement('div');
         wrapper.classList.add('actions_spoti');
 
@@ -85,9 +88,30 @@ export class EpisodesListItem {
         shareButton.classList.add('button_action');
         shareButton.classList.add('share');
 
-        const saveButton: Element = document.createElement('div');
+        const saveButton: HTMLElement = document.createElement('div');
         saveButton.classList.add('button_action');
-        saveButton.classList.add('save');
+        const path = window.location.hash.split('/');
+        if (path[0] === '#saved' || path[0] === '#savedPodcast')
+        {
+            saveButton.dataset.id = episodeId.toString();
+            saveButton.classList.add('saved');
+            saveButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const playlistName = path[0] === '#saved' ? 'likedPodcasts' : (path[1] as string).replace(/(%20)/g, ' ');
+                this.library.removeItemFromPlaylist(playlistName, saveButton.dataset.id as string)
+                .then(()=>{
+                    setTimeout(()=> {
+                        window.location.href = path.join('/');
+                    }, 1000);
+                })
+                ;
+            });
+        }
+        else 
+        {
+            saveButton.classList.add('save');
+        }
+
 
         const moreButton: Element = document.createElement('div');
         moreButton.classList.add('button_action');

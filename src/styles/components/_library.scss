@@ -21,6 +21,7 @@
 
 .playlists {
     display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     color: $color-light;
     padding-top: 2rem;

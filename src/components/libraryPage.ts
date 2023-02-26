@@ -115,8 +115,9 @@ export class LibraryPage {
                     if (inputElem.value != '' && Number.isNaN(Number(inputElem.value)) === true) {
                         playlistName.innerHTML = inputElem.value;
                         library.addNewPlaylist(inputElem.value).then(() => {
-                            window.location.href = '/#library';
-                            window.location.href = '/#library';
+                            setTimeout(()=>{
+                                window.location.href = '/#library';
+                            }, 1000);
                         });
                     } else {
                         alert('Error: wrong name');
@@ -154,8 +155,9 @@ export class LibraryPage {
         deletePlaylist.addEventListener('click', (event) => {
             event.stopPropagation();
             library.removePlaylist(playlist).then(() => {
-                window.location.href = '/#library';
-                window.location.href = '/#library';
+                setTimeout(()=>{
+                    window.location.href = '/#library';
+                }, 1000);
             });
         });
         renamePlaylist.addEventListener('click', rename);
