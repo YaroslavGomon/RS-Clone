@@ -51,7 +51,7 @@ export default class PodcastPage {
                           </div>
                           </div>
                           <div class="actions">
-                          <div class="button_action save"></div>
+                          <div class="button_action save" data-id=${episode.id}></div>
                           <div class="button_action download"></div>
                           <div class="button_action add"></div>
                           </div>
@@ -94,7 +94,7 @@ export default class PodcastPage {
                                   </div>
                                   <div class="actions_spoti">
                                       <div class="button_action share"></div>
-                                      <div class="button_action save"></div>
+                                      <div class="button_action save" data-id=${episode.id}></div>
                                       <div class="button_action more_spoti"></div>
                                   </div>
                               </div>
@@ -127,6 +127,7 @@ export default class PodcastPage {
     private addListeners(): void {
         const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
         const follow = document.querySelector('.button_follow') as HTMLElement;
+
         follow.dataset.id = this.podcastId.toString();
         episodesWrapper.forEach((episodeWrapper) =>
             episodeWrapper.addEventListener('click', () =>
@@ -147,6 +148,14 @@ export default class PodcastPage {
 
         follow.addEventListener('click', () => {
             this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
+        });
+
+        const saveButton = document.querySelectorAll('.save') as NodeListOf<HTMLElement>;
+        saveButton.forEach((elem) => {
+            (elem as HTMLElement).addEventListener('click', (event) => {
+                event.stopPropagation();
+                console.log(elem.id);
+            });
         });
     }
 }
