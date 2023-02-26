@@ -24,7 +24,7 @@ export class EpisodesListItem {
     private createEpisodeImage(image: string): Element {
         const episodeImage: HTMLImageElement = document.createElement('img');
         episodeImage.classList.add('episode__image_spoti');
-        episodeImage.src = image;
+        episodeImage.src = image || `../assets/img/fav-icon.png`;
         episodeImage.alt = 'Episode Image';
 
         return episodeImage;

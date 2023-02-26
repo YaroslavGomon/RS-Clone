@@ -38,6 +38,11 @@
     border-radius: $radius;
 }
 
+.save-episodes:hover {
+    cursor: pointer;
+    background: $color-menu
+}
+
 .playlist {
     display: flex;
     flex-direction: column;
@@ -48,6 +53,11 @@
     border-radius: $radius;
     padding: 1rem;
     color: $color-dark;
+}
+
+.playlist:hover {
+    cursor: pointer;
+    background-color: $color-menu
 }
 
 .playlist__image {
