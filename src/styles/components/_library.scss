@@ -43,6 +43,33 @@
     background: $color-menu
 }
 
+.delete {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: $color-bright;
+    -webkit-mask: url('./assets/icons/delete.svg') no-repeat center;
+    mask: url('./assets/icons/delete.svg') no-repeat center;
+}
+.rename {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: $color-bright;
+    -webkit-mask: url('./assets/icons/edit.svg') no-repeat center;
+    mask: url('./assets/icons/edit.svg') no-repeat center;
+}
+
+.owner {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-self: end;
+    opacity: 0;
+}
+.input-rename {
+    width: 18rem;
+}
 .playlist {
     display: flex;
     flex-direction: column;
@@ -53,10 +80,12 @@
     border-radius: $radius;
     padding: 1rem;
     color: $color-dark;
+    &:hover .owner {
+        opacity: 1;
+    }
 }
 
 .playlist:hover {
-    cursor: pointer;
     background-color: $color-menu
 }
 
