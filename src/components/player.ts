@@ -6,17 +6,19 @@ import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './ut
 export class Player {
     private readonly onRangeInput: OnRangeInput;
     private readonly onClickPlayerButton: OnClickPlayerButton;
+    private readonly changeStatusPlayButton: (id: string, isPlay: boolean) => void;
     public readonly audio: HTMLAudioElement;
     public isPlay: boolean = false;
     private readonly controller: Controller = new Controller();
     public readonly storage = new PodcastStorage();
 
-    constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
+    constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton, changeStatusPlayButton: (id: string, isPlay: boolean) => void) {
         this.audio = document.createElement('audio');
         this.audio.classList.add('track');
         this.setFirstAudio();
         this.onRangeInput = onRangeInput;
         this.onClickPlayerButton = onClickPlayerButton;
+        this.changeStatusPlayButton = changeStatusPlayButton;
         this.controller = new Controller();
     }
 
@@ -101,6 +103,7 @@ export class Player {
         playButton.classList.add('player__button');
         playButton.classList.add('play');
         playButton.addEventListener('click', (event) => this.onClickPlayerButton(event));
+        playButton.addEventListener('click', () => this.changeStatusPlayButton(String(this.audio.getAttribute('data-id')), this.isPlay));
 
         const nextButton: Element = document.createElement('p');
         nextButton.id = 'next';
@@ -241,20 +244,18 @@ export class Player {
 
     public nextEpisode(): void {
         const order = this.storage.getEpisodeOrder();
-        this.updatePlayerSource(order[0].id);
-        order.push(order[0]);
-        order.shift();
+        this.updatePlayerSource(order[order.length - 1].id);
+        order.unshift(order[order.length - 1]);
+        order.pop();
         this.storage.setEpisodeOrder(order);
-        this.playAudio();
     }
 
     public previousEpisode(): void {
         const order = this.storage.getEpisodeOrder();
-        this.updatePlayerSource(order[order.length - 2].id);
-        order.unshift(order[order.length - 1]);
-        order.pop();
+        this.updatePlayerSource(order[1].id);
+        order.push(order[0]);
+        order.shift();
         this.storage.setEpisodeOrder(order);
-        this.playAudio();
     }
 
     private setFirstAudio(): void {
@@ -263,7 +264,6 @@ export class Player {
             this.controller.fetchEpisodeById(lastListenedEpisode.id)
                 .then(data => {
                     this.updateData(data);
-                    this.updateProgressTrackDuration(data.duration);
                     //TODO set currentTime
                     // this.audio.currentTime = listemed.currentDuration;
                 });
@@ -271,7 +271,6 @@ export class Player {
         }
         this.controller.fetchDataForUpdatePlayer().then((data) => {
             this.updateData(data);
-            this.updateProgressTrackDuration(data.duration);
             this.audio.setAttribute('data-id', `${data.id}`);
         });
     }
@@ -280,7 +279,8 @@ export class Player {
         this.controller.fetchEpisodeById(episodeId).then((data) => {
             if (episodeId !== Number(this.audio.getAttribute('data-id'))) {
                 this.updateData(data);
-                this.updateProgressTrackDuration(data.duration);
+                this.playAudio();
+                this.changeStatusPlayButton(String(episodeId), this.isPlay);
             }
             if (!event) return;
             const target: Element = event.target as Element;
@@ -288,18 +288,16 @@ export class Player {
                 this.playAudio();
                 return;
             }
-            if (!target.classList.value.includes('pause')) {
-                target.classList.toggle('pause');
+            if (target.classList.value.includes('pause')) {
                 this.playAudio();
                 return;
             }
-            target.classList.toggle('pause');
             this.pauseAudio();
         });
     }
 
     private updateData(data: episode) {
-        this.storage.setLastListened(JSON.stringify({'id': data.id, 'currentTime': this.audio.currentTime}));
+        this.storage.setLastListened({'id': data.id, 'currentDuration': this.audio.currentTime});
         this.audio.src = data.enclosureUrl;
         this.audio.setAttribute('data-id', `${data.id}`);
         const episodeTitle: Element = querySelectNonNull<Element>('.player__title');

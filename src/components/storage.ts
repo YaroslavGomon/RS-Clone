@@ -10,11 +10,11 @@ export class PodcastStorage {
         return JSON.parse(localStorage.getItem('episodeOrder') || '[]');
     }
 
-    public setLastListened(lastListened: string): void {
-        localStorage.setItem('lastListened', lastListened);
+    public setLastListened(lastListened: StorageEpisode): void {
+        localStorage.setItem('lastListened', JSON.stringify(lastListened));
     }
 
     public getLastListened(): StorageEpisode {
-        return JSON.parse(localStorage.getItem('lastListened') || '{"id":0,"currentTime":0}');
+        return JSON.parse(localStorage.getItem('lastListened') || '{"id":0,"currentDuration":0}');
     }
 }
