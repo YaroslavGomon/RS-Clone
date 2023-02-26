@@ -32,9 +32,9 @@ export class LibraryPage {
     }
 
     private createLibraryNavigation(): Element {
-        const nav = document.createElement('nav');
+        const nav: Element = document.createElement('nav');
         nav.classList.add('library__navigation');
-        const list = document.createElement('ul');
+        const list: Element = document.createElement('ul');
         list.classList.add('navigation__list');
 
         list.appendChild(this.createNavItem('playlists'));

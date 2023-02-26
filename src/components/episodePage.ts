@@ -113,7 +113,7 @@ export class EpisodePage {
     }
 
     private createButtonSeeAll(podcastId: number): Element {
-        const seeAllButton = document.createElement('div');
+        const seeAllButton: Element = document.createElement('div');
         seeAllButton.classList.add('button');
         seeAllButton.classList.add('button_light');
         seeAllButton.classList.add('button_see-all');

@@ -186,7 +186,7 @@ export class App {
     }
 
     private onLoadSavedPlaylist(playlistName: string | number): void {
-        const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
+        const playlistNAME: string = (playlistName as string).replace(/(%20)/g, ' ');
         console.log(playlistNAME);
         new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), playlistNAME).draw();
     }

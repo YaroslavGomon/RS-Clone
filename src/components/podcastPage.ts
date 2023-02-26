@@ -87,7 +87,6 @@ export default class PodcastPage {
                                   ${replaceTags(episode.description)}
                                   </div>
                                       <div class="progress_small unvisible"></div>
-                                  </div>
                                   <div class="actions_spoti">
                                       <div class="button_action share"></div>
                                       <div class="button_action save"></div>
@@ -139,10 +138,10 @@ export default class PodcastPage {
     }
 
     private createSmallPlayer(episode: episode): Element {
-        const playerSmall = document.createElement('div');
+        const playerSmall: Element = document.createElement('div');
         playerSmall.classList.add('player_small');
 
-        const playButton = document.createElement('div');
+        const playButton: Element = document.createElement('div');
         playButton.classList.add('button');
         playButton.classList.add('button-play');
         playButton.classList.add('play');
@@ -152,11 +151,11 @@ export default class PodcastPage {
             playButton.classList.add('pause');
         }
 
-        const date = document.createElement('div');
+        const date: Element = document.createElement('div');
         date.classList.add('episode__time_spoti');
         date.textContent = episode.datePublishedPretty;
 
-        const duration = document.createElement('div');
+        const duration: Element = document.createElement('div');
         duration.classList.add('duration');
         duration.textContent = `${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec`;
 
