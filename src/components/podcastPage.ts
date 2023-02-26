@@ -2,6 +2,7 @@ import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastP
 import Controller from './controller';
 import { episode, onClickEpisodeCard, OnClickPlayButton } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
+import { Library } from './api/libraryController';
 
 export default class PodcastPage {
     private readonly podcastId: number;
@@ -9,6 +10,7 @@ export default class PodcastPage {
     private readonly data: Promise<episode[]>;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
     private readonly onClickPlayButton: OnClickPlayButton;
+    private readonly library: Library;
 
     constructor(podcastId: number, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
         this.podcastId = podcastId;
@@ -16,6 +18,7 @@ export default class PodcastPage {
         this.data = this.controller.fetchEpisodesById(podcastId);
         this.onClickEpisodeCard = onClickEpisodeCard;
         this.onClickPlayButton = onClickPlayButton;
+        this.library = new Library('ivanov@gmail.com');
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -123,6 +126,8 @@ export default class PodcastPage {
 
     private addListeners(): void {
         const episodesWrapper: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.episode'));
+        const follow = document.querySelector('.button_follow') as HTMLElement;
+        follow.dataset.id = this.podcastId.toString();
         episodesWrapper.forEach((episodeWrapper) =>
             episodeWrapper.addEventListener('click', () =>
                 this.onClickEpisodeCard(Number(episodeWrapper.getAttribute('data-id')))
@@ -139,5 +144,9 @@ export default class PodcastPage {
                 );
             })
         );
+
+        follow.addEventListener('click', () => {
+            this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
+        });
     }
 }

@@ -161,19 +161,22 @@ export class LibraryPage {
             });
         });
         renamePlaylist.addEventListener('click', rename);
-        function rename(event: Event) {
+       function rename(event: Event) {
             event.stopPropagation();
             const inputElem: HTMLInputElement = document.createElement('input');
             inputElem.placeholder = playlist;
             inputElem.classList.add('input-rename');
             playlistName.innerHTML = '';
             playlistName.append(inputElem);
-            inputElem.addEventListener('keyup', (event) => {
+            inputElem.addEventListener('keyup', async (event) => {
                 if (event.key === 'Enter') {
                     playlistName.innerHTML = '';
                     if (inputElem.value != '') {
                         playlistName.innerHTML = inputElem.value;
-                        library.renamePlaylist(playlist, inputElem.value);
+                        await library.renamePlaylist(playlist, inputElem.value);
+                        setTimeout(()=>{
+                            window.location.href = '/#library';
+                        }, 1000);
                     } else {
                         playlistName.innerHTML = playlist;
                     }

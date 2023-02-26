@@ -12,7 +12,7 @@ export class Library implements ILibrary {
     public addNewPlaylist(playlistName: string) {
         return addNewPlaylist(this.email, playlistName);
     }
-    public renamePlaylist(playlistName: string, newPlaylistName: string): void {
+    public renamePlaylist(playlistName: string, newPlaylistName: string) {
         return renamePlaylist(this.email, playlistName, newPlaylistName);
     }
     public addItemToPlaylist(playlistName: string, itemId: string): void {
@@ -77,7 +77,7 @@ async function addNewPlaylist(email: string, playlistName: string) {
         .catch((error) => console.log('error', error));
 }
 
-function renamePlaylist(email: string, playlistName: string, newPlaylistName: string): void {
+async function renamePlaylist(email: string, playlistName: string, newPlaylistName: string) {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
