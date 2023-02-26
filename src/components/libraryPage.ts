@@ -78,6 +78,55 @@ export class LibraryPage {
         return wrapper;
     }
 
+    private createAddButton(): Element {
+        const library = this.library;
+        const wrapper: Element = document.createElement('div');
+        wrapper.classList.add('playlist');
+        const image: HTMLImageElement = document.createElement('img');
+        image.src =
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/OOjs_UI_icon_add.svg/1024px-OOjs_UI_icon_add.svg.png';
+        image.alt = 'ADD PLAYLIST';
+        image.classList.add('playlist__image');
+
+        const wrapperName: Element = document.createElement('div');
+        wrapperName.classList.add('playlist__name__wrapper');
+        const owner: HTMLElement = document.createElement('div');
+        owner.textContent = 'User';
+        const playlistName: Element = document.createElement('h3');
+        playlistName.textContent = `Add playlist`;
+
+        wrapperName.appendChild(playlistName);
+        wrapperName.appendChild(owner);
+        wrapper.appendChild(image);
+        wrapper.appendChild(wrapperName);
+        image.addEventListener('click', addPlaylist);
+
+        function addPlaylist(event: Event) {
+            event.stopPropagation();
+            const inputElem: HTMLInputElement = document.createElement('input');
+            inputElem.placeholder = 'playlist';
+            inputElem.classList.add('input-rename');
+            playlistName.innerHTML = '';
+            playlistName.append(inputElem);
+            inputElem.addEventListener('keyup', (event) => {
+                event.stopPropagation();
+                if (event.key === 'Enter') {
+                    playlistName.innerHTML = '';
+                    if (inputElem.value != '' && Number.isNaN(Number(inputElem.value)) === true) {
+                        playlistName.innerHTML = inputElem.value;
+                        library.addNewPlaylist(inputElem.value).then(() => {
+                            window.location.href = '/#library';
+                            window.location.href = '/#library';
+                        });
+                    } else {
+                        alert('Error: wrong name');
+                    }
+                }
+            });
+        }
+        return wrapper;
+    }
+
     private createPlaylist(playlist: string): Element {
         const library = this.library;
         const wrapper: Element = document.createElement('div');
@@ -104,8 +153,10 @@ export class LibraryPage {
 
         deletePlaylist.addEventListener('click', (event) => {
             event.stopPropagation();
-            library.removePlaylist(playlist);
-            this.updateLibrary();
+            library.removePlaylist(playlist).then(() => {
+                window.location.href = '/#library';
+                window.location.href = '/#library';
+            });
         });
         renamePlaylist.addEventListener('click', rename);
         function rename(event: Event) {
@@ -134,8 +185,7 @@ export class LibraryPage {
             console.log(target.tagName);
             if (target.tagName === 'INPUT') {
                 event.stopPropagation();
-            } 
-            else {
+            } else {
                 this.onClickSavedPlaylist(playlist);
             }
         });
@@ -166,6 +216,7 @@ export class LibraryPage {
                         playlistWrapper.appendChild(this.createPlaylist(`${usersPlaylistsKeysArray[i]}`));
                     }
                 }
+                playlistWrapper.appendChild(this.createAddButton());
                 amountEpisodes.innerText = result.likedPodcasts.length.toString() + ' episodes';
             })
             .catch((err) => {

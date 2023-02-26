@@ -9,7 +9,7 @@ export class Library implements ILibrary {
     public userLibrary(): Promise<UserLibrary | string> {
         return userLibrary(this.email);
     }
-    public addNewPlaylist(playlistName: string): void {
+    public addNewPlaylist(playlistName: string) {
         return addNewPlaylist(this.email, playlistName);
     }
     public renamePlaylist(playlistName: string, newPlaylistName: string): void {
@@ -21,7 +21,7 @@ export class Library implements ILibrary {
     public removeItemFromPlaylist(playlistName: string, itemId: string): void {
         return removeItemFromPlaylist(this.email, playlistName, itemId);
     }
-    public removePlaylist(playlistName: string): void {
+    public removePlaylist(playlistName: string) {
         return removePlaylist(this.email, playlistName);
     }
 }
@@ -65,7 +65,7 @@ async function userLibrary(email: string): Promise<UserLibrary | string> {
         // .catch((error) => console.error(error));
 }
 
-function addNewPlaylist(email: string, playlistName: string): void {
+async function addNewPlaylist(email: string, playlistName: string) {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
@@ -113,7 +113,7 @@ function removeItemFromPlaylist(email: string, playlistName: string, itemId: str
         .catch((error) => console.log('error', error));
 }
 
-function removePlaylist(email: string, playlistName: string): void {
+async function removePlaylist(email: string, playlistName: string) {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',
