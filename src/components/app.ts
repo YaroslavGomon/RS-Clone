@@ -1,7 +1,7 @@
 import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import { PlayerButtons} from './types/type';
+import { PlayerButtons, StorageEpisode } from './types/type';
 import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
@@ -11,6 +11,7 @@ import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
 import { LibraryEpisodes } from './libraryEpisodes';
+import { PodcastStorage } from './storage';
 
 export class App {
     private readonly player: Player;
@@ -23,14 +24,21 @@ export class App {
     constructor() {
         this.player = new Player(
             (event) => this.onRangeInput(event),
-            (event) => this.onClickPlayerButton(event)
+            (event) => this.onClickPlayerButton(event),
+            (id: string, isPlay: boolean) => this.changeStatusPlayButton(id, isPlay)
         );
 
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
+        this.menu = new Menu(
+            (inputValue: string) => this.onChangeSearchValue(inputValue),
+            (path: string) => this.onClickLink(path)
+        );
         this.footer = new Footer();
-        this.cards = new Cards((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
+        this.cards = new Cards(
+            (id: number) => this.onClickPodcastCard(id),
+            (id: number, event: Event) => this.onClickPlayButton(id, event)
+        );
     }
 
     public start(): void {
@@ -106,6 +114,8 @@ export class App {
         const podcastID = podcastId as number;
         new PodcastPage(
             podcastID,
+            Number(this.player.audio.getAttribute('data-id')),
+            this.player.isPlay,
             (episodeId: number) => this.onClickEpisodeCard(episodeId),
             (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
         ).drawPodcastPage('spotify');
@@ -118,19 +128,41 @@ export class App {
     private onLoadEpisodePage(episodeId: number | string): void {
         const episodeID = episodeId as number;
         new EpisodePage(
+            Number(this.player.audio.getAttribute('data-id')),
+            this.player.isPlay,
             (id: number) => this.onClickPodcastCard(id),
             (id: number, event: Event) => this.onClickPlayButton(id, event)
         ).fetchEpisode(episodeID);
     }
 
     public onClickPlayButton(episodeId: number, event: Event): void {
-        const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
         const target: Element = event.target as Element;
-        playButtons.forEach(button => {
-            if (button !== target && button.classList.value.includes('pause')) {
-                button.classList.toggle('pause');
-            }
+        if (!target.classList.value.includes('card__play')) {
+            const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+
+            playButtons.forEach((button) => {
+                if (button !== target && button.classList.value.includes('pause')) {
+                    button.classList.toggle('pause');
+                }
+            });
+            target.classList.toggle('pause');
+        }
+
+        const storage: PodcastStorage = new PodcastStorage();
+        const arrayStart: StorageEpisode[] = storage.getEpisodeOrder();
+        let arrayPrevs: StorageEpisode[] = [];
+        let arrayNexts: StorageEpisode[] = [];
+        const currentIndex = arrayStart.findIndex((item) => item.id === episodeId);
+        arrayStart.forEach((item, index) => {
+            index <= currentIndex ? arrayNexts.push(item) : arrayPrevs.push(item);
         });
+        arrayNexts.pop();
+        let resultArray: StorageEpisode[] = [];
+        resultArray.push(arrayStart[currentIndex]);
+        resultArray.push(...arrayPrevs);
+        resultArray.push(...arrayNexts);
+        storage.setEpisodeOrder(resultArray);
+
         this.player.updatePlayerSource(episodeId, event);
     }
 
@@ -143,7 +175,10 @@ export class App {
     }
 
     private onLoadLibraryPage(): void {
-        new LibraryPage((path: string) => this.onClickLink(path), (playlist: string) => this.onClickSavedPlaylist(playlist)).draw();
+        new LibraryPage(
+            (path: string) => this.onClickLink(path),
+            (playlist: string) => this.onClickSavedPlaylist(playlist)
+        ).draw();
     }
 
     private onLoadLibraryEpisodes(): void {
@@ -151,8 +186,20 @@ export class App {
     }
 
     private onLoadSavedPlaylist(playlistName: string | number): void {
-        const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
+        const playlistNAME: string = (playlistName as string).replace(/(%20)/g, ' ');
         console.log(playlistNAME);
         new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), playlistNAME).draw();
+    }
+
+    private changeStatusPlayButton(id: string, isPlay: boolean): void {
+        const playButtons: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.button-play'));
+        for (const button of playButtons) {
+            if (button.classList.value.includes('pause')) {
+                button.classList.toggle('pause');
+                break;
+            }
+        }
+        const playButton: Element = requiresNonNull(document.getElementById(id));
+        isPlay ? playButton.classList.add('pause') : playButton.classList.remove('pause');
     }
 }

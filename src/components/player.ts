@@ -1,20 +1,24 @@
 import Controller from './controller';
+import { PodcastStorage } from './storage';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
 import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
     private readonly onClickPlayerButton: OnClickPlayerButton;
+    private readonly changeStatusPlayButton: (id: string, isPlay: boolean) => void;
     public readonly audio: HTMLAudioElement;
     public isPlay: boolean = false;
-    private controller: Controller = new Controller();
+    private readonly controller: Controller = new Controller();
+    public readonly storage = new PodcastStorage();
 
-    constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton) {
+    constructor(onRangeInput: OnRangeInput, onClickPlayerButton: OnClickPlayerButton, changeStatusPlayButton: (id: string, isPlay: boolean) => void) {
         this.audio = document.createElement('audio');
         this.audio.classList.add('track');
         this.setFirstAudio();
         this.onRangeInput = onRangeInput;
         this.onClickPlayerButton = onClickPlayerButton;
+        this.changeStatusPlayButton = changeStatusPlayButton;
         this.controller = new Controller();
     }
 
@@ -99,6 +103,7 @@ export class Player {
         playButton.classList.add('player__button');
         playButton.classList.add('play');
         playButton.addEventListener('click', (event) => this.onClickPlayerButton(event));
+        playButton.addEventListener('click', () => this.changeStatusPlayButton(String(this.audio.getAttribute('data-id')), this.isPlay));
 
         const nextButton: Element = document.createElement('p');
         nextButton.id = 'next';
@@ -238,45 +243,61 @@ export class Player {
     }
 
     public nextEpisode(): void {
-        console.log('next'); //will be deleted later
-        this.playAudio();
+        const order = this.storage.getEpisodeOrder();
+        this.updatePlayerSource(order[order.length - 1].id);
+        order.unshift(order[order.length - 1]);
+        order.pop();
+        this.storage.setEpisodeOrder(order);
     }
 
     public previousEpisode(): void {
-        console.log('prev'); //will be deleted later
-        this.playAudio();
+        const order = this.storage.getEpisodeOrder();
+        this.updatePlayerSource(order[1].id);
+        order.push(order[0]);
+        order.shift();
+        this.storage.setEpisodeOrder(order);
     }
 
     private setFirstAudio(): void {
+        const lastListenedEpisode = this.storage.getLastListened();
+        if (lastListenedEpisode.id !== 0) {
+            this.controller.fetchEpisodeById(lastListenedEpisode.id)
+                .then(data => {
+                    this.updateData(data);
+                    //TODO set currentTime
+                    // this.audio.currentTime = listemed.currentDuration;
+                });
+            return;
+        }
         this.controller.fetchDataForUpdatePlayer().then((data) => {
             this.updateData(data);
-            this.updateProgressTrackDuration(data.duration);
             this.audio.setAttribute('data-id', `${data.id}`);
         });
     }
 
-    public updatePlayerSource(episodeId: number, event: Event): void {
+    public updatePlayerSource(episodeId: number, event?: Event): void {
         this.controller.fetchEpisodeById(episodeId).then((data) => {
-            const target: Element = event.target as Element;
             if (episodeId !== Number(this.audio.getAttribute('data-id'))) {
                 this.updateData(data);
-                this.updateProgressTrackDuration(data.duration);
+                this.playAudio();
+                this.changeStatusPlayButton(String(episodeId), this.isPlay);
             }
+            if (!event) return;
+            const target: Element = event.target as Element;
             if (target.classList.value.includes('card__play')) {
                 this.playAudio();
                 return;
             }
-            if (!target.classList.value.includes('pause')) {
-                target.classList.toggle('pause');
+            if (target.classList.value.includes('pause')) {
                 this.playAudio();
                 return;
             }
-            target.classList.toggle('pause');
             this.pauseAudio();
         });
     }
 
-    private updateData(data: episode): void {
+    private updateData(data: episode) {
+        this.storage.setLastListened({'id': data.id, 'currentDuration': this.audio.currentTime});
         this.audio.src = data.enclosureUrl;
         this.audio.setAttribute('data-id', `${data.id}`);
         const episodeTitle: Element = querySelectNonNull<Element>('.player__title');
@@ -285,5 +306,6 @@ export class Player {
 
         episodeImage.src = data.image || data.feedImage || './assets/img/fav-icon.png';
         episodeImage.alt = data.title;
+        this.updateProgressTrackDuration(data.duration);
     }
 }

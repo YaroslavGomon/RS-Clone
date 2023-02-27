@@ -1,7 +1,10 @@
-import { podcastCard, episode, PodcastsJson, SearchJson, PodcastJson, EpisodesJson, EpisodeJson } from './types/type';
+import { podcastCard, episode, PodcastsJson, SearchJson, PodcastJson, EpisodesJson, EpisodeJson, StorageEpisode } from './types/type';
 import { IController } from './types/interfaces';
+import { PodcastStorage } from './storage';
 
 class Loader {
+    public storage = new PodcastStorage();
+
     private async getAuthorizationHeaderValue(
         apiKey: string,
         apiSecret: string,
@@ -64,7 +67,14 @@ class Loader {
             .then((headers: HeadersInit) => ({ method: 'GET', headers }))
             .then((requestInit: RequestInit) => fetch(url, requestInit))
             .then((res: Response) => res.json())
-            .then((json: EpisodesJson) => json.items);
+            .then((json: EpisodesJson) => {
+                const episodeOrder: StorageEpisode[] = [];
+                json.items.forEach((item) => {
+                    episodeOrder.push({ 'id': item.id, 'currentDuration': 0 });
+                });
+                this.storage.setEpisodeOrder(episodeOrder);
+                return json.items;
+            });
     }
 
     fetchEpisodeById(id: number, apiKey: string, apiSecret: string): Promise<episode> {
@@ -78,7 +88,7 @@ class Loader {
             .then((json: EpisodeJson) => json.episode);
     }
 
-    async fetchPlayer(apiKey: string, apiSecret: string): Promise<episode> {
+    async fetchDataForUpdatePlayer(apiKey: string, apiSecret: string): Promise<episode> {
         const apiHeaderTime: string = '' + Math.round(Date.now() / 1_000);
         const authorization: string = await this.getAuthorizationHeaderValue(apiKey, apiSecret, apiHeaderTime);
         const headers: HeadersInit = this.getHeaders(apiHeaderTime, apiKey, authorization);
@@ -114,7 +124,7 @@ class Controller implements IController {
         return new Loader().fetchRecent(this.apiKey, this.apiSecret);
     }
     fetchDataForUpdatePlayer(): Promise<episode> {
-        return new Loader().fetchPlayer(this.apiKey, this.apiSecret);
+        return new Loader().fetchDataForUpdatePlayer(this.apiKey, this.apiSecret);
     }
 }
 

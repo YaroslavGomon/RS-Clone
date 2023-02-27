@@ -9,13 +9,17 @@ export default class PodcastPage {
     private readonly data: Promise<episode[]>;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
     private readonly onClickPlayButton: OnClickPlayButton;
+    private readonly currentEpesodeId: number;
+    private readonly isPlay: boolean;
 
-    constructor(podcastId: number, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
+    constructor(podcastId: number, currentEpesodeId: number, isPlay: boolean, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
         this.podcastId = podcastId;
         this.controller = new Controller();
         this.data = this.controller.fetchEpisodesById(podcastId);
         this.onClickEpisodeCard = onClickEpisodeCard;
         this.onClickPlayButton = onClickPlayButton;
+        this.currentEpesodeId = currentEpesodeId;
+        this.isPlay = isPlay;
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -40,7 +44,7 @@ export default class PodcastPage {
                           ${replaceTags(episode.description)}
                           </div>
                           <div class="player_small">
-                          <div class="button button-play"></div>
+                          <div id=${episode.id} class="button button-play"></div>
                           <div class="progress_small unvisible"></div>
                           <div class="duration">${Math.floor(episode.duration / 60)} min ${
                             episode.duration % 60
@@ -66,6 +70,7 @@ export default class PodcastPage {
                     episodes.forEach((episode) => {
                         const episodeImg =
                             episode.image || (document.querySelector('.podcast__image') as HTMLImageElement).src;
+                        const player = this.createSmallPlayer(episode);
                         spotifyEpisodeElement = `
                           <div class="episode" data-id=${episode.id}>
                               <img
@@ -81,14 +86,7 @@ export default class PodcastPage {
                                   <div class="episode__description">
                                   ${replaceTags(episode.description)}
                                   </div>
-                                  <div class="player_small">
-                                      <div class="button button-play play"></div>
-                                      <div class="episode__time_spoti">${episode.datePublishedPretty}</div>
-                                      <div class="duration">${Math.floor(episode.duration / 60)} min ${
-                            episode.duration % 60
-                        } sec</div>
                                       <div class="progress_small unvisible"></div>
-                                  </div>
                                   <div class="actions_spoti">
                                       <div class="button_action share"></div>
                                       <div class="button_action save"></div>
@@ -98,6 +96,7 @@ export default class PodcastPage {
                           </div>
                          `;
                         (document.querySelector('.podcast__list') as HTMLElement).innerHTML += spotifyEpisodeElement;
+                        document.querySelector('.podcast__list')?.append(player);
                         this.addListeners();
                     });
                 });
@@ -133,11 +132,37 @@ export default class PodcastPage {
         buttonsPlay.forEach((button) =>
             button.addEventListener('click', (event: Event) => {
                 event.stopPropagation();
-                this.onClickPlayButton(
-                    Number(requiresNonNull<Element>(button.closest('.episode')).getAttribute('data-id')),
-                    event
-                );
+                this.onClickPlayButton(Number(button.getAttribute('id')),event);
             })
         );
+    }
+
+    private createSmallPlayer(episode: episode): Element {
+        const playerSmall: Element = document.createElement('div');
+        playerSmall.classList.add('player_small');
+
+        const playButton: Element = document.createElement('div');
+        playButton.classList.add('button');
+        playButton.classList.add('button-play');
+        playButton.classList.add('play');
+        playButton.setAttribute('id', `${episode.id}`);
+
+        if (episode.id === this.currentEpesodeId && this.isPlay) {
+            playButton.classList.add('pause');
+        }
+
+        const date: Element = document.createElement('div');
+        date.classList.add('episode__time_spoti');
+        date.textContent = episode.datePublishedPretty;
+
+        const duration: Element = document.createElement('div');
+        duration.classList.add('duration');
+        duration.textContent = `${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec`;
+
+        playerSmall.append(playButton);
+        playerSmall.append(date);
+        playerSmall.append(duration);
+
+        return playerSmall;
     }
 }
