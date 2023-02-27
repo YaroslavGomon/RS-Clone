@@ -11,6 +11,7 @@ import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
 import { LibraryEpisodes } from './libraryEpisodes';
+import SubscriptionPage from './subscriptionsPage';
 
 export class App {
     private readonly player: Player;
@@ -19,13 +20,14 @@ export class App {
     private readonly menu: Menu;
     private readonly footer: Footer;
     private readonly cards: Cards;
+    private readonly subscriptionPage: SubscriptionPage;
 
     constructor() {
         this.player = new Player(
             (event) => this.onRangeInput(event),
             (event) => this.onClickPlayerButton(event)
         );
-
+        this.subscriptionPage = new SubscriptionPage((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
         this.router = new Router();
         this.mainPage = new MainPage();
         this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
@@ -48,6 +50,7 @@ export class App {
 
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
+        this.router.addRoute('subscriptionsList', () => this.onLoadSubscriptionsPage());
         this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
@@ -88,6 +91,10 @@ export class App {
             default:
                 throw new Error(`Unknown target ID: ${target.id}`);
         }
+    }
+
+    private onLoadSubscriptionsPage():void {
+        this.subscriptionPage.draw();
     }
 
     private onLoadMainPage(): void {
