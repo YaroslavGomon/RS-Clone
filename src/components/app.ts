@@ -158,14 +158,14 @@ export class App {
 
         const storage: PodcastStorage = new PodcastStorage();
         const arrayStart: StorageEpisode[] = storage.getEpisodeOrder();
-        let arrayPrevs: StorageEpisode[] = [];
-        let arrayNexts: StorageEpisode[] = [];
+        const arrayPrevs: StorageEpisode[] = [];
+        const arrayNexts: StorageEpisode[] = [];
         const currentIndex = arrayStart.findIndex((item) => item.id === episodeId);
         arrayStart.forEach((item, index) => {
             index <= currentIndex ? arrayNexts.push(item) : arrayPrevs.push(item);
         });
         arrayNexts.pop();
-        let resultArray: StorageEpisode[] = [];
+        const resultArray: StorageEpisode[] = [];
         resultArray.push(arrayStart[currentIndex]);
         resultArray.push(...arrayPrevs);
         resultArray.push(...arrayNexts);
