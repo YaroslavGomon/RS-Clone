@@ -1,26 +1,27 @@
-import { ILibrary } from "../types/interfaces";
+import { ILibrary } from '../types/interfaces';
+import { UserLibrary } from '../types/type';
 
 export class Library implements ILibrary {
     private email: string;
-    constructor (email: string){
+    constructor(email: string) {
         this.email = email;
     }
-    public userLibrary(): void {
+    public userLibrary(): Promise<UserLibrary | string> {
         return userLibrary(this.email);
     }
-    public addNewPlaylist(playlistName: string): void {
+    public addNewPlaylist(playlistName: string) {
         return addNewPlaylist(this.email, playlistName);
     }
-    public renamePlaylist(playlistName: string, newPlaylistName: string): void {
+    public renamePlaylist(playlistName: string, newPlaylistName: string) {
         return renamePlaylist(this.email, playlistName, newPlaylistName);
     }
-    public addItemToPlaylist(playlistName: string, itemId: string): void {
+    public addItemToPlaylist(playlistName: string, itemId: string) {
         return addItemToPlaylist(this.email, playlistName, itemId);
     }
-    public removeItemFromPlaylist(playlistName: string, itemId: string): void {
+    public removeItemFromPlaylist(playlistName: string, itemId: string) {
         return removeItemFromPlaylist(this.email, playlistName, itemId);
     }
-    public removePlaylist(playlistName: string): void {
+    public removePlaylist(playlistName: string) {
         return removePlaylist(this.email, playlistName);
     }
 }
@@ -44,19 +45,27 @@ export function allLibrary(adminPass: string): void {
         .catch((error) => console.log('error', error));
 }
 
-function userLibrary(email: string): void {
+async function userLibrary(email: string): Promise<UserLibrary | string> {
     const requestOptions = {
         method: 'GET',
         credentials: 'include',
     } as RequestInit;
 
-    fetch(`https://rs-clone-api.vercel.app/userLibrary/${email}`, requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log('error', error));
+    return fetch(`https://rs-clone-api.vercel.app/userLibrary/${email}`, requestOptions)
+        .then(async (response) => {
+            const responseString = await response.text();
+            if(response.status === 500 || response.status === 404){
+                throw new Error(`${responseString}`);
+            }
+            else {
+                return responseString;
+            }
+        })
+        .then(res => JSON.parse(res) as UserLibrary);
+        // .catch((error) => console.error(error));
 }
 
-function  addNewPlaylist(email: string, playlistName:string): void {
+async function addNewPlaylist(email: string, playlistName: string) {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
@@ -68,7 +77,7 @@ function  addNewPlaylist(email: string, playlistName:string): void {
         .catch((error) => console.log('error', error));
 }
 
-function  renamePlaylist(email: string, playlistName:string, newPlaylistName: string): void {
+async function renamePlaylist(email: string, playlistName: string, newPlaylistName: string) {
     const requestOptions = {
         method: 'PATCH',
         credentials: 'include',
@@ -80,7 +89,7 @@ function  renamePlaylist(email: string, playlistName:string, newPlaylistName: st
         .catch((error) => console.log('error', error));
 }
 
-function  addItemToPlaylist(email: string, playlistName:string, itemId: string): void {
+async function addItemToPlaylist(email: string, playlistName: string, itemId: string) {
     const requestOptions = {
         method: 'POST',
         credentials: 'include',
@@ -92,7 +101,7 @@ function  addItemToPlaylist(email: string, playlistName:string, itemId: string):
         .catch((error) => console.log('error', error));
 }
 
-function  removeItemFromPlaylist(email: string, playlistName:string, itemId: string): void {
+async function removeItemFromPlaylist(email: string, playlistName: string, itemId: string) {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',
@@ -104,7 +113,7 @@ function  removeItemFromPlaylist(email: string, playlistName:string, itemId: str
         .catch((error) => console.log('error', error));
 }
 
-function  removePlaylist(email: string, playlistName:string): void {
+async function removePlaylist(email: string, playlistName: string) {
     const requestOptions = {
         method: 'DELETE',
         credentials: 'include',

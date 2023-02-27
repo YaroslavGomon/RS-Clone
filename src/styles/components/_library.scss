@@ -21,6 +21,7 @@
 
 .playlists {
     display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     color: $color-light;
     padding-top: 2rem;
@@ -38,6 +39,49 @@
     border-radius: $radius;
 }
 
+.save-episodes:hover {
+    cursor: pointer;
+    background: $color-menu
+}
+
+.delete {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: $color-bright;
+    -webkit-mask: url('./assets/icons/delete.svg') no-repeat center;
+    mask: url('./assets/icons/delete.svg') no-repeat center;
+}
+
+.delete:hover {
+    background-color: aqua;
+    border: 2px solid $color-bright;
+}
+
+.rename {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: $color-bright;
+    -webkit-mask: url('./assets/icons/edit.svg') no-repeat center;
+    mask: url('./assets/icons/edit.svg') no-repeat center;
+}
+
+.rename:hover {
+    background-color: aqua;
+    border: 2px solid $color-bright;
+}
+
+.owner {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-self: end;
+    opacity: 0;
+}
+.input-rename {
+    width: 18rem;
+}
 .playlist {
     display: flex;
     flex-direction: column;
@@ -48,6 +92,13 @@
     border-radius: $radius;
     padding: 1rem;
     color: $color-dark;
+    &:hover .owner {
+        opacity: 1;
+    }
+}
+
+.playlist:hover {
+    background-color: $color-menu
 }
 
 .playlist__image {
