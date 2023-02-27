@@ -170,11 +170,11 @@ export default class PodcastPage {
             this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
         });
 
-        const saveButton = document.querySelectorAll('.save') as NodeListOf<HTMLElement>;
-        saveButton.forEach((elem) => {
+        const saveButtons = document.querySelectorAll('.save') as NodeListOf<HTMLElement>;
+        saveButtons.forEach((elem) => {
             (elem as HTMLElement).addEventListener('click', (event) => {
                 event.stopPropagation();
-                const actionsContainer = document.querySelector('.actions__container') as HTMLElement;
+                const actionsContainer = elem.parentElement as HTMLElement;
                 const inputElem = `
                 <input class="playlist__input" list="playlists" placeholder="chose playlist">
                 <img data-id=${elem.dataset.id} class='addButton' style="width: 20px; height: 20px; cursor: pointer; border: 1px solid #993aed;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/OOjs_UI_icon_add.svg/1024px-OOjs_UI_icon_add.svg.png">
