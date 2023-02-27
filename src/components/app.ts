@@ -11,7 +11,9 @@ import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
 import { LibraryEpisodes } from './libraryEpisodes';
+import SubscriptionPage from './subscriptionsPage';
 import { PodcastStorage } from './storage';
+
 
 export class App {
     private readonly player: Player;
@@ -20,6 +22,7 @@ export class App {
     private readonly menu: Menu;
     private readonly footer: Footer;
     private readonly cards: Cards;
+    private readonly subscriptionPage: SubscriptionPage;
 
     constructor() {
         this.player = new Player(
@@ -27,7 +30,7 @@ export class App {
             (event) => this.onClickPlayerButton(event),
             (id: string, isPlay: boolean) => this.changeStatusPlayButton(id, isPlay)
         );
-
+        this.subscriptionPage = new SubscriptionPage((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
         this.router = new Router();
         this.mainPage = new MainPage();
         this.menu = new Menu(
@@ -56,6 +59,7 @@ export class App {
 
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
+        this.router.addRoute('subscriptionsList', () => this.onLoadSubscriptionsPage());
         this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
@@ -96,6 +100,10 @@ export class App {
             default:
                 throw new Error(`Unknown target ID: ${target.id}`);
         }
+    }
+
+    private onLoadSubscriptionsPage():void {
+        this.subscriptionPage.draw();
     }
 
     private onLoadMainPage(): void {
@@ -182,13 +190,13 @@ export class App {
     }
 
     private onLoadLibraryEpisodes(): void {
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId)).draw();
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)).draw();
     }
 
     private onLoadSavedPlaylist(playlistName: string | number): void {
-        const playlistNAME: string = (playlistName as string).replace(/(%20)/g, ' ');
-        console.log(playlistNAME);
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), playlistNAME).draw();
+        const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event), playlistNAME).draw();
+
     }
 
     private changeStatusPlayButton(id: string, isPlay: boolean): void {

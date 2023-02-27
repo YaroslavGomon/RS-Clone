@@ -1,7 +1,7 @@
 const applePodcastPageDOM = `
 <div class="podcast">
     <div class="podcast__header">
-        <img class="podcast__image" src="./assets/img/tedtalksdaily.png" alt="Podcast image" />
+        <img class="podcast__image" src="./assets/img/fav-icon.png" alt="Podcast image" />
         <div class="podcast__info">
             <h1 class="h1 podcast__title">Ted Talks Daily</h1>
             <h2 class="h2 podcast__owner">Author</h2>
