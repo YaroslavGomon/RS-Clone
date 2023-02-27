@@ -11,6 +11,9 @@ import Menu from './menu';
 import Footer from './footer';
 import { LibraryPage } from './libraryPage';
 import { LibraryEpisodes } from './libraryEpisodes';
+
+import AccountBtns from './accountBtns';
+import Popups from './popups';
 import SubscriptionPage from './subscriptionsPage';
 import { PodcastStorage } from './storage';
 
@@ -20,6 +23,7 @@ export class App {
     private readonly router: Router;
     private readonly mainPage: MainPage;
     private readonly menu: Menu;
+    private readonly accountBtns: AccountBtns;
     private readonly footer: Footer;
     private readonly cards: Cards;
     private readonly subscriptionPage: SubscriptionPage;
@@ -33,10 +37,9 @@ export class App {
         this.subscriptionPage = new SubscriptionPage((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
         this.router = new Router();
         this.mainPage = new MainPage();
-        this.menu = new Menu(
-            (inputValue: string) => this.onChangeSearchValue(inputValue),
-            (path: string) => this.onClickLink(path)
-        );
+
+        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
+        this.accountBtns = new AccountBtns((btnText: string) => this.onCLickAccountsBtn(btnText));
         this.footer = new Footer();
         this.cards = new Cards(
             (id: number) => this.onClickPodcastCard(id),
@@ -49,6 +52,7 @@ export class App {
         new Header().draw();
         this.player.draw();
         this.menu.drawMenu();
+        this.accountBtns.draw();
         this.footer.draw();
 
         this.createBasicRoutes();
@@ -112,6 +116,10 @@ export class App {
 
     private onChangeSearchValue(searchString: string): void {
         this.cards.draw(searchString);
+    }
+
+    private onCLickAccountsBtn(btnText: string): void {
+      new Popups(btnText).draw();
     }
 
     private onClickPodcastCard(podcastId: number): void {

@@ -1,16 +1,20 @@
 .menu {
   height: 100%;
   width: 15%;
-  // min-width: 30rem;
   background-color: $color-menu;
   border-radius: $radius;
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   z-index: 1;
   top: 0;
   left: 0;
 
   &__inner {
     padding: 2rem;
+    margin-bottom: 2rem;
   }
 
   &__link {
@@ -43,6 +47,7 @@
 
   &__title {
     @include font($size: 3rem, $weight: 800);
+    font-size: calc(100vw / 1920 * 30);
     color: $color-dark;
     display: inline-block;
     transition: color .3s;
@@ -54,5 +59,49 @@
 
   @include media-mobile {
     display: none;
+  }
+
+  // Login menu
+
+  
+  &__personal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    width: 100%;
+    margin-top: auto;
+    transform: translateY(2rem);
+    opacity: 0;
+    transition: transform .3s, opacity .2s;
+  }
+
+  &__personal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &__btn {
+    // opacity: 0;
+    margin: .5rem 0;
+    padding: .5rem 0;
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+    text-transform: capitalize;
+    border-color: transparent;
+    border-radius: $radius;
+    background-color: $color-not-active;
+    transition: background-color .1s;
+  }
+
+
+
+  &__btn:hover {
+    background-color: $color-additional;
+  }
+
+  &__btn:active {
+    opacity: .8;
   }
 }

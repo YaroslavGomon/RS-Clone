@@ -1,0 +1,81 @@
+.modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+  z-index: 100;
+
+  &__form {
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 70rem;
+    width: 70%;
+    z-index: 11;
+    background-color: white;
+    border-radius: .8rem;
+    border: .2rem solid $color-bright;
+    cursor: auto;
+  }
+
+  &__title {
+    margin-bottom: 2rem;
+    width: 100%;
+    text-align: center;
+    text-transform: capitalize;
+    // border-bottom: .1rem solid #000;
+  }
+
+  &__wrapper {
+    margin: 1rem;
+    text-align: center;
+    width: 70%;
+    position: relative;
+  }
+
+  &__wrapper.err::after {
+    display: block;
+  }
+
+  &__wrapper.err > input {
+    border-color: red;
+  }
+
+  &__wrapper::after {
+    content: 'ERR';
+    display: none;
+    position: absolute;
+    left: .5rem;
+    top: .4rem;
+    color: red;
+    font-weight: 500;
+  }
+
+  &__input {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.btn-form {
+  padding: .5rem 2rem;
+  margin-top: 2rem;
+  cursor: pointer;
+  background-color: $color-menu;
+  border-radius: $radius;
+  border: none;
+  outline: none;
+  transition: background-color .3s;
+  
+  &:hover {
+    background-color: $color-not-active;
+  }
+}

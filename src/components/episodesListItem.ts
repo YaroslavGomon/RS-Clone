@@ -8,6 +8,7 @@ export class EpisodesListItem {
     private readonly onClickEpisodeCard: onClickEpisodeCard;
     private readonly library: Library;
 
+
     constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard) {
         this.parent = parent;
         this.onClickEpisodeCard = onClickEpisodeCard;
