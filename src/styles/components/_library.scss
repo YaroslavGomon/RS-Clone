@@ -52,6 +52,12 @@
     -webkit-mask: url('./assets/icons/delete.svg') no-repeat center;
     mask: url('./assets/icons/delete.svg') no-repeat center;
 }
+
+.delete:hover {
+    background-color: aqua;
+    border: 2px solid $color-bright;
+}
+
 .rename {
     cursor: pointer;
     width: 30px;
@@ -59,6 +65,11 @@
     background-color: $color-bright;
     -webkit-mask: url('./assets/icons/edit.svg') no-repeat center;
     mask: url('./assets/icons/edit.svg') no-repeat center;
+}
+
+.rename:hover {
+    background-color: aqua;
+    border: 2px solid $color-bright;
 }
 
 .owner {

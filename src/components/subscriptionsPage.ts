@@ -49,6 +49,19 @@ export default class SubscriptionPage {
                 `;
             card.addEventListener('click', () => this.onClickPodcastCard(data.id));
 
+            const deleteButton: HTMLElement = document.createElement('div');
+            deleteButton.classList.add('delete');
+            deleteButton.setAttribute('data-id', data.id.toString());
+            deleteButton.style.position = 'absolute';
+            deleteButton.style.top = '30rem';
+            deleteButton.style.right = '1rem';
+            deleteButton.addEventListener('click', (event)=>{
+                event.stopPropagation();
+                this.library.removeItemFromPlaylist('subscribedPodcasts', data.id.toString()).then(()=>{
+                    setTimeout(()=>this.draw(), 1000);
+                });
+            });
+
             const playButton: Element = document.createElement('div');
             playButton.classList.add('card__play');
             playButton.setAttribute('data-id', data.id.toString());
@@ -58,8 +71,10 @@ export default class SubscriptionPage {
                 const podcastId: number = Number(target.getAttribute('data-id'));
                 this.controller.fetchEpisodesById(podcastId).then((res) => this.onClickPlayButton(res[0].id, event));
             });
+            card.appendChild(deleteButton);
             card.appendChild(playButton);
             podcastCards.appendChild(card);
+            (podcastCards as HTMLElement).style.position = 'relative';
         });
     }
 
@@ -77,7 +92,7 @@ export default class SubscriptionPage {
     public draw() {
         this.addStructure();
         this.changeTitle();
-        this.library.userLibrary().then(data=>{
+        this.library.userLibrary().then((data) => {
             const subscriptions = (data as UserLibrary).subscribedPodcasts;
             subscriptions.forEach((elem) => {
                 this.drawCard(Number(elem.id));
