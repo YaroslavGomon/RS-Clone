@@ -1,6 +1,7 @@
 import { Library } from './api/libraryController';
 import { OnClickLink, UserLibrary, onClickSavedPlaylist } from './types/type';
 import { querySelectNonNull } from './utils';
+import { EMAIL } from './constants';
 
 export class LibraryPage {
     private readonly onClickLink: OnClickLink;
@@ -9,7 +10,7 @@ export class LibraryPage {
 
     constructor(onClickLink: OnClickLink, onClickSavedPlaylist: onClickSavedPlaylist) {
         this.onClickLink = onClickLink;
-        this.library = new Library('ivanov@gmail.com');
+        this.library = new Library(EMAIL);
         this.onClickSavedPlaylist = onClickSavedPlaylist;
     }
 

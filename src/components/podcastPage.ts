@@ -3,6 +3,7 @@ import Controller from './controller';
 import { episode, onClickEpisodeCard, OnClickPlayButton, UserLibrary } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
+import { EMAIL } from './constants';
 
 export default class PodcastPage {
     private readonly podcastId: number;
@@ -18,7 +19,7 @@ export default class PodcastPage {
         this.data = this.controller.fetchEpisodesById(podcastId);
         this.onClickEpisodeCard = onClickEpisodeCard;
         this.onClickPlayButton = onClickPlayButton;
-        this.library = new Library('ivanov@gmail.com');
+        this.library = new Library(EMAIL);
     }
 
     public drawPodcastPage(layout = 'apple'): void {

@@ -1,6 +1,7 @@
 import { episode, onClickEpisodeCard } from './types/type';
 import { replaceTags } from './utils';
 import { Library } from './api/libraryController';
+import { EMAIL } from './constants';
 
 export class EpisodesListItem {
     private readonly parent: Element;
@@ -10,7 +11,7 @@ export class EpisodesListItem {
     constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard) {
         this.parent = parent;
         this.onClickEpisodeCard = onClickEpisodeCard;
-        this.library = new Library('ivanov@gmail.com');
+        this.library = new Library(EMAIL);
     }
 
     public createEpisode(data: episode): Element {

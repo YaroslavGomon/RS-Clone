@@ -2,6 +2,7 @@ import { Library } from './api/libraryController';
 import Controller from './controller';
 import { OnClickPlayButton, OnClickPodcastCard, UserLibrary } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
+import { EMAIL } from './constants';
 
 export default class SubscriptionPage {
     private readonly controller: Controller;
@@ -12,7 +13,7 @@ export default class SubscriptionPage {
     constructor(onClickPodcastCard: OnClickPodcastCard, onClickPlayButton: OnClickPlayButton) {
         this.onClickPodcastCard = onClickPodcastCard;
         this.onClickPlayButton = onClickPlayButton;
-        this.library = new Library('ivanov@gmail.com');
+        this.library = new Library(EMAIL);
         this.controller = new Controller();
     }
 

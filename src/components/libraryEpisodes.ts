@@ -3,6 +3,7 @@ import { EpisodesListItem } from './episodesListItem';
 import { UserLibrary, onClickEpisodeCard, OnClickPlayButton } from './types/type';
 import { querySelectNonNull, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
+import { EMAIL } from './constants';
 
 export class LibraryEpisodes {
     private readonly controller: Controller;
@@ -18,7 +19,7 @@ export class LibraryEpisodes {
     ) {
         this.controller = new Controller();
         this.onClickEpisodeCard = onClickEpisodeCard;
-        this.library = new Library('ivanov@gmail.com');
+        this.library = new Library(EMAIL);
         this.playlistName = playlistName;
         this.onClickPlayButton = onClickPlayButton;
     }
