@@ -147,12 +147,11 @@ export class App {
     }
 
     private onLoadLibraryEpisodes(): void {
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId)).draw();
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)).draw();
     }
 
     private onLoadSavedPlaylist(playlistName: string | number): void {
         const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
-        console.log(playlistNAME);
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), playlistNAME).draw();
+        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event), playlistNAME).draw();
     }
 }

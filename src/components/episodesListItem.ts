@@ -14,8 +14,9 @@ export class EpisodesListItem {
     }
 
     public createEpisode(data: episode): Element {
-        const episode: Element = document.createElement('div');
+        const episode: HTMLElement = document.createElement('div');
         episode.classList.add('episode');
+        episode.dataset.id = data.id.toString();
 
         episode.appendChild(this.createEpisodeImage(data.image));
         episode.appendChild(this.createEpisodeInfo(data));

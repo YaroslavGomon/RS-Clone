@@ -187,7 +187,6 @@ export class LibraryPage {
         //will be change
         wrapper.addEventListener('click', (event) => {
             const target = event.target as HTMLElement;
-            console.log(target.tagName);
             if (target.tagName === 'INPUT') {
                 event.stopPropagation();
             } else {
