@@ -15,7 +15,7 @@ export class Library implements ILibrary {
     public renamePlaylist(playlistName: string, newPlaylistName: string) {
         return renamePlaylist(this.email, playlistName, newPlaylistName);
     }
-    public addItemToPlaylist(playlistName: string, itemId: string): void {
+    public addItemToPlaylist(playlistName: string, itemId: string) {
         return addItemToPlaylist(this.email, playlistName, itemId);
     }
     public removeItemFromPlaylist(playlistName: string, itemId: string) {
@@ -89,7 +89,7 @@ async function renamePlaylist(email: string, playlistName: string, newPlaylistNa
         .catch((error) => console.log('error', error));
 }
 
-function addItemToPlaylist(email: string, playlistName: string, itemId: string): void {
+async function addItemToPlaylist(email: string, playlistName: string, itemId: string) {
     const requestOptions = {
         method: 'POST',
         credentials: 'include',

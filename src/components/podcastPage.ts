@@ -1,6 +1,6 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode, onClickEpisodeCard, OnClickPlayButton } from './types/type';
+import { episode, onClickEpisodeCard, OnClickPlayButton, UserLibrary } from './types/type';
 import { replaceTags, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
 
@@ -50,7 +50,7 @@ export default class PodcastPage {
                         } sec</div>
                           </div>
                           </div>
-                          <div class="actions">
+                          <div class="actions actions__container">
                           <div class="button_action save" data-id=${episode.id}></div>
                           <div class="button_action download"></div>
                           <div class="button_action add"></div>
@@ -92,9 +92,10 @@ export default class PodcastPage {
                         } sec</div>
                                       <div class="progress_small unvisible"></div>
                                   </div>
-                                  <div class="actions_spoti">
+                                  <div class="actions_spoti actions__container">
                                       <div class="button_action share"></div>
-                                      <div class="button_action save" data-id=${episode.id}></div>
+                                      <div class="button_action save" data-id=${episode.id}>
+                                      </div>
                                       <div class="button_action more_spoti"></div>
                                   </div>
                               </div>
@@ -122,6 +123,22 @@ export default class PodcastPage {
                 podcastDescription.innerText = replaceTags(podcastData.description);
             }
         });
+        // add playlist
+        this.library.userLibrary().then((res) => {
+            const userLibrary = res as UserLibrary;
+            const playlists = Object.keys(userLibrary);
+            const datalist = document.createElement('datalist');
+            const main = document.querySelector('.main__container');
+            datalist.id = 'playlists';
+            playlists.forEach((elem) => {
+                if (elem != 'email' && elem != 'subscribedPodcasts' && elem != '_id') {
+                    const option = document.createElement('option') as HTMLOptionElement;
+                    option.value = elem;
+                    datalist.appendChild(option);
+                }
+            });
+            main?.appendChild(datalist);
+        });
     }
 
     private addListeners(): void {
@@ -147,6 +164,9 @@ export default class PodcastPage {
         );
 
         follow.addEventListener('click', () => {
+            follow.style.background = '#993aed';
+            follow.style.color = '#ffffff';
+            follow.innerText = 'followed';
             this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
         });
 
@@ -154,7 +174,46 @@ export default class PodcastPage {
         saveButton.forEach((elem) => {
             (elem as HTMLElement).addEventListener('click', (event) => {
                 event.stopPropagation();
-                console.log(elem.id);
+                const actionsContainer = document.querySelector('.actions__container') as HTMLElement;
+                const inputElem = `
+                <input class="playlist__input" list="playlists" placeholder="chose playlist">
+                <img data-id=${elem.dataset.id} class='addButton' style="width: 20px; height: 20px; cursor: pointer; border: 1px solid #993aed;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/OOjs_UI_icon_add.svg/1024px-OOjs_UI_icon_add.svg.png">
+                `;
+                actionsContainer.innerHTML = '';
+                actionsContainer.innerHTML = inputElem;
+                const addButton = document.querySelector('.addButton') as HTMLElement;
+                const playlistInput = document.querySelector('.playlist__input') as HTMLInputElement;
+                actionsContainer.style.opacity = '1';
+                playlistInput?.addEventListener('click', (e) => e.stopPropagation());
+                addButton?.addEventListener('click', async (event) => {
+                    event.stopPropagation();
+                    await this.library
+                        .addItemToPlaylist(playlistInput.value, elem.dataset.id as string)
+                        .then(() => {
+                            actionsContainer.innerHTML = '';
+                            actionsContainer.innerHTML = `
+                        <div class="button_action share"></div>
+                        <div class="button_action saved" data-id=${elem.dataset.id}>
+                        </div>
+                        <div class="button_action more_spoti"></div>`;
+                            actionsContainer.style.opacity = '';
+
+                            return playlistInput.value;
+                        })
+                        .then((playlist) => {
+                            const savedButton = document.querySelector('.saved') as HTMLElement;
+                            savedButton.addEventListener('click', async (event) => {
+                                event.stopPropagation();
+                                await this.library.removeItemFromPlaylist(playlist, elem.dataset.id as string);
+                                actionsContainer.innerHTML = '';
+                                actionsContainer.innerHTML = `
+                                <div class="button_action share"></div>
+                                <div class="button_action save" data-id=${elem.dataset.id}>
+                                </div>
+                                <div class="button_action more_spoti"></div>`;
+                            });
+                        });
+                });
             });
         });
     }
