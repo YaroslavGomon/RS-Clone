@@ -115,3 +115,8 @@ export type UserLibrary = {
     likedPodcasts: Array<{id:number}>
     subscribedPodcasts: Array<{id:number}>
 }
+
+export type StorageEpisode = {
+    id: number,
+    currentDuration: number
+};

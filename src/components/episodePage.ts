@@ -6,11 +6,15 @@ export class EpisodePage {
     private readonly controller: Controller;
     private readonly onClickPodcastCard: OnClickPodcastCard;
     private readonly onClickPlayButton: OnClickPlayButton;
+    private readonly currentEpisodeId: number;
+    private readonly isPlay: boolean;
 
-    constructor(onClickPodcastCard: OnClickPodcastCard, onClickPlayButton: OnClickPlayButton) {
+    constructor(currentEpisodeId: number, isPlay: boolean, onClickPodcastCard: OnClickPodcastCard, onClickPlayButton: OnClickPlayButton) {
         this.controller = new Controller();
         this.onClickPodcastCard = onClickPodcastCard;
         this.onClickPlayButton = onClickPlayButton;
+        this.currentEpisodeId = currentEpisodeId;
+        this.isPlay = isPlay;
     }
 
     public draw(data: episode): void {
@@ -64,6 +68,10 @@ export class EpisodePage {
         playButton.classList.add('button');
         playButton.classList.add('button_big');
         playButton.classList.add('play');
+        playButton.setAttribute('id', `${episodeId}`);
+        if (episodeId === this.currentEpisodeId && this.isPlay) {
+            playButton.classList.add('pause');
+        }
         playButton.addEventListener('click', (event: Event) => {
             this.onClickPlayButton(episodeId, event);
         });
@@ -105,7 +113,7 @@ export class EpisodePage {
     }
 
     private createButtonSeeAll(podcastId: number): Element {
-        const seeAllButton = document.createElement('div');
+        const seeAllButton: Element = document.createElement('div');
         seeAllButton.classList.add('button');
         seeAllButton.classList.add('button_light');
         seeAllButton.classList.add('button_see-all');
