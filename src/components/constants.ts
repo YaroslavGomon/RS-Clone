@@ -1,1 +1,1 @@
-export const EMAIL = 'ivanov@gmail.com';
+export const EMAIL = localStorage.getItem('userEmail') || '';

@@ -211,8 +211,9 @@ export default class Popups {
         const inputEmail = document.querySelector('.modal__input.e-mail') as HTMLInputElement;
         const inputPass = document.querySelector('.modal__input.password') as HTMLInputElement;
         const login = new Authentication(inputEmail.value, inputPass.value);
-        login.signIn();
-        localStorage.setItem('userEmail', inputEmail.value);
+        login.signIn().then(()=>{
+            localStorage.setItem('userEmail', inputEmail.value);
+        });
     }
 
     private logOut() {

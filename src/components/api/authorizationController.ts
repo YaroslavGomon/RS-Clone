@@ -14,7 +14,7 @@ class Authentication implements IAuthentication {
         this.email = email;
         this.hashPassword = this.hash(password);
     }
-    public signIn(): void {
+    public signIn() {
         return signIn(this.email, this.hashPassword);
     }
     private hash(string: string): string {
@@ -63,7 +63,7 @@ export function listUsers(adminPass: string): void {
         .catch((error) => console.log('error', error));
 }
 
-function signIn(email: string, password = ''): void {
+async function signIn(email: string, password = '') {
     const myHeaders = new Headers();
     if (password != '') {
         myHeaders.append('x-hash-pass', `${password}`);

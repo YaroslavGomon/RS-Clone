@@ -11,10 +11,10 @@ const menuDOM = `
             <span class="menu__item-logo home"></span>
             <p class="menu__item-text">Home</p>
           </a>
-          <li class="menu__item">
+          <a class="menu__item" href="/#library">
             <span class="menu__item-logo library"></span>
             <p class="menu__item-text">Library</p>
-          </li>
+          </a>
         </ul>
       </nav>
     </div>
