@@ -1,5 +1,5 @@
-import { IAuthentication, IAuthorization, IRegestration } from "../types/interfaces";
-import { user } from "../types/type";
+import { IAuthentication, IAuthorization, IRegestration } from '../types/interfaces';
+import { user } from '../types/type';
 
 class Regestration implements IRegestration {
     public addUser(newUser: user): void {
@@ -10,7 +10,7 @@ class Regestration implements IRegestration {
 class Authentication implements IAuthentication {
     private email;
     private hashPassword;
-    constructor (email: string, password: string){
+    constructor(email: string, password: string) {
         this.email = email;
         this.hashPassword = this.hash(password);
     }
@@ -28,7 +28,7 @@ class Authentication implements IAuthentication {
 
 class Authorization implements IAuthorization {
     private email: string;
-    constructor (email: string) {
+    constructor(email: string) {
         this.email = email;
     }
     signOut(): void {
@@ -42,7 +42,7 @@ class Authorization implements IAuthorization {
     }
 }
 
-export {Authorization, Authentication, Regestration};
+export { Authorization, Authentication, Regestration };
 
 /// API Authorization and Authentication functions
 /// DELETE EXPORT
@@ -78,7 +78,11 @@ function signIn(email: string, password = ''): void {
 
     fetch(`https://rs-clone-api.vercel.app/signIn/${email}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then((result) => {
+            console.log(result);
+            return result;
+        })
+        .then((result) => localStorage.setItem('currentUser', result))
         .catch((error) => console.log('error', error));
 }
 
@@ -96,7 +100,7 @@ function signOut(email: string): void {
 
 function addUser(newUser: object): void {
     const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Content-Type', 'application/json');
     const reqUser = JSON.stringify(newUser);
     const requestOptions = {
         method: 'POST',
@@ -125,7 +129,7 @@ function deleteUser(email: string): void {
 
 function updateUser(updateFields: object, email: string): void {
     const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append('Content-Type', 'application/json');
     const reqData = JSON.stringify(updateFields);
     const requestOptions = {
         method: 'PATCH',
