@@ -110,7 +110,7 @@ export class EpisodesListItem {
                 ;
             });
         }
-        else 
+        else
         {
             saveButton.classList.add('save');
         }
@@ -118,7 +118,7 @@ export class EpisodesListItem {
 
         const moreButton: Element = document.createElement('div');
         moreButton.classList.add('button_action');
-        moreButton.classList.add('more_spoti');
+        moreButton.classList.add('download');
 
         wrapper.appendChild(shareButton);
         wrapper.appendChild(saveButton);

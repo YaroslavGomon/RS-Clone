@@ -63,6 +63,8 @@ export type OnChangeSearchValue = (value: string) => void;
 export type OnClickPlayButton = (episodeId: number, event: Event) => void;
 export type OnClickLink = (path: string) => void;
 export type OnClickAccountsBtn = (btnText: string) => void;
+export type OnClickAction = (type: ActionsButtons, event: Event) => void;
+
 
 export type user = {
     userName: string;
@@ -121,3 +123,9 @@ export type StorageEpisode = {
     id: number,
     currentDuration: number
 };
+
+export enum ActionsButtons {
+    Share = 'share',
+    Save = 'save',
+    More = 'more',
+}
