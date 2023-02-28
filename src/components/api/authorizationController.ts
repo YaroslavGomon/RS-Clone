@@ -59,7 +59,7 @@ export function listUsers(adminPass: string): void {
     } as RequestInit;
     fetch('https://rs-clone-api.vercel.app/listUsers', requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -67,7 +67,7 @@ async function signIn(email: string, password = '') {
     const myHeaders = new Headers();
     if (password != '') {
         myHeaders.append('x-hash-pass', `${password}`);
-        console.log(`Get user using password`);
+        // console.log(`Get user using password`);
     }
 
     const requestOptions = {
@@ -79,10 +79,17 @@ async function signIn(email: string, password = '') {
     fetch(`https://rs-clone-api.vercel.app/signIn/${email}`, requestOptions)
         .then((response) => response.text())
         .then((result) => {
-            console.log(result);
+            // console.log(result);
             return result;
         })
-        .then((result) => localStorage.setItem('currentUser', result))
+        .then((result) => {
+            localStorage.setItem('currentUser', result);
+            return result;
+        })
+        .then((result) => {
+            alert(`Hooray!!! ${(JSON.parse(result) as user).userName}, you are logged in`);
+            window.location.reload();
+        })
         .catch((error) => console.log('error', error));
 }
 
@@ -94,7 +101,11 @@ function signOut(email: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/signOut/${email}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then((res) => {
+            alert(`${res}`);
+            window.location.reload();
+        })
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -111,7 +122,8 @@ function addUser(newUser: object): void {
 
     fetch(`https://rs-clone-api.vercel.app/addUser`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then(res => alert(`${res}`))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -123,7 +135,8 @@ function deleteUser(email: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/deleteUser/${email}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then(res => alert(`${res}`))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -140,6 +153,7 @@ function updateUser(updateFields: object, email: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/updateUser/${email}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then(res => alert(`User updated\n${res}`))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }

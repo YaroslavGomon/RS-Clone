@@ -41,7 +41,7 @@ export function allLibrary(adminPass: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/allPlaylists`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -85,7 +85,7 @@ async function renamePlaylist(email: string, playlistName: string, newPlaylistNa
 
     fetch(`https://rs-clone-api.vercel.app/renamePlaylist/${email}/${playlistName}/${newPlaylistName}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -97,7 +97,7 @@ async function addItemToPlaylist(email: string, playlistName: string, itemId: st
 
     fetch(`https://rs-clone-api.vercel.app/addItemToPlaylist/${email}/${playlistName}/${itemId}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -109,7 +109,7 @@ async function removeItemFromPlaylist(email: string, playlistName: string, itemI
 
     fetch(`https://rs-clone-api.vercel.app/removeItemFromPlaylist/${email}/${playlistName}/${itemId}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
 
@@ -121,6 +121,6 @@ async function removePlaylist(email: string, playlistName: string) {
 
     fetch(`https://rs-clone-api.vercel.app/removePlaylist/${email}/${playlistName}`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
