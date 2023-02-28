@@ -70,6 +70,7 @@ export class App {
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('subscriptionsList', () => this.onLoadSubscriptionsPage());
+        this.router.addRoute('home', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
@@ -235,15 +236,16 @@ export class App {
     private OnClickAction(type: ActionsButtons, event: Event) {
         const target: Element = event.target as Element;
         const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        const temp: HTMLInputElement = document.createElement('input');
         switch (type) {
-            case ActionsButtons.Share:
-                const temp: HTMLInputElement = document.createElement('input');
+            case ActionsButtons.Share: {
                 document.body.appendChild(temp);
                 temp.value = `${window.location.origin}/#episode/${episodeId}`;
                 temp.select();
                 document.execCommand('copy');
                 document.body.removeChild(temp);
                 break;
+            }
             case ActionsButtons.Save:
                 break;
             case ActionsButtons.More:

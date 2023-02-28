@@ -1,7 +1,7 @@
 import Controller from './controller';
 import { PodcastStorage } from './storage';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './utils';
+import { changeRangeBackground, querySelectNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;
@@ -218,8 +218,8 @@ export class Player {
         if (this.isPlay) {
             this.isPlay = false;
             playButton.classList.toggle('pause');
-            const episodePlayButton: Element = requiresNonNull(document.querySelector('.pause'));
-            episodePlayButton.classList.toggle('pause');
+            // const episodePlayButton: Element = requiresNonNull(document.querySelector('.pause'));
+            // episodePlayButton.classList.toggle('pause');
         }
     }
 
@@ -284,11 +284,7 @@ export class Player {
             }
             if (!event) return;
             const target: Element = event.target as Element;
-            if (target.classList.value.includes('card__play')) {
-                this.playAudio();
-                return;
-            }
-            if (target.classList.value.includes('pause')) {
+            if (target.classList.value.includes('card__play') || target.classList.value.includes('pause')) {
                 this.playAudio();
                 return;
             }

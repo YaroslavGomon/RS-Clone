@@ -1,7 +1,7 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
 import { ActionsButtons, episode, OnClickAction, onClickEpisodeCard, OnClickPlayButton, UserLibrary } from './types/type';
-import { replaceTags, requiresNonNull } from './utils';
+import { formatTime, replaceTags, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
 import { EMAIL } from './constants';
 
@@ -173,7 +173,7 @@ export default class PodcastPage {
         follow.addEventListener('click', () => {
             follow.style.background = '#993aed';
             follow.style.color = '#ffffff';
-            follow.innerText = 'followed';
+            follow.innerText = 'Followed';
             this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
         });
 
@@ -199,10 +199,10 @@ export default class PodcastPage {
                         .then(() => {
                             actionsContainer.innerHTML = '';
                             actionsContainer.innerHTML = `
-                        <div class="button_action share"></div>
-                        <div class="button_action saved" data-id=${elem.dataset.id}>
-                        </div>
-                        <div class="button_action download"></div>`;
+                                <div class="button_action share"></div>
+                                <div class="button_action saved" data-id=${elem.dataset.id}>
+                                </div>
+                                <div class="button_action download"></div>`;
                             actionsContainer.style.opacity = '';
 
                             return playlistInput.value;
@@ -261,7 +261,7 @@ export default class PodcastPage {
 
         const duration: Element = document.createElement('div');
         duration.classList.add('duration');
-        duration.textContent = `${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec`;
+        duration.textContent = formatTime(episode.duration);
 
         playerSmall.append(playButton);
         playerSmall.append(date);
