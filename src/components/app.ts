@@ -237,7 +237,7 @@ export class App {
         const target: Element = event.target as Element;
         const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
         switch (type) {
-            case ActionsButtons.Share:
+            case ActionsButtons.Share: {
                 const temp: HTMLInputElement = document.createElement('input');
                 document.body.appendChild(temp);
                 temp.value = `${window.location.origin}/#episode/${episodeId}`;
@@ -245,6 +245,7 @@ export class App {
                 document.execCommand('copy');
                 document.body.removeChild(temp);
                 break;
+            }
             case ActionsButtons.Save:
                 break;
             case ActionsButtons.More:
