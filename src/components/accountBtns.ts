@@ -13,8 +13,16 @@ export default class AccountBtns {
             const menuLogin = document.createElement('div');
             menuLogin.classList.add('menu__personal');
             menu.append(menuLogin);
+            const buttonNames = [];
+            if (localStorage.getItem('userEmail') !== null){
+                buttonNames.push('settings','logout');
+            }
+            else
+            {
+                buttonNames.push('login','register');
+            }
 
-            const buttonNames = ['register', 'login', 'settings', 'logout'];
+            // const buttonNames = ['register', 'login', 'settings', 'logout'];
 
             buttonNames.forEach((val) => {
                 const button = document.createElement('button');

@@ -1,9 +1,7 @@
 import { Authentication, Authorization, Regestration } from './api/authorizationController';
-// import { Regestration } from './api/authorizationController';
 import { user } from './types/type';
 
 export default class Popups {
-    // private authentication: Authentication;
     private registration: Regestration;
     private btnText: string;
     private placeholdersRegister: string[] = ['name', 'phone', 'e-mail', 'password'];
