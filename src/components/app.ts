@@ -70,6 +70,7 @@ export class App {
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('subscriptionsList', () => this.onLoadSubscriptionsPage());
+        this.router.addRoute('home', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
