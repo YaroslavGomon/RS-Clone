@@ -100,13 +100,19 @@ function signOut(email: string): void {
     } as RequestInit;
 
     fetch(`https://rs-clone-api.vercel.app/signOut/${email}`, requestOptions)
-        .then((response) => response.text())
+        .then((response) => {
+            if (response.status === 500 || response.status === 404) {
+                throw new Error('Incorrect password or email');
+            } else {
+                return response.text();
+            }
+        })
         .then((res) => {
             alert(`${res}`);
             window.location.reload();
         })
         // .then((result) => console.log(result))
-        .catch((error) => console.log('error', error));
+        .catch((error) => alert(`${error}`));
 }
 
 function addUser(newUser: object): void {
