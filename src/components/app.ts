@@ -1,7 +1,7 @@
 import { Header } from './header';
 import MainPage from './mainPage';
 import { Player } from './player';
-import { PlayerButtons, StorageEpisode } from './types/type';
+import { ActionsButtons, PlayerButtons, StorageEpisode } from './types/type';
 import { changeRangeBackground, requiresNonNull } from './utils';
 import PodcastPage from './podcastPage';
 import { Router } from './router';
@@ -16,7 +16,7 @@ import AccountBtns from './accountBtns';
 import Popups from './popups';
 import SubscriptionPage from './subscriptionsPage';
 import { PodcastStorage } from './storage';
-
+import Controller from './controller';
 
 export class App {
     private readonly player: Player;
@@ -34,11 +34,17 @@ export class App {
             (event) => this.onClickPlayerButton(event),
             (id: string, isPlay: boolean) => this.changeStatusPlayButton(id, isPlay)
         );
-        this.subscriptionPage = new SubscriptionPage((id: number) => this.onClickPodcastCard(id), (id: number, event: Event) => this.onClickPlayButton(id, event));
+        this.subscriptionPage = new SubscriptionPage(
+            (id: number) => this.onClickPodcastCard(id),
+            (id: number, event: Event) => this.onClickPlayButton(id, event)
+        );
         this.router = new Router();
         this.mainPage = new MainPage();
 
-        this.menu = new Menu((inputValue: string) => this.onChangeSearchValue(inputValue), (path: string) => this.onClickLink(path));
+        this.menu = new Menu(
+            (inputValue: string) => this.onChangeSearchValue(inputValue),
+            (path: string) => this.onClickLink(path)
+        );
         this.accountBtns = new AccountBtns((btnText: string) => this.onCLickAccountsBtn(btnText));
         this.footer = new Footer();
         this.cards = new Cards(
@@ -64,6 +70,7 @@ export class App {
     private createBasicRoutes() {
         this.router.addRoute('/', () => this.onLoadMainPage());
         this.router.addRoute('subscriptionsList', () => this.onLoadSubscriptionsPage());
+        this.router.addRoute('home', () => this.onLoadMainPage());
         this.router.addRoute('podcast', (podcastId: number | string) => this.onLoadPodcastPage(podcastId));
         this.router.addRoute('episode', (episodeId: number | string) => this.onLoadEpisodePage(episodeId));
         this.router.addRoute('library', this.onLoadLibraryPage.bind(this));
@@ -106,7 +113,7 @@ export class App {
         }
     }
 
-    private onLoadSubscriptionsPage():void {
+    private onLoadSubscriptionsPage(): void {
         this.subscriptionPage.draw();
     }
 
@@ -119,7 +126,7 @@ export class App {
     }
 
     private onCLickAccountsBtn(btnText: string): void {
-      new Popups(btnText).draw();
+        new Popups(btnText).draw();
     }
 
     private onClickPodcastCard(podcastId: number): void {
@@ -133,7 +140,8 @@ export class App {
             Number(this.player.audio.getAttribute('data-id')),
             this.player.isPlay,
             (episodeId: number) => this.onClickEpisodeCard(episodeId),
-            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
+            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event),
+            (type: ActionsButtons, event: Event) => this.OnClickAction(type, event)
         ).drawPodcastPage('spotify');
     }
 
@@ -198,13 +206,19 @@ export class App {
     }
 
     private onLoadLibraryEpisodes(): void {
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)).draw();
+        new LibraryEpisodes(
+            (episodeId: number) => this.onClickEpisodeCard(episodeId),
+            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
+        ).draw();
     }
 
     private onLoadSavedPlaylist(playlistName: string | number): void {
         const playlistNAME = (playlistName as string).replace(/(%20)/g, ' ');
-        new LibraryEpisodes((episodeId: number) => this.onClickEpisodeCard(episodeId), (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event), playlistNAME).draw();
-
+        new LibraryEpisodes(
+            (episodeId: number) => this.onClickEpisodeCard(episodeId),
+            (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event),
+            playlistNAME
+        ).draw();
     }
 
     private changeStatusPlayButton(id: string, isPlay: boolean): void {
@@ -217,5 +231,41 @@ export class App {
         }
         const playButton: Element = requiresNonNull(document.getElementById(id));
         isPlay ? playButton.classList.add('pause') : playButton.classList.remove('pause');
+    }
+
+    private OnClickAction(type: ActionsButtons, event: Event) {
+        const target: Element = event.target as Element;
+        const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        const temp: HTMLInputElement = document.createElement('input');
+        switch (type) {
+            case ActionsButtons.Share: {
+                document.body.appendChild(temp);
+                temp.value = `${window.location.origin}/#episode/${episodeId}`;
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                break;
+            }
+            case ActionsButtons.Save:
+                break;
+            case ActionsButtons.More:
+                this.downloadEpisode(event);
+                break;
+        }
+    }
+
+    private async downloadEpisode(event: Event): Promise<void> {
+        const controller = new Controller();
+        const anchor: HTMLAnchorElement = document.createElement('a');
+        const target: Element = event.target as Element;
+        const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        if (episodeId === null) return;
+        const episodeData = await controller.fetchEpisodeById(Number(episodeId)).then((data) => data);
+        anchor.href = episodeData.enclosureUrl;
+        anchor.download = episodeData.title;
+        anchor.target = '_blank';
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
     }
 }

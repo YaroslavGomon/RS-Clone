@@ -1,17 +1,19 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
-import { onClickEpisodeCard } from './types/type';
+import { onClickEpisodeCard, OnClickPlayButton } from './types/type';
 
 export class EpisodeList {
     private podcastId: number;
 
     private readonly controller: Controller;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
+    private readonly onClickPlayButton: OnClickPlayButton;
 
-    constructor(podcatId: number, onClickEpisodeCard: onClickEpisodeCard) {
+    constructor(podcatId: number, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
         this.podcastId = podcatId;
         this.controller = new Controller();
         this.onClickEpisodeCard = onClickEpisodeCard;
+        this.onClickPlayButton = onClickPlayButton;
     }
 
     public createList(): Element {
@@ -32,7 +34,7 @@ export class EpisodeList {
         this.controller.fetchEpisodesById(this.podcastId).then((data) =>
             data.forEach((item, index) => {
                 if (index === 0) {
-                    const episode: Element = new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this,item.id)).createEpisode(item);
+                    const episode: Element = new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this, item.id), (id: number, event: Event) => this.onClickPlayButton(id, event)).createEpisode(item);
                     episode.classList.add('episode_latest');
                     parent.appendChild(episode);
 
@@ -42,7 +44,7 @@ export class EpisodeList {
                     listHeader.textContent = 'Episodes';
                     parent.appendChild(listHeader);
                 } else {
-                    new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this,item.id)).createEpisode(item);
+                    new EpisodesListItem(parent, this.onClickEpisodeCard.bind(this,item.id), (id: number, event: Event) => this.onClickPlayButton(id, event)).createEpisode(item);
                 }
             })
         );
