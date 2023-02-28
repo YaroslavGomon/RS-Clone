@@ -236,9 +236,9 @@ export class App {
     private OnClickAction(type: ActionsButtons, event: Event) {
         const target: Element = event.target as Element;
         const episodeId: string | null = requiresNonNull(target.closest('.episode')).getAttribute('data-id');
+        const temp: HTMLInputElement = document.createElement('input');
         switch (type) {
             case ActionsButtons.Share: {
-                const temp: HTMLInputElement = document.createElement('input');
                 document.body.appendChild(temp);
                 temp.value = `${window.location.origin}/#episode/${episodeId}`;
                 temp.select();
