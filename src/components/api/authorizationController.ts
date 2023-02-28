@@ -121,10 +121,18 @@ function addUser(newUser: object): void {
     } as RequestInit;
 
     fetch(`https://rs-clone-api.vercel.app/addUser`, requestOptions)
-        .then((response) => response.text())
-        .then(res => alert(`${res}`))
+        .then((response) => {
+            if (response.status === 500) {
+                throw new Error('This email exist');
+            } else {
+                return response.text();
+            }
+        })
+        .then((res) => {
+            alert(`User ${(JSON.parse(res) as user).userName} added. Please signIn`);
+        })
         // .then((result) => console.log(result))
-        .catch((error) => console.log('error', error));
+        .catch((error) => alert(`${error}`));
 }
 
 function deleteUser(email: string): void {
@@ -135,7 +143,7 @@ function deleteUser(email: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/deleteUser/${email}`, requestOptions)
         .then((response) => response.text())
-        .then(res => alert(`${res}`))
+        .then((res) => alert(`${res}`))
         // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
@@ -153,7 +161,7 @@ function updateUser(updateFields: object, email: string): void {
 
     fetch(`https://rs-clone-api.vercel.app/updateUser/${email}`, requestOptions)
         .then((response) => response.text())
-        .then(res => alert(`User updated\n${res}`))
+        .then((res) => alert(`User updated\n${res}`))
         // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }
