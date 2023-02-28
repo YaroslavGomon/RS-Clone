@@ -1,7 +1,7 @@
 import Controller from './controller';
 import { PodcastStorage } from './storage';
 import { episode, OnClickPlayerButton, OnRangeInput } from './types/type';
-import { changeRangeBackground, querySelectNonNull, requiresNonNull } from './utils';
+import { changeRangeBackground, querySelectNonNull } from './utils';
 
 export class Player {
     private readonly onRangeInput: OnRangeInput;

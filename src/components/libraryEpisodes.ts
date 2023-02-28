@@ -1,7 +1,7 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
 import { UserLibrary, onClickEpisodeCard, OnClickPlayButton, StorageEpisode } from './types/type';
-import { querySelectNonNull, requiresNonNull } from './utils';
+import { querySelectNonNull } from './utils';
 import { Library } from './api/libraryController';
 import { EMAIL } from './constants';
 import { PodcastStorage } from './storage';
