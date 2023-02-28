@@ -92,9 +92,9 @@
     mask: url('./assets/icons/saved.svg') no-repeat center;
 }
 
-.share, .download {
-    -webkit-mask: url('./assets/icons/download.svg') no-repeat center;
-    mask: url('./assets/icons/download.svg') no-repeat center;
+.share {
+    -webkit-mask: url('./assets/icons/copy.svg') no-repeat center;
+    mask: url('./assets/icons/copy.svg') no-repeat center;
 }
 
 .title_up-next {
@@ -122,4 +122,9 @@
 .more_spoti, .add {
     -webkit-mask: url('./assets/icons/more.svg') no-repeat center;
     mask: url('./assets/icons/more.svg') no-repeat center;
+}
+
+.download {
+    -webkit-mask: url('./assets/icons/download.svg') no-repeat center;
+    mask: url('./assets/icons/download.svg') no-repeat center;
 }

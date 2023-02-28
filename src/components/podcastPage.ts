@@ -1,7 +1,7 @@
 import { applePodcastPageDOM, spotifyPodcastPageDOM } from './templates/podcastPageDom';
 import Controller from './controller';
-import { episode, onClickEpisodeCard, OnClickPlayButton, UserLibrary } from './types/type';
-import { replaceTags, requiresNonNull } from './utils';
+import { ActionsButtons, episode, OnClickAction, onClickEpisodeCard, OnClickPlayButton, UserLibrary } from './types/type';
+import { formatTime, replaceTags, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
 import { EMAIL } from './constants';
 
@@ -15,9 +15,10 @@ export default class PodcastPage {
     private readonly library: Library;
     private readonly currentEpesodeId: number;
     private readonly isPlay: boolean;
+    private readonly onClickAction: OnClickAction;
 
 
-    constructor(podcastId: number, currentEpesodeId: number, isPlay: boolean, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
+    constructor(podcastId: number, currentEpesodeId: number, isPlay: boolean, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton, onClickAction: OnClickAction) {
         this.podcastId = podcastId;
         this.controller = new Controller();
         this.data = this.controller.fetchEpisodesById(podcastId);
@@ -29,6 +30,7 @@ export default class PodcastPage {
         this.currentEpesodeId = currentEpesodeId;
         this.isPlay = isPlay;
 
+        this.onClickAction = onClickAction;
     }
 
     public drawPodcastPage(layout = 'apple'): void {
@@ -103,7 +105,7 @@ export default class PodcastPage {
                                       <div class="button_action share"></div>
                                       <div class="button_action save" data-id=${episode.id}>
                                       </div>
-                                      <div class="button_action more_spoti"></div>
+                                      <div class="button_action download"></div>
                                   </div>
                               </div>
                           </div>
@@ -171,7 +173,7 @@ export default class PodcastPage {
         follow.addEventListener('click', () => {
             follow.style.background = '#993aed';
             follow.style.color = '#ffffff';
-            follow.innerText = 'followed';
+            follow.innerText = 'Followed';
             this.library.addItemToPlaylist('subscribedPodcasts', follow.dataset.id as string);
         });
 
@@ -197,10 +199,10 @@ export default class PodcastPage {
                         .then(() => {
                             actionsContainer.innerHTML = '';
                             actionsContainer.innerHTML = `
-                        <div class="button_action share"></div>
-                        <div class="button_action saved" data-id=${elem.dataset.id}>
-                        </div>
-                        <div class="button_action more_spoti"></div>`;
+                                <div class="button_action share"></div>
+                                <div class="button_action saved" data-id=${elem.dataset.id}>
+                                </div>
+                                <div class="button_action download"></div>`;
                             actionsContainer.style.opacity = '';
 
                             return playlistInput.value;
@@ -215,10 +217,26 @@ export default class PodcastPage {
                                 <div class="button_action share"></div>
                                 <div class="button_action save" data-id=${elem.dataset.id}>
                                 </div>
-                                <div class="button_action more_spoti"></div>`;
+                                <div class="button_action download"></div>`;
                             });
                         });
                 });
+            });
+        });
+
+        const buttonsShare: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.share'));
+        buttonsShare.forEach(shareButton => {
+            shareButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.onClickAction(ActionsButtons.Share, event);
+            });
+        });
+
+        const buttonsDownload: NodeListOf<Element> = requiresNonNull(document.querySelectorAll('.download'));
+        buttonsDownload.forEach(dowloadButton => {
+            dowloadButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                this.onClickAction(ActionsButtons.More, event);
             });
         });
     }
@@ -243,7 +261,7 @@ export default class PodcastPage {
 
         const duration: Element = document.createElement('div');
         duration.classList.add('duration');
-        duration.textContent = `${Math.floor(episode.duration / 60)} min ${episode.duration % 60} sec`;
+        duration.textContent = formatTime(episode.duration);
 
         playerSmall.append(playButton);
         playerSmall.append(date);
