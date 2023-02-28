@@ -1,9 +1,10 @@
 import Controller from './controller';
 import { EpisodesListItem } from './episodesListItem';
-import { UserLibrary, onClickEpisodeCard, OnClickPlayButton } from './types/type';
+import { UserLibrary, onClickEpisodeCard, OnClickPlayButton, StorageEpisode } from './types/type';
 import { querySelectNonNull, requiresNonNull } from './utils';
 import { Library } from './api/libraryController';
 import { EMAIL } from './constants';
+import { PodcastStorage } from './storage';
 
 export class LibraryEpisodes {
     private readonly controller: Controller;
@@ -11,6 +12,7 @@ export class LibraryEpisodes {
     private readonly onClickPlayButton: OnClickPlayButton;
     private readonly library: Library;
     private readonly playlistName: string;
+    public storage = new PodcastStorage();
 
     constructor(
         onClickEpisodeCard: onClickEpisodeCard,
@@ -30,7 +32,6 @@ export class LibraryEpisodes {
 
         mainContainer.appendChild(this.createHeader());
         mainContainer.appendChild(this.createList());
-        setTimeout(()=>this.addListeners(), 1000);
     }
 
     private createHeader(): Element {
@@ -66,40 +67,24 @@ export class LibraryEpisodes {
     private createList(): Element {
         const wrapper: Element = document.createElement('div');
         const creator = document.querySelector('.creator') as HTMLElement;
-        this.library
-            .userLibrary()
-            .then((res) => {
-                const userLibraryObj = res as UserLibrary;
-                const array: Array<{ id: number }> = userLibraryObj[this.playlistName];
-                creator.innerText = array.length === 1 ? `UserName • 1 episode` : `UserName • ${array.length} episodes`;
-                array.forEach((item) => {
-                    this.controller
-                        .fetchEpisodeById(item.id)
-                        .then((data) => {
-                           return new EpisodesListItem(wrapper, (episodeId: number) =>
-                                this.onClickEpisodeCard(episodeId)
-                            ).createEpisode(data);}
-                        );
-                        // .then(() => {
-                        //     if (index === array.length - 1){
-                        //         this.addListeners();
-                        //     }
-                        // });
+        this.library.userLibrary().then((res) => {
+            const userLibraryObj = res as UserLibrary;
+            console.log(userLibraryObj.email);
+            const array: Array<{ id: number }> = userLibraryObj[this.playlistName];
+            creator.innerText = array.length === 1 ? `${userLibraryObj.email} • 1 episode` : `${userLibraryObj.email} • ${array.length} episodes`;
+            const episodeOrder: StorageEpisode[] = [];
+            array.forEach((item) => {
+                this.controller.fetchEpisodeById(item.id).then((data) => {
+                    episodeOrder.push({ id: data.id, currentDuration: 0 });
+                    this.storage.setEpisodeOrder(episodeOrder);
+                    return new EpisodesListItem(
+                        wrapper,
+                        (episodeId: number) => this.onClickEpisodeCard(episodeId),
+                        (episodeId: number, event: Event) => this.onClickPlayButton(episodeId, event)
+                    ).createEpisode(data);
                 });
             });
+        });
         return wrapper;
-    }
-    private addListeners() {
-        const buttonsPlay: NodeListOf<Element> = document.querySelectorAll('.button-play');
-        console.log(buttonsPlay);
-        buttonsPlay.forEach((button) =>
-            button.addEventListener('click', (event: Event) => {
-                event.stopPropagation();
-                this.onClickPlayButton(
-                    Number(requiresNonNull<Element>(button.closest('.episode')).getAttribute('data-id')),
-                    event
-                );
-            })
-        );
     }
 }

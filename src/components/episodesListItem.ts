@@ -1,5 +1,5 @@
-import { episode, onClickEpisodeCard } from './types/type';
-import { replaceTags } from './utils';
+import { episode, onClickEpisodeCard, OnClickPlayButton } from './types/type';
+import { formatTime, replaceTags } from './utils';
 import { Library } from './api/libraryController';
 import { EMAIL } from './constants';
 
@@ -7,12 +7,13 @@ export class EpisodesListItem {
     private readonly parent: Element;
     private readonly onClickEpisodeCard: onClickEpisodeCard;
     private readonly library: Library;
+    private readonly onClickPlayButton: OnClickPlayButton;
 
-
-    constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard) {
+    constructor(parent: Element, onClickEpisodeCard: onClickEpisodeCard, onClickPlayButton: OnClickPlayButton) {
         this.parent = parent;
         this.onClickEpisodeCard = onClickEpisodeCard;
         this.library = new Library(EMAIL);
+        this.onClickPlayButton = onClickPlayButton;
     }
 
     public createEpisode(data: episode): Element {
@@ -41,7 +42,7 @@ export class EpisodesListItem {
 
         const episodeTitle: Element = document.createElement('h4');
         episodeTitle.classList.add('episode__title_spoti');
-        episodeTitle.innerHTML = `${data.title} | <span class="episode__author">Marins</span>`; // ???
+        episodeTitle.innerHTML = data.title;
 
         const episodeDescription: Element = document.createElement('div');
         episodeDescription.classList.add('episode__description');
@@ -49,26 +50,32 @@ export class EpisodesListItem {
 
         episodeInfo.appendChild(episodeTitle);
         episodeInfo.appendChild(episodeDescription);
-        episodeInfo.appendChild(this.createEpisodePlayer(data.duration));
+        episodeInfo.appendChild(this.createEpisodePlayer(data.duration, data.id));
         episodeInfo.appendChild(this.createActionsButton(data.id));
 
         return episodeInfo;
     }
 
-    private createEpisodePlayer(duration: number): Element {
+    private createEpisodePlayer(duration: number, id: number): Element {
         const player: Element = document.createElement('div');
         player.classList.add('player_small');
 
         const playButton: Element = document.createElement('div');
         playButton.classList.add('button');
         playButton.classList.add('button-play');
+        playButton.setAttribute('id', `${id}`);
+
+        playButton.addEventListener('click', (event: Event) => {
+            event.stopPropagation();
+            this.onClickPlayButton(id, event);
+        });
 
         const episodeTime: Element = document.createElement('div');
         episodeTime.classList.add('episode__time_spoti');
 
         const episodeDuration: Element = document.createElement('div');
         episodeDuration.classList.add('duration');
-        episodeDuration.textContent = this.getTime(duration);
+        episodeDuration.textContent = formatTime(duration);
 
         const episodeProgress: HTMLInputElement = document.createElement('input');
         episodeProgress.type = 'range';
@@ -127,11 +134,12 @@ export class EpisodesListItem {
         return wrapper;
     }
 
-    private getTime(duration: number): string {
-        const hoursStr = duration >= 3600 ? `${Math.floor(duration / 3600)} hr ` : ``;
-        const minutes = Math.floor((duration - Number(hoursStr) * 3600) / 60);
-        const seconds = Math.floor(duration - Number(hoursStr) * 3600 - minutes * 60);
-
-        return `${hoursStr} ${minutes} min ${seconds} sec`;
-    }
+//     private getTime(duration: number): string {
+//         const hours: number =  duration >= 3600 ? Math.floor(duration / 3600) : 0;
+//         const hoursStr: string = hours !== 0 ? `${hours} hr ` : ``;
+//         const minutes: number = Math.floor((duration - hours * 3600) / 60);
+//         const seconds: number = Math.floor(duration - hours * 3600 - minutes * 60);
+//
+//         return `${hoursStr} ${minutes} min ${seconds} sec`;
+//     }
 }
