@@ -34,7 +34,7 @@ class Authorization implements IAuthorization {
     signOut(): void {
         return signOut(this.email);
     }
-    updateUser(updateFields: user): void {
+    updateUser(updateFields: user) {
         return updateUser(updateFields, this.email);
     }
     deleteUser(): void {
@@ -77,20 +77,27 @@ async function signIn(email: string, password = '') {
     } as RequestInit;
 
     fetch(`https://rs-clone-api.vercel.app/signIn/${email}`, requestOptions)
-        .then((response) => response.text())
+        .then((response) => {
+            if (response.status === 404 || response.status === 500) {
+                throw new Error('Invalid password or email');
+            } else {
+                return response.text();
+            }
+        })
         .then((result) => {
             // console.log(result);
             return result;
         })
         .then((result) => {
             localStorage.setItem('currentUser', result);
+            localStorage.setItem('userEmail', (JSON.parse(result) as user).email);
             return result;
         })
         .then((result) => {
             alert(`Hooray!!! ${(JSON.parse(result) as user).userName}, you are logged in`);
             window.location.reload();
         })
-        .catch((error) => console.log('error', error));
+        .catch((error) => alert(`${error}`));
 }
 
 function signOut(email: string): void {
@@ -154,7 +161,7 @@ function deleteUser(email: string): void {
         .catch((error) => console.log('error', error));
 }
 
-function updateUser(updateFields: object, email: string): void {
+async function updateUser(updateFields: object, email: string) {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     const reqData = JSON.stringify(updateFields);
@@ -165,9 +172,12 @@ function updateUser(updateFields: object, email: string): void {
         credentials: 'include',
     } as RequestInit;
 
-    fetch(`https://rs-clone-api.vercel.app/updateUser/${email}`, requestOptions)
+    return await fetch(`https://rs-clone-api.vercel.app/updateUser/${email}`, requestOptions)
         .then((response) => response.text())
-        .then((res) => alert(`User updated\n${res}`))
+        .then((res) => {
+            alert(`User updated\n${res}, you should relogin`);
+            return res;
+        })
         // .then((result) => console.log(result))
         .catch((error) => console.log('error', error));
 }

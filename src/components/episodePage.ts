@@ -88,8 +88,8 @@ export class EpisodePage {
         actionsButton.textContent = '...';
 
         buttonsContainer.appendChild(playButton);
-        buttonsContainer.appendChild(libraryButton);
-        buttonsContainer.appendChild(actionsButton);
+        // buttonsContainer.appendChild(libraryButton);
+        // buttonsContainer.appendChild(actionsButton);
 
         return buttonsContainer;
     }

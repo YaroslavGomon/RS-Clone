@@ -176,7 +176,10 @@ export default class Popups {
         if (localStorage.getItem('userEmail')) {
             if (Object.values(user).every((val) => val !== '')) {
                 const update = new Authorization(localStorage.getItem('userEmail') as string);
-                update.updateUser(user);
+                update.updateUser(user).then(()=>{
+                    new Authorization(localStorage.getItem('userEmail') as string).signOut();
+                    localStorage.removeItem('userEmail');
+                });
             }
         }
     }
@@ -209,9 +212,7 @@ export default class Popups {
         const inputEmail = document.querySelector('.modal__input.e-mail') as HTMLInputElement;
         const inputPass = document.querySelector('.modal__input.password') as HTMLInputElement;
         const login = new Authentication(inputEmail.value, inputPass.value);
-        login.signIn().then(()=>{
-            localStorage.setItem('userEmail', inputEmail.value);
-        });
+        login.signIn();
     }
 
     private logOut() {
