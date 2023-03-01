@@ -53,7 +53,7 @@ export class Player {
 
         episodeData.appendChild(episodeImage);
         episodeData.appendChild(this.createPlayerInfo());
-        episodeData.appendChild(saveButton);
+        // episodeData.appendChild(saveButton);
 
         return episodeData;
     }

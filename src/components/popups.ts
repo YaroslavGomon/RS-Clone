@@ -1,9 +1,7 @@
 import { Authentication, Authorization, Regestration } from './api/authorizationController';
-// import { Regestration } from './api/authorizationController';
 import { user } from './types/type';
 
 export default class Popups {
-    // private authentication: Authentication;
     private registration: Regestration;
     private btnText: string;
     private placeholdersRegister: string[] = ['name', 'phone', 'e-mail', 'password'];
@@ -78,7 +76,7 @@ export default class Popups {
 
     private createInputsLogin() {
         this.placeholdersLogin.forEach((val, i) => {
-            const fragment = this.create(i !== 0 ? 'text' : 'email', val, this.namesLogin[i]);
+            const fragment = this.create(i !== 0 ? 'password' : 'email', val, this.namesLogin[i]);
             const modalForm = document.querySelector('.modal__form');
             if (modalForm) modalForm.append(fragment);
         });
@@ -153,7 +151,6 @@ export default class Popups {
         user.userPassword = inputPass.value;
         user.email = inputEmail.value;
         user.phone = inputPhone.value;
-        console.log(user);
         if (Object.values(user).every((val) => val !== '')) {
             this.registration.addUser(user);
         }
@@ -170,6 +167,8 @@ export default class Popups {
         const inputEmail = document.querySelector('.modal__input.e-mail') as HTMLInputElement;
         const inputPhone = document.querySelector('.modal__input.phone') as HTMLInputElement;
         const inputPass = document.querySelector('.modal__input.password') as HTMLInputElement;
+        inputPass.type = 'password';
+        inputPass.minLength = 8;
         user.userName = inputName.value;
         user.userPassword = inputPass.value;
         user.email = inputEmail.value;
@@ -177,8 +176,10 @@ export default class Popups {
         if (localStorage.getItem('userEmail')) {
             if (Object.values(user).every((val) => val !== '')) {
                 const update = new Authorization(localStorage.getItem('userEmail') as string);
-                console.log(user);
-                update.updateUser(user);
+                update.updateUser(user).then(()=>{
+                    new Authorization(localStorage.getItem('userEmail') as string).signOut();
+                    localStorage.removeItem('userEmail');
+                });
             }
         }
     }
@@ -211,9 +212,7 @@ export default class Popups {
         const inputEmail = document.querySelector('.modal__input.e-mail') as HTMLInputElement;
         const inputPass = document.querySelector('.modal__input.password') as HTMLInputElement;
         const login = new Authentication(inputEmail.value, inputPass.value);
-        login.signIn().then(()=>{
-            localStorage.setItem('userEmail', inputEmail.value);
-        });
+        login.signIn();
     }
 
     private logOut() {
